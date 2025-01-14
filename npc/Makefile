@@ -47,7 +47,7 @@ all: default
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN)
-		@$^
+	@$^
 	
 	
 #	verilator -Wno-fatal --cc --exe --build -j 0 -Wall $(CSRC) $(VSRC) --trace    
