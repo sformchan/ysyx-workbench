@@ -8,6 +8,7 @@ all:
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
+	unset VERILATOR_ROOT
 	verilator -Wno-fatal --cc --exe --build -j 0 -Wall $(CSRC) $(VSRC) --trace
 	./obj_dir/Vtop
 
