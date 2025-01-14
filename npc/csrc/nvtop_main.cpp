@@ -1,7 +1,7 @@
 #include <nvboard.h>
 #include <Vtop.h>
  
-static TOP_NAME dut;
+static top dut;
  
 void nvboard_bind_all_pins(top* top);
  
