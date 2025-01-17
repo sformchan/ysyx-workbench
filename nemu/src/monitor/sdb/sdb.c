@@ -12,7 +12,7 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-#include <sys/wait.h>
+
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <readline/readline.h>
@@ -49,8 +49,8 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  wait(NULL);
   return -1;
+  nemu_state.state = NEMU_QUIT;
 }
 
 static int cmd_help(char *args);
