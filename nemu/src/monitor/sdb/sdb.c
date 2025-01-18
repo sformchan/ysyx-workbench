@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
 
@@ -95,6 +97,28 @@ static int cmd_info(char *args)
 }
   
 
+
+static int cmd_x(char *args)
+{
+  int length;
+  uint32_t start;
+  if(args == NULL)
+  {
+    printf("nothing output cause of INVALID INPUT.");
+  }
+  else
+  {
+    sscanf(args, "%d %x", &length, &start);
+    for(int i = 0; i < length; i++)
+    {
+      printf("%d %x %x\n", length, start + (i * 4), vaddr_read(start + (i * 4), 4));
+    }
+  }
+  return 0;
+}
+
+
+
 static struct {
   const char *name;
   const char *description;
@@ -104,7 +128,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step", cmd_si },
-  { "info", "print info of reg or wp", cmd_info }
+  { "info", "print info of reg or wp", cmd_info },
+  { "x", "visit the target memory and print it", cmd_x}
 
   /* TODO: Add more commands */
 
