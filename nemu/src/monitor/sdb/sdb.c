@@ -126,6 +126,15 @@ static int cmd_x(char *args)
 
 
 
+static int cmd_t(char *args)
+{
+  bool flag = false;
+  expr(args, &flag);
+  return 0;
+}
+
+
+
 static struct {
   const char *name;
   const char *description;
@@ -136,7 +145,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step", cmd_si },
   { "info", "print info of reg or wp", cmd_info },
-  { "x", "visit the target memory and print it", cmd_x}
+  { "x", "visit the target memory and print it", cmd_x},
+  { "t", "for test", cmd_t}
 
   /* TODO: Add more commands */
 

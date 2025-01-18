@@ -21,7 +21,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256,
+  TK_EQ = 1,
+  TK_NUM = 2
+  
 
   /* TODO: Add more token types */
 
@@ -39,9 +42,15 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"[0-9]", TK_NUM},
+  {"\\-", '-'},
+  {"\\*", '*'},
+  {"\\/", '/'},
+  {"\\(", '('},
+  {"\\)", ')'}
 };
 
-#define NR_REGEX ARRLEN(rules)
+#define NR_REGEX ARRLEN(rules)  //calculate the length of array
 
 static regex_t re[NR_REGEX] = {};
 
@@ -95,10 +104,37 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+          case '+':
+            tokens[nr_token].type = '+';
+            nr_token++;
+            break;
+          case '-':
+            tokens[nr_token].type = '-';
+            nr_token++;
+            break;
+          case '*':
+            tokens[nr_token].type = '*';
+            nr_token++;
+            break;
+          case '/':
+            tokens[nr_token].type = '/';
+            nr_token++;
+            break;  
+          case '2':
+            tokens[nr_token].type = 2;
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+            nr_token++;
+            break;
+          case '1':
+            tokens[nr_token].type = 1;
+            nr_token++;
+            break;
+          default: 
+            printf("invalid input: %d\n ", i);
+            break;
         }
 
-        break;
+        
       }
     }
 
@@ -107,7 +143,10 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
+  for(i = 0; i < nr_token; i++)  //for test
+  {
+    printf("%d, %s\n", tokens[i].type, tokens[i].str);
+  }
   return true;
 }
 
