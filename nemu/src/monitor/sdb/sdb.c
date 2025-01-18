@@ -58,13 +58,13 @@ static int cmd_help(char *args);
 static int cmd_si(char *args)
 {
   int step;
-  int result = sscanf(args, "%d", &step);
   if(args == NULL)
   {
     step = 1;
   }
   else
   {
+    int result = sscanf(args, "%d", &step);
     if(result != 1 || step < 1)
     {
       step = 1;
