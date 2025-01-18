@@ -63,17 +63,22 @@ static int cmd_si(char *args)
   {
     step = 1;
   }
-  if(result == 1 && step > 0)
-  {
-    cpu_exec(step);    
-  }
   else
   {
-    cpu_exec(1);
+	  if(result == 1 && step > 0)
+	  {
+		  cpu_exec(step);
+	  }
+	  else
+	  {
+		  step = 1;
+		  cpu_exec(step);
+		  printf("already put step as 1.pls prompt a valid integer");
+	  }  
   }
   return 0;
 }
-
+  
 
 static struct {
   const char *name;
@@ -87,7 +92,7 @@ static struct {
 
   /* TODO: Add more commands */
 
-};
+}; 
 
 #define NR_CMD ARRLEN(cmd_table)
 
