@@ -65,7 +65,8 @@ static int cmd_si(char *args)
   }
   else
   {
-    cpu_exec(1);
+    step = 1;
+    cpu_exec(step);
   }
   return 0;
 }
