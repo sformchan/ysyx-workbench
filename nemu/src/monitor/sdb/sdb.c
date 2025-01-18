@@ -68,7 +68,7 @@ static int cmd_si(char *args)
     if(result != 1 || step < 1)
     {
       step = 1;
-      printf("already put step as 1.pls prompt a valid integer");
+      printf("already put step as 1.pls prompt a valid integer\n");
     } 
   }
   cpu_exec(step);
