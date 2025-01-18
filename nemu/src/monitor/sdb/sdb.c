@@ -111,7 +111,7 @@ static int cmd_x(char *args)
     sscanf(args, "%d %x", &length, &start);
     for(int i = 0; i < length; i++)
     {
-      printf("%d %x %x\n", length, start + (i * 4), vaddr_read(start + (i * 4), 4));
+      printf("%d 0x%x 0x%x\n", i, start + (i * 4), vaddr_read(start + (i * 4), 4));
     }
   }
   return 0;
