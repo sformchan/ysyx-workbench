@@ -59,14 +59,17 @@ static int cmd_si(char *args)
 {
   int step;
   int result = sscanf(args, "%d", &step);
+  if(args == NULL)
+  {
+    step = 1;
+  }
   if(result == 1 && step > 0)
   {
     cpu_exec(step);    
   }
   else
   {
-    step = 1;
-    cpu_exec(step);
+    cpu_exec(1);
   }
   return 0;
 }
