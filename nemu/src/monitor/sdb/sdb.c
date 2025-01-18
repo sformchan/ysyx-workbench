@@ -109,10 +109,17 @@ static int cmd_x(char *args)
   else
   {
     sscanf(args, "%d %x", &length, &start);
-    for(int i = 0; i < length; i++)
+    if( length > 0 && start > 0x80000000)
     {
-      printf("%d 0x%x 0x%x\n", i, start + (i * 4), vaddr_read(start + (i * 4), 4));
+      for(int i = 0; i < length; i++)
+      {
+        printf("%d 0x%x 0x%x\n", i, start + (i * 4), vaddr_read(start + (i * 4), 4));
+      }
     }
+    else
+    {
+      printf("nothing output cause of INVALID INPUT.");
+    }  
   }
   return 0;
 }
