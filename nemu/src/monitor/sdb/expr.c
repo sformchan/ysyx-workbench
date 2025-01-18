@@ -120,14 +120,16 @@ static bool make_token(char *e) {
             tokens[nr_token].type = '/';
             nr_token++;
             break;  
-          case '2':
+          case 2:
             tokens[nr_token].type = 2;
             strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
             nr_token++;
             break;
-          case '1':
+          case 1:
             tokens[nr_token].type = 1;
             nr_token++;
+            break;
+          case 256:
             break;
           default: 
             printf("invalid input: %d\n ", i);
@@ -143,7 +145,7 @@ static bool make_token(char *e) {
       return false;
     }
   }
-  for(i = 0; i < nr_token; i++)  //for test
+  for(i = 0; i <= nr_token; i++)  //for test
   {
     printf("%d, %s\n", tokens[i].type, tokens[i].str);
   }
