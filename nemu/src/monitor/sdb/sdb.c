@@ -109,7 +109,7 @@ static int cmd_x(char *args)
   else
   {
     sscanf(args, "%d %x", &length, &start);
-    if( length > 0 && start > 0x80000000)
+    if( length > 0 && start >= 0x80000000)
     {
       for(int i = 0; i < length; i++)
       {
