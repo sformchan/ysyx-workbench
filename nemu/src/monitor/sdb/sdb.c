@@ -118,7 +118,7 @@ static int cmd_x(char *args)
     }
     else
     {
-      printf("nothing output cause of INVALID INPUT.");
+      printf("nothing output cause of INVALID INPUT.\n");
     }  
   }
   return 0;
