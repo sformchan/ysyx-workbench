@@ -68,10 +68,29 @@ static int cmd_si(char *args)
     if(result != 1 || step < 1)
     {
       step = 1;
-      printf("already put step as 1.pls prompt a valid integer\n");
+      printf("already put step as 1. pls prompt a valid integer\n");
     } 
   }
   cpu_exec(step);
+  return 0;
+}
+
+
+static int cmd_info(char *args)
+{
+  char letter;
+  if(args == NULL)
+  {
+    printf("nothing output cause of INVALID INPUT.");
+  }
+  else
+  {
+    sscanf(args, "%c", &letter);
+    if(letter == 'r')
+    {
+      isa_reg_display();
+    }
+  }
   return 0;
 }
   
@@ -84,7 +103,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Let the program step", cmd_si}
+  { "si", "Let the program step", cmd_si },
+  { "info", "print info of reg or wp", cmd_info }
 
   /* TODO: Add more commands */
 
