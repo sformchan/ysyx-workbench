@@ -62,7 +62,7 @@ static int cmd_si(char *args)
   if(args == NULL)
   {
     step = 1;
-	cpu_exec(step);
+    cpu_exec(step);
   }
   else
   {
