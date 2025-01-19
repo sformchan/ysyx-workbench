@@ -137,8 +137,6 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           case 256:
-            tokens[nr_token].type = 256;
-            nr_token++;
             break;
           default: 
             printf("invalid input: %d\n ", i);
@@ -164,7 +162,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  printf("result: 0x%x\n", eval(0, strlen(e) - 1));
+  printf("result: 0x%x\n", eval(0, sizeof(tokens) - 1));
 
   return 0;
 }
@@ -242,10 +240,7 @@ uint32_t eval(int p, int q) {
         sign = true;
         op = i;
       }
-      else if(tokens[i].type == 256)
-      {
-        continue;
-      }
+      
     }
     
     int op_type = tokens[op].type;
