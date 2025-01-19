@@ -139,7 +139,7 @@ static bool make_token(char *e) {
           case 256:
             break;
           default: 
-            printf("invalid input: %d\n %c", i, e[i]);
+            printf("invalid input: %d %c\n", i, e[i]);
             break;
         }
         break;
