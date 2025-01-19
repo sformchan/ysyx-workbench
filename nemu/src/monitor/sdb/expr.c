@@ -19,12 +19,13 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <ctype.h>
 
 
 
 bool check_parentheses(int p, int q);
 uint32_t eval(int p, int q);
-
+bool is_all_digit(int p, int q);
 
 
 enum {
@@ -218,6 +219,19 @@ uint32_t eval(int p, int q) {
      return atoi(tokens[p].str);
      
   }
+  else if ((p != q) && is_all_digit(p, q) == true)
+  {
+    char number[q - p + 2];
+    int j = 0;
+    
+    for(int i = p; i <= q; i++)
+    {
+      number[j++] = tokens[i].str[0];
+    }
+    number[j] = '\0';
+    
+    return atoi(number);
+  }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
@@ -264,5 +278,18 @@ uint32_t eval(int p, int q) {
   }
 } 
 
+
+
+bool is_all_digit(int p, int q)
+{
+  for(int i = p; i <= q; i++)
+  {
+    if(!isdigit(tokens[i].str[0]))
+    {
+      return false;
+    }
+  }
+  return true;
+}
 
 
