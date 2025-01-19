@@ -242,6 +242,10 @@ uint32_t eval(int p, int q) {
         sign = true;
         op = i;
       }
+      else if(tokens[i].type == 256)
+      {
+        continue;
+      }
     }
     
     int op_type = tokens[op].type;
