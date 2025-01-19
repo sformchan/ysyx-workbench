@@ -204,12 +204,7 @@ uint32_t eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */ 
-     if(tokens[p].type == 256)
-     {
-       return 0;
-     }
-     else
-       return atoi(tokens[p].str);
+     return atoi(tokens[p].str);
      
   }
   else if (check_parentheses(p, q) == true) {
@@ -231,11 +226,11 @@ uint32_t eval(int p, int q) {
           i++;
         }
       }
-      else if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
+      if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
         op = i;
       }
-      else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
+      if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = true;
         op = i;
