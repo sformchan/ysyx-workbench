@@ -137,6 +137,8 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           case 256:
+            tokens[nr_token].type = 256;
+            nr_token++;
             break;
           default: 
             printf("invalid input: %d\n ", i);
@@ -203,7 +205,12 @@ uint32_t eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */ 
-     return atoi(tokens[p].str);
+     if(tokens[p].type == 256)
+     {
+       return 0;
+     }
+     else
+       return atoi(tokens[p].str);
      
   }
   else if (check_parentheses(p, q) == true) {
