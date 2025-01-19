@@ -239,18 +239,13 @@ uint32_t eval(int p, int q) {
       }
       if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        op = max(op, i);
+        op = i;
       }
       if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = true;
-        op = max(op, i);
+        op = i;
       }
-      if(tokens[i].type == 256)
-      {
-        continue;
-      }
-      
     }
     
     int op_type = tokens[op].type;
