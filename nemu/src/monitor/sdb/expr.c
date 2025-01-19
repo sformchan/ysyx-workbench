@@ -198,10 +198,9 @@ bool check_parentheses(int p, int q)
 
 
 uint32_t eval(int p, int q) {
-  bool sign = false;
+  
   if (p > q) {
     /* Bad expression */
-    printf("%d", sign);
     printf("eval(%d, %d)\n", p, q);
     assert(0);
     return -1;
@@ -222,7 +221,7 @@ uint32_t eval(int p, int q) {
   }
   else {
     int op = -1;
-    
+    bool sign = false;
     
     for(int i = p; i <= q; i++)
     {
@@ -241,6 +240,10 @@ uint32_t eval(int p, int q) {
       {
         sign = true;
         op = max(op, i);
+      }
+      if(tokens[i].type == 256)
+      {
+        continue;
       }
       
     }
