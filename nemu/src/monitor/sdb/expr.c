@@ -200,10 +200,7 @@ uint32_t eval(int p, int q) {
   
   if (p > q) {
     /* Bad expression */
-    for(int j = 0; j <= q; j++)
-    {
-      printf("%d\n",tokens[j].type);
-    }
+    
     printf("eval(%d, %d)\n", p, q);
     assert(0);
     return -1;
@@ -223,6 +220,13 @@ uint32_t eval(int p, int q) {
     return eval(p + 1, q - 1);
   }
   else {
+    
+    for(int j = 0; j <= q; j++)
+    {
+      printf("%d\n",tokens[j].type);
+    }
+    
+    
     int op = -1;
     bool sign = false;
     
