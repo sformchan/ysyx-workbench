@@ -162,7 +162,6 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  make_token(e);
   /* TODO: Insert codes to evaluate the expression. */
   printf("result: 0x%x\n", eval(0, strlen(e) - 1));
 
@@ -201,6 +200,10 @@ uint32_t eval(int p, int q) {
   
   if (p > q) {
     /* Bad expression */
+    for(int j = 0; j <= q; j++)
+    {
+      printf("%d\n",tokens[j].type);
+    }
     printf("eval(%d, %d)\n", p, q);
     assert(0);
     return -1;
