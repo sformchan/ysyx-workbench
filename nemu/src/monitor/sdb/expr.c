@@ -194,6 +194,9 @@ bool check_parentheses(int p, int q)
 }
 
 
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+
 uint32_t eval(int p, int q) {
   bool sign = false;
   if (p > q) {
@@ -232,12 +235,12 @@ uint32_t eval(int p, int q) {
       }
       if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        op = i;
+        op = max(op, i);
       }
       if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = true;
-        op = i;
+        op = max(op, i);
       }
       
     }
