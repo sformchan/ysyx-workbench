@@ -196,8 +196,8 @@ uint32_t eval(int p, int q) {
   bool sign = false;
   if (p > q) {
     /* Bad expression */
-    printf("eval(%d, %d)\n", p, q);
     printf("%d", sign);
+    printf("eval(%d, %d)\n", p, q);
     assert(0);
     return -1;
   }
