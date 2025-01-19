@@ -206,7 +206,7 @@ uint32_t eval(int p, int q) {
   
   if (p > q) {
     /* Bad expression */
-    
+    printf("%d %d", p, q);
     assert(0);
     return -1;
   }
