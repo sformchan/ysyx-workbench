@@ -220,7 +220,7 @@ uint32_t eval(int p, int q) {
     return eval(p + 1, q - 1);
   }
   else {
-    
+    printf("eval(%d, %d)\n", p, q);
     for(int j = 0; j <= q; j++)
     {
       printf("%d\n",tokens[j].type);
