@@ -161,7 +161,7 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   /* TODO: Insert codes to evaluate the expression. */
-  printf("result: 0x%x\n", eval(0, sizeof(tokens) / sizeof(tokens[0])));
+  printf("result: 0x%x\n", eval(0, nr_token - 1));
 
   return 0;
 }
