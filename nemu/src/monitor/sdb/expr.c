@@ -98,7 +98,7 @@ static bool make_token(char *e) {
 
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+        /* TODO: Now a new tok en is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
@@ -135,18 +135,18 @@ static bool make_token(char *e) {
             printf("invalid input: %d\n ", i);
             break;
         }
-
-        
+        break;
       }
     }
-
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
+  
+    if  (i == NR_REGEX) {
+        printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        return false;
     }
   }
+
   for(i = 0; i <= nr_token; i++)  //for test
-  {
+  { 
     printf("%d, %s\n", tokens[i].type, tokens[i].str);
   }
   return true;
