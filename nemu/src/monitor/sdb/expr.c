@@ -138,8 +138,16 @@ static bool make_token(char *e) {
             break;
           case 256:
             break;
+          case '(':
+            tokens[nr_token].type = '(';
+            nr_token++;
+            break;
+          case ')':
+            tokens[nr_token].type = ')';
+            nr_token++;
+            break;
           default: 
-            printf("invalid input: %d %c\n", i, e[i]);
+            printf("invalid input: %d %c\n", position, e[position]);
             break;
         }
         break;
