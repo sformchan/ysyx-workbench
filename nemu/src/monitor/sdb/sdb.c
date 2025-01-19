@@ -128,8 +128,8 @@ static int cmd_x(char *args)
 
 static int cmd_t(char *args)
 {
-  bool flag = false;
-  expr(args, &flag);
+  bool sign = false;
+  expr(args, &sign);
   return 0;
 }
 
@@ -146,7 +146,7 @@ static struct {
   { "si", "Let the program step", cmd_si },
   { "info", "print info of reg or wp", cmd_info },
   { "x", "visit the target memory and print it", cmd_x},
-  { "t", "for test", cmd_t}
+  { "p", "calculate the result of the given expression", cmd_t}
 
   /* TODO: Add more commands */
 
