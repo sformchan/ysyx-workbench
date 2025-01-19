@@ -162,7 +162,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  make_token(e);
   /* TODO: Insert codes to evaluate the expression. */
   printf("result: 0x%x\n", eval(0, strlen(e) - 1));
 
@@ -236,7 +236,7 @@ uint32_t eval(int p, int q) {
       {
         op = max(op, i);
       }
-      if(tokens[i].type == '+' || tokens[i].type == '-')
+      if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = true;
         op = max(op, i);
