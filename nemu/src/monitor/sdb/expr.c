@@ -236,7 +236,7 @@ uint32_t eval(int p, int q) {
       {
         op = max(op, i);
       }
-      if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
+      if(tokens[i].type == '+' || tokens[i].type == '-')
       {
         sign = true;
         op = max(op, i);
