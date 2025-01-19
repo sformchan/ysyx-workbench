@@ -20,6 +20,13 @@
  */
 #include <regex.h>
 
+
+
+bool check_parentheses(int p, int q);
+uint32_t eval(int p, int q);
+
+
+
 enum {
   TK_EQ = 1,
   TK_NUM = 2,
@@ -144,11 +151,6 @@ static bool make_token(char *e) {
         return false;
     }
   }
-
-  for(i = 0; i < nr_token; i++)  //for test
-  { 
-    printf("%d, %s\n", tokens[i].type, tokens[i].str);
-  }
   return true;
 }
 
@@ -160,7 +162,95 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  
+  printf("result: 0x%x\n", eval(0, strlen(e) - 1));
 
   return 0;
 }
+
+
+bool check_parentheses(int p, int q)
+{
+  if(tokens[p].type != '('  || tokens[q].type != ')')
+    return false;
+      int l = p , r = q;
+  while(l < r)
+  {
+    if(tokens[l].type == '('){
+      if(tokens[r].type == ')')
+      {       
+        l ++ , r --;
+          continue;
+      }
+      else       
+        r --;
+    }
+    else if(tokens[l].type == ')')
+      return false;
+    else l ++;
+  }
+  return true;
+}
+
+
+uint32_t eval(int p, int q) {
+  if (p > q) {
+    /* Bad expression */
+    assert(0);
+    return -1;
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */ 
+     return atoi(tokens[p].str);
+     
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(q + 1, q - 1);
+  }
+  else {
+    int op = -1;
+    bool sign = false;
+    
+    for(int i = p; i <= q; i++)
+    {
+      if(tokens[i].type == '(')
+      {
+        while(tokens[i].type != ')')
+        {
+          i++;
+        }
+      }
+      else if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
+      {
+        op = i;
+      }
+      else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
+      {
+        sign = true;
+        op = i;
+      }
+    }
+    
+    int op_type = tokens[op].type;
+    
+    //op = the position of 主运算符 in the token expression;
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
+
+    switch (op_type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+} 
+
+
+
