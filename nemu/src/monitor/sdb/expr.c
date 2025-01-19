@@ -275,7 +275,7 @@ uint32_t eval(int p, int q) {
       case '/': 
         if(val2 == 0)
         {
-          printf("invalid input (cannot divised by ZERO)");
+          printf("invalid input (cannot divised by ZERO)\n");
           return 0;
         }
         else
