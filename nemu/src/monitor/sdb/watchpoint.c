@@ -122,7 +122,7 @@ void display_wp()
 {
   if(head == NULL)
   {
-    printf("No wp working.");
+    printf("No wp working.\n");
     return;
   }
   
@@ -167,7 +167,7 @@ bool check_wp()
     uint32_t new_value = expr(wp->expr, &success);
     if(success && new_value != wp->old_value)
     {
-      printf("wp triggered at %s: 0x%x <-- 0x%x", wp->expr, new_value, wp->old_value);
+      printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->old_value);
       return true;
     }
     wp = wp->next;

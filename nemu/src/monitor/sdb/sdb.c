@@ -87,7 +87,7 @@ static int cmd_info(char *args)
   char letter;
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.");
+    printf("nothing output cause of INVALID INPUT.\n");
   }
   else
   {
@@ -113,7 +113,7 @@ static int cmd_x(char *args)
   bool success = false;
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.");
+    printf("nothing output cause of INVALID INPUT.\n");
   }
   else
   {
@@ -140,7 +140,7 @@ static int cmd_p(char *args)
 {
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.");
+    printf("nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   bool sign = false;
@@ -154,7 +154,7 @@ static int cmd_w(char *args)
 {
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.");
+    printf("nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   set_wp(args);
@@ -168,16 +168,13 @@ static int cmd_d(char *args)
   
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.");
+    printf("nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   int num = atoi(args);
   delete_wp(num);
   return 0;
 }
-
-
-
 
 
 
