@@ -158,5 +158,20 @@ void delete_wp(int num)
 }
 
 
-
+bool check_wp()
+{
+  WP *wp = head;
+  while(wp != NULL)
+  {
+    bool success = false;
+    uint32_t new_value = expr(wp->expr, &success);
+    if(success && new_value != wp->old_value)
+    {
+      printf("wp triggered at %s: 0x%x <-- 0x%x", wp->expr, new_value, wp->old_value);
+      return true;
+    }
+    wp = wp->next;
+  } 
+  return false;
+}
 
