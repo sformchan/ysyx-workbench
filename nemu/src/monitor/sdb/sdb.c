@@ -25,6 +25,10 @@ static int is_batch_mode = false;
 void set_wp(char *expr_str);
 void init_regex();
 void init_wp_pool();
+void display_wp();
+void delete_wp(int num);
+word_t expr(char *e, bool *success);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -92,6 +96,10 @@ static int cmd_info(char *args)
     {
       isa_reg_display();
     }
+    else if(letter == 'w')
+    {
+      display_wp();
+    }
   }
   return 0;
 }
@@ -101,19 +109,21 @@ static int cmd_info(char *args)
 static int cmd_x(char *args)
 {
   int length;
-  uint32_t start;
+  char start[256];
+  bool success = false;
   if(args == NULL)
   {
     printf("nothing output cause of INVALID INPUT.");
   }
   else
   {
-    sscanf(args, "%d %x", &length, &start);
-    if( length > 0 && start >= 0x80000000)
+    sscanf(args, "%d %s", &length, start);
+    uint32_t result = expr(start, &success);
+    if( length > 0 && result >= 0x80000000)
     {
       for(int i = 0; i < length; i++)
       {
-        printf("%d 0x%x 0x%x\n", i, start + (i * 4), vaddr_read(start + (i * 4), 4));
+        printf("%d 0x%x 0x%x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
       }
     }
     else
@@ -139,6 +149,7 @@ static int cmd_p(char *args)
 }
 
 
+
 static int cmd_w(char *args)
 {
   if(args == NULL)
@@ -151,6 +162,25 @@ static int cmd_w(char *args)
 }
 
 
+
+static int cmd_d(char *args)
+{
+  
+  if(args == NULL)
+  {
+    printf("nothing output cause of INVALID INPUT.");
+    return 0;
+  }
+  int num = atoi(args);
+  delete_wp(num);
+  return 0;
+}
+
+
+
+
+
+
 static struct {
   const char *name;
   const char *description;
@@ -159,11 +189,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Let the program step", cmd_si },
-  { "info", "print info of reg or wp", cmd_info },
-  { "x", "visit the target memory and print it", cmd_x},
-  { "p", "calculate the result of the given expression", cmd_p},
-  { "w", "set a new watchpoint to monitor the given expression", cmd_w}
+  { "si", "Let the program step, you can enter a number after 'si'", cmd_si },
+  { "info", "Print info of reg or wp", cmd_info },
+  { "x", "Visit the target memory and print it, you are expected to enter a", cmd_x},
+  { "p", "Calculate the result of the given expression", cmd_p},
+  { "w", "Set a new watchpoint to monitor the given expression", cmd_w},
+  { "d", "Delete the watchpoint with sequence number 'n'", cmd_d}
 
   /* TODO: Add more commands */
 
