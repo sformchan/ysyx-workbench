@@ -31,9 +31,10 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
+/*static void gen_rand_expr() {
   buf[0] = '\0';
-}
+} */
+
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -48,15 +49,15 @@ int main(int argc, char *argv[]) {
 
     sprintf(code_buf, code_format, buf);
 
-    FILE *fp = fopen("/tmp/.code.c", "w");
+    FILE *fp = fopen("/home/leonard/ysyx-workbench/nemu/src/monitor/sdb/expr.c", "w");
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc /home/leonard/ysyx-workbench/nemu/src/monitor/sdb/expr.c -o /home/leonard/ysyx-workbench/nemu/src/monitor/sdb/expr");
     if (ret != 0) continue;
 
-    fp = popen("/tmp/.expr", "r");
+    fp = popen("/home/leonard/ysyx-workbench/nemu/src/monitor/sdb/expr", "r");
     assert(fp != NULL);
 
     int result;
@@ -67,3 +68,12 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+
+
+
+
+
+
+
+
+

@@ -170,11 +170,9 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   /* TODO: Insert codes to evaluate the expression. */
-  //printf("result: 0x%x\n", eval(0, nr_token - 1));
-  uint32_t result = eval(0, nr_token - 1);
-  *success = true;
-  return result;
-  
+  printf("result: 0x%x\n", eval(0, nr_token - 1));
+
+  return 0;
 }
 
 
@@ -202,7 +200,7 @@ bool check_parentheses(int p, int q)
 }
 
 
-//#define max(a, b) ((a) > (b) ? (a) : (b))    unsure to use it.
+#define max(a, b) ((a) > (b) ? (a) : (b))
 
 
 uint32_t eval(int p, int q) {

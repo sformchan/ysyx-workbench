@@ -22,7 +22,7 @@
 #include <memory/vaddr.h>
 
 static int is_batch_mode = false;
-
+void set_wp(char *expr_str);
 void init_regex();
 void init_wp_pool();
 
@@ -126,13 +126,29 @@ static int cmd_x(char *args)
 
 
 
-static int cmd_t(char *args)
+static int cmd_p(char *args)
 {
+  if(args == NULL)
+  {
+    printf("nothing output cause of INVALID INPUT.");
+    return 0;
+  }
   bool sign = false;
-  expr(args, &sign);
+  printf("result: 0x%x\n", expr(args, &sign));
   return 0;
 }
 
+
+static int cmd_w(char *args)
+{
+  if(args == NULL)
+  {
+    printf("nothing output cause of INVALID INPUT.");
+    return 0;
+  }
+  set_wp(args);
+  return 0;
+}
 
 
 static struct {
@@ -146,7 +162,8 @@ static struct {
   { "si", "Let the program step", cmd_si },
   { "info", "print info of reg or wp", cmd_info },
   { "x", "visit the target memory and print it", cmd_x},
-  { "p", "calculate the result of the given expression", cmd_t}
+  { "p", "calculate the result of the given expression", cmd_p},
+  { "w", "set a new watchpoint to monitor the given expression", cmd_w}
 
   /* TODO: Add more commands */
 
