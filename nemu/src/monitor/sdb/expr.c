@@ -55,8 +55,7 @@ static struct rule {
   {"\\*", '*'},
   {"\\/", '/'},
   {"\\(", '('},
-  {"\\)", ')'},
-  {}
+  {"\\)", ')'}
 };
 
 #define NR_REGEX ARRLEN(rules)  //calculate the length of array
