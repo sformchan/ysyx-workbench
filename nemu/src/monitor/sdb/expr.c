@@ -51,13 +51,14 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"\\=\\=", TK_DEQ},        // equal
+  {"0x[0-9a-fA-F]+", TK_HEX},
   {"[0-9]+", TK_NUM},
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
   {"\\(", '('},
-  {"\\)", ')'},
-  {"0x[0-9a-fA-F]+", TK_HEX}
+  {"\\)", ')'}
+  
 };
 
 #define NR_REGEX ARRLEN(rules)  //calculate the length of array
@@ -129,12 +130,17 @@ static bool make_token(char *e) {
           case '/':
             tokens[nr_token].type = '/';
             nr_token++;
-            break;  
+            break; 
+          case 16:
+            tokens[nr_token].type = 16;
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
+            nr_token++;
+            break; 
           case 2:
             tokens[nr_token].type = 2;
             strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
             nr_token++;
-            break;
+            break; 
           case 1:
             tokens[nr_token].type = 1;
             nr_token++;
@@ -223,19 +229,6 @@ uint32_t eval(int p, int q) {
      return atoi(tokens[p].str);
      
   }
- /* else if ((p != q) && is_all_digit(p, q) == true)
-  {
-    char number[q - p + 2];
-    int j = 0;
-    
-    for(int i = p; i <= q; i++)
-    {
-      number[j++] = tokens[i].str[0];
-    }
-    number[j] = '\0';
-    
-    return atoi(number);
-  } */
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
@@ -291,16 +284,5 @@ uint32_t eval(int p, int q) {
 
 
 
-bool is_all_digit(int p, int q)
-{
-  for(int i = p; i <= q; i++)
-  {
-    if(!isdigit(tokens[i].str[0]))
-    {
-      return false;
-    }
-  }
-  return true;
-}
 
 
