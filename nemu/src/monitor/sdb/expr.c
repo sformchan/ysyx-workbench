@@ -29,7 +29,7 @@ bool is_all_digit(int p, int q);
 
 
 enum {
-  TK_EQ = 1,
+  TK_DEQ = 1,
   TK_NUM = 2,
   TK_NOTYPE = 256,
   
@@ -49,13 +49,14 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  {"\\=\\=", TK_DEQ},        // equal
   {"[0-9]", TK_NUM},
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
   {"\\(", '('},
-  {"\\)", ')'}
+  {"\\)", ')'},
+  {}
 };
 
 #define NR_REGEX ARRLEN(rules)  //calculate the length of array
