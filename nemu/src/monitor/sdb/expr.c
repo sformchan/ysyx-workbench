@@ -32,6 +32,7 @@ enum {
   TK_DEQ = 1,
   TK_NUM = 2,
   TK_NOTYPE = 256,
+  TK_HEX = 16,
   
 
   /* TODO: Add more token types */
@@ -50,12 +51,13 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"\\=\\=", TK_DEQ},        // equal
-  {"[0-9]", TK_NUM},
+  {"[0-9]+", TK_NUM},
   {"\\-", '-'},
   {"\\*", '*'},
   {"\\/", '/'},
   {"\\(", '('},
-  {"\\)", ')'}
+  {"\\)", ')'},
+  {"0x[0-9a-fA-F]+", TK_HEX}
 };
 
 #define NR_REGEX ARRLEN(rules)  //calculate the length of array
@@ -221,7 +223,7 @@ uint32_t eval(int p, int q) {
      return atoi(tokens[p].str);
      
   }
-  else if ((p != q) && is_all_digit(p, q) == true)
+ /* else if ((p != q) && is_all_digit(p, q) == true)
   {
     char number[q - p + 2];
     int j = 0;
@@ -233,7 +235,7 @@ uint32_t eval(int p, int q) {
     number[j] = '\0';
     
     return atoi(number);
-  }
+  } */
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
