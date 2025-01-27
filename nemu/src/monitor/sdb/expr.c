@@ -67,7 +67,7 @@ static struct rule {
   {"\\$\\w+", TK_REG},
   {"\\&\\&", TK_AND},
   {"\\|\\|", TK_OR},
-  {"\\*", TK_DEREF}
+  /* {"\\*", TK_DEREF} */
   
 };
 
