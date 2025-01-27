@@ -37,7 +37,7 @@ enum {
   TK_REG = 4,
   TK_AND = 5,
   TK_OR = 6,
-  TK_DEREF = 7
+  
   
 
   /* TODO: Add more token types */
