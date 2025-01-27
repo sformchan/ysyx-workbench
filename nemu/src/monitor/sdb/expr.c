@@ -132,11 +132,11 @@ static bool make_token(char *e) {
             tokens[nr_token].type = '-';
             nr_token++;
             break;
-          /* case '*':
-            if(tokens[i - 1].type == )
+          case '*':
+            
             tokens[nr_token].type = '*';
             nr_token++;
-            break; */
+            break; 
           case '/':
             tokens[nr_token].type = '/';
             nr_token++;
