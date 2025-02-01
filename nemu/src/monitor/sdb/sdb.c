@@ -184,7 +184,7 @@ static struct {
   int (*handler) (char *);
 } cmd_table [] = {
   {"help" , ANSI_FG_CYAN "Display information about all supported commands" ANSI_NONE , cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
+  { ANSI_FG_CYAN "c" ANSI_NONE , "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step, you can enter a number after 'si'", cmd_si },
   { "info", "Print info of reg or wp", cmd_info },
