@@ -113,7 +113,7 @@ static int cmd_x(char *args)
   bool success = false;
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.\n");
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
   }
   else
   {
@@ -128,7 +128,7 @@ static int cmd_x(char *args)
     }
     else
     {
-      printf("nothing output cause of INVALID INPUT.\n");
+      printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
     }  
   }
   return 0;
