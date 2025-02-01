@@ -266,7 +266,14 @@ uint32_t eval(int p, int q) {
      bool success = false;
      if(tokens[p].type == 4)
      {
-       return isa_reg_str2val(tokens[p].str, &success);
+       word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
+       if(!success)
+       {
+         printf("NOT A LEGAL REGISTER\n");
+         printf("please prompt again\n");
+         return 0;
+       }
+       return reg_value;
      }
      return atoi(tokens[p].str);
      
@@ -303,8 +310,8 @@ uint32_t eval(int p, int q) {
         op = i;
       }
     }
-    printf("%d\n", op);
-    printf("flag is %s\n", sign ? "true" : "false");
+    //printf("%d\n", op);
+    //printf("flag is %s\n", sign ? "true" : "false");
     int op_type = tokens[op].type;
     
     //op = the position of 主运算符 in the token expression;
