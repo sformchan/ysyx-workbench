@@ -187,11 +187,11 @@ static struct {
   { "c", "   Continue the execution of the program", cmd_c },
   { "q", ANSI_FG_CYAN "   Exit NEMU" ANSI_NONE , cmd_q },
   { "si", "  Let the program step, you can enter a number after 'si'", cmd_si },
-  { "info", "Print info of reg or wp", cmd_info },
-  { "x", "   Visit the target memory and print it, you are expected to enter a", cmd_x},
-  { "p", "   Calculate the result of the given expression", cmd_p},
+  { "info", ANSI_FG_CYAN "Print info of reg or wp" ANSI_NONE, cmd_info },
+  { "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
+  { "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
   { "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
-  { "d", "   Delete the watchpoint with sequence number 'n'", cmd_d}
+  { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d}
 
   /* TODO: Add more commands */
 
