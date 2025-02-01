@@ -275,6 +275,11 @@ uint32_t eval(int p, int q) {
        }
        return reg_value;
      }
+     else if(tokens[p].type == 16)
+     {
+       word_t hex_value = (word_t)strtol(tokens[p].str, NULL, 16); 
+       return hex_value;
+     }
      return atoi(tokens[p].str);
      
   }
