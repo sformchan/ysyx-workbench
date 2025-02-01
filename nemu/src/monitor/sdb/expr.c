@@ -303,7 +303,7 @@ uint32_t eval(int p, int q) {
         op = i;
       }
     }
-    printf("%d", op);
+    printf("%d\n", op);
     int op_type = tokens[op].type;
     
     //op = the position of 主运算符 in the token expression;
