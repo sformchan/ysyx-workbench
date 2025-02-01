@@ -140,7 +140,7 @@ static int cmd_p(char *args)
 {
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.\n");
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   bool sign = false;
