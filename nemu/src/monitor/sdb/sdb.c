@@ -184,9 +184,9 @@ static struct {
   int (*handler) (char *);
 } cmd_table [] = {
   {"help" , ANSI_FG_CYAN "Display information about all supported commands" ANSI_NONE , cmd_help },
-  { "c" , "   Continue the execution of the program", cmd_c },
+  { "c", "   Continue the execution of the program", cmd_c },
   { "q", ANSI_FG_CYAN "   Exit NEMU" ANSI_NONE , cmd_q },
-  { "si", "   Let the program step, you can enter a number after 'si'", cmd_si },
+  { "si", "  Let the program step, you can enter a number after 'si'", cmd_si },
   { "info", "Print info of reg or wp", cmd_info },
   { "x", "   Visit the target memory and print it, you are expected to enter a", cmd_x},
   { "p", "   Calculate the result of the given expression", cmd_p},
