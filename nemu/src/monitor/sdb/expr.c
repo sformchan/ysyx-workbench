@@ -304,6 +304,7 @@ uint32_t eval(int p, int q) {
       }
     }
     printf("%d\n", op);
+    printf("flag is %s\n", sign ? "true" : "false");
     int op_type = tokens[op].type;
     
     //op = the position of 主运算符 in the token expression;
