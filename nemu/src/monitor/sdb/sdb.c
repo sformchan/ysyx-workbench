@@ -154,7 +154,7 @@ static int cmd_w(char *args)
 {
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.\n");
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   set_wp(args);
@@ -168,7 +168,7 @@ static int cmd_d(char *args)
   
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.\n");
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
     return 0;
   }
   int num = atoi(args);
@@ -183,7 +183,7 @@ static struct {
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display information about all supported commands", cmd_help },
+  { ANSI_FG_CYAN "help" ANSI_NONE, "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step, you can enter a number after 'si'", cmd_si },
