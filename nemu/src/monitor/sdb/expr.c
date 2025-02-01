@@ -56,13 +56,13 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"\\=\\=", TK_DEQ},        // equal
-  {"0x[0-9a-fA-F]+", TK_HEX},
-  {"[0-9]+", TK_NUM},
-  {"\\-", '-'},
-  {"\\*", '*'},
+  {"0x[0-9a-fA-F]+", TK_HEX}, //heximal
+  {"[0-9]+", TK_NUM}, //decimal
+  {"\\-", '-'}, //minus
+  {"\\*", '*'}, //mutilply
   {"\\*", TK_DEREF},
-  {"\\/", '/'},
-  {"\\(", '('},
+  {"\\/", '/'}, //divide
+  {"\\(", '('}, 
   {"\\)", ')'},
   {"\\!\\=", TK_NEQ},
   {"\\$\\w+", TK_REG},
@@ -254,7 +254,7 @@ uint32_t eval(int p, int q) {
   
   if (p > q) {
     /* Bad expression */
-    printf("%d %d", p, q);
+    printf("%d %d\n", p, q);
     assert(0);
     return -1;
   }
