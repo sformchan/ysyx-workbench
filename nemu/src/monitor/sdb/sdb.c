@@ -183,7 +183,7 @@ static struct {
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  {ANSI_FG_RED "help" ANSI_NONE, "Display information about all supported commands", cmd_help },
+  {"help" , ANSI_FG_RED "Display information about all supported commands" ANSI_NONE , cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step, you can enter a number after 'si'", cmd_si },
