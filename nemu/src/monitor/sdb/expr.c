@@ -294,7 +294,7 @@ uint32_t eval(int p, int q) {
       }
       if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        
+        assert(0);
         op = i;
       }
       else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
