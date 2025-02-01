@@ -37,7 +37,7 @@ enum {
   TK_REG = 4,
   TK_AND = 5,
   TK_OR = 6,
-  
+  TK_DEREF = 7
   
 
   /* TODO: Add more token types */
@@ -60,14 +60,15 @@ static struct rule {
   {"[0-9]+", TK_NUM},
   {"\\-", '-'},
   {"\\*", '*'},
+  {"\\*", TK_DEREF},
   {"\\/", '/'},
   {"\\(", '('},
   {"\\)", ')'},
   {"\\!\\=", TK_NEQ},
   {"\\$\\w+", TK_REG},
   {"\\&\\&", TK_AND},
-  {"\\|\\|", TK_OR},
-  /* {"\\*", TK_DEREF} */
+  {"\\|\\|", TK_OR}
+  
   
 };
 
@@ -133,9 +134,18 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           case '*':
-            
-            tokens[nr_token].type = '*';
-            nr_token++;
+            if(i == 0 || tokens[i - 1].type == '(' || 
+                         tokens[i - 1].type != 2   || 
+                         tokens[i - 1].type != 16)
+            {
+              tokens[nr_token].type = 7;
+              nr_token++;
+            }
+            else
+            {
+              tokens[nr_token].type = '*';
+              nr_token++;
+            }    
             break; 
           case '/':
             tokens[nr_token].type = '/';
@@ -170,7 +180,8 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           case 4:
-            tokens[nr_token].type = 4;
+            tokens[nr_token].type = 4; //reg
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
             nr_token++;
             break;
           case 5:
@@ -179,10 +190,6 @@ static bool make_token(char *e) {
             break;
           case 6:
             tokens[nr_token].type = 6;
-            nr_token++;
-            break;
-          case 7:
-            tokens[nr_token].type = 7;
             nr_token++;
             break;
           default: 
@@ -256,6 +263,11 @@ uint32_t eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */ 
+     bool success = false;
+     if(tokens[p].type == 4)
+     {
+       return isa_reg_str2val(tokens[p].str, &success);
+     }
      return atoi(tokens[p].str);
      
   }
@@ -266,6 +278,8 @@ uint32_t eval(int p, int q) {
     return eval(p + 1, q - 1);
   }
   else {
+    //find major
+    
     int op = -1;
     bool sign = false;
     
@@ -280,9 +294,10 @@ uint32_t eval(int p, int q) {
       }
       if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
+        
         op = i;
       }
-      if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
+      else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = true;
         op = i;
