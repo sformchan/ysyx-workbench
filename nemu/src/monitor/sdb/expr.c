@@ -221,7 +221,8 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' ||
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
-                                           tokens[i - 1].type == '/' ))
+                                           tokens[i - 1].type == '/' ||
+                                           tokens[i - 1].type == ')' ))
     {
       
       tokens[i].type = 7;
@@ -229,7 +230,8 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '+' ||
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
-                                           tokens[i - 1].type == '/' ))
+                                           tokens[i - 1].type == '/' ||
+                                           tokens[i - 1].type == ')' ))
     {
       
       tokens[i].type = 8;
@@ -299,7 +301,16 @@ uint32_t eval(int p, int q) {
        word_t hex_value = (word_t)strtol(tokens[p].str, NULL, 16); 
        return hex_value;
      }
-     return atoi(tokens[p].str);
+     else if(tokens[p].type == 2)
+     {
+       return atoi(tokens[p].str);
+     }
+     else
+     {
+       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+       printf("please prompt again\n");
+       return 0;
+     }
      
   }
   else if(tokens[p].type == 7)
