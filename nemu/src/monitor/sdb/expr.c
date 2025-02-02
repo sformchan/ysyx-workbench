@@ -183,7 +183,7 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           default: 
-            printf("invalid input: %d %c\n", position, e[position]);
+            printf(ANSI_FG_RED "ERROR" ANSI_NONE ": invalid input: %d %c\n", position, e[position]);
             break;
         }
         break;
@@ -191,7 +191,7 @@ static bool make_token(char *e) {
     }
   
     if  (i == NR_REGEX) {
-        printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        printf(ANSI_FG_RED "ERROR" ANSI_NONE ": no match at position %d\n%s\n%*.s^\n", position, e, position, "");
         return false;
     }
   }
@@ -256,9 +256,6 @@ bool check_parentheses(int p, int q)
   }
   return true;
 }
-
-
-#define max(a, b) ((a) > (b) ? (a) : (b))
 
 
 uint32_t eval(int p, int q) {
