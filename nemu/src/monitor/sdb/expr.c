@@ -20,7 +20,7 @@
  */
 #include <regex.h>
 #include <ctype.h>
-
+#include <memory/paddr.h>
 
 
 bool check_parentheses(int p, int q);
@@ -215,6 +215,16 @@ word_t expr(char *e, bool *success) {
   }
   /* TODO: Insert codes to evaluate the expression. */
   //printf("result: 0x%x\n", eval(0, nr_token - 1));
+  for(int i = 0; i < nr_token; i++)
+  {
+    if(tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' ||
+                                           tokens[i - 1].type == '-' ||
+                                           tokens[i - 1].type == '*' ||
+                                           tokens[i - 1].type == '/' ))
+    {
+      tokens[i].type = TK_DEREF;
+    }
+  }
   uint32_t result = eval(0, nr_token - 1);
   *success = true;
   return result;
@@ -282,6 +292,12 @@ uint32_t eval(int p, int q) {
      return atoi(tokens[p].str);
      
   }
+  else if(tokens[p].type == TK_DEREF)
+  {
+    word_t addr = eval(p - 1, q);
+    word_t data = paddr_read(addr, 1);
+    return data;
+  }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
@@ -305,7 +321,6 @@ uint32_t eval(int p, int q) {
       }
       if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        
         op = i;
       }
       else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
