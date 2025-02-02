@@ -297,7 +297,7 @@ uint32_t eval(int p, int q) {
   {
     
     word_t addr = eval(p + 1, q);
-    word_t data = paddr_read(addr, 1);
+    word_t data = paddr_read(addr, 4);
     return data;
   }
   else if (check_parentheses(p, q) == true) {
