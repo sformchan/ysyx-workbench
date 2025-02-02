@@ -318,7 +318,7 @@ uint32_t eval(int p, int q) {
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
     int op_type = tokens[op].type;
-    
+    printf("%d", op_type);
     //op = the position of 主运算符 in the token expression;
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
