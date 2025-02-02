@@ -371,12 +371,17 @@ uint32_t eval(int p, int q) {
       case '/': 
         if(val2 == 0)
         {
-          printf("invalid input (cannot divised by ZERO)\n");
+          printf(ANSI_FG_RED "ERROR" ANSI_NONE ": cannot divised by ZERO\n");
           return 0;
         }
         else
           return val1 / val2;
-      default: assert(0);
+      default:
+        {
+          printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+          printf("please prompt again\n");
+          return 0;
+        }
     }
   }
 } 
