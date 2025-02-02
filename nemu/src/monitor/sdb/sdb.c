@@ -145,9 +145,9 @@ static int cmd_p(char *args)
     return 0;
   }
   bool sign = false;
-  printf("\n");
+ 
   printf(ANSI_FG_WHITE "result" ANSI_NONE ": 0x%x\n", expr(args, &sign));
-  printf("\n");
+
   return 0;
 }
 
