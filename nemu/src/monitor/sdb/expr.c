@@ -60,7 +60,6 @@ static struct rule {
   {"[0-9]+", TK_NUM}, //decimal
   {"\\-", '-'}, //minus
   {"\\*", '*'}, //mutilply
-  {"\\*", TK_DEREF},
   {"\\/", '/'}, //divide
   {"\\(", '('}, 
   {"\\)", ')'},
