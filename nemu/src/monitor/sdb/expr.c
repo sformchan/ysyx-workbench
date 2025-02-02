@@ -380,6 +380,10 @@ uint32_t eval(int p, int q) {
         }
         else
           return val1 / val2;
+      case 1: return val1 == val2;
+      case 3: return val1 != val2;
+      case 5: return val1 && val2;
+      case 6: return val1 || val2;
       default:
         {
           printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
