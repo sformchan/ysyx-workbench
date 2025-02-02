@@ -296,7 +296,7 @@ uint32_t eval(int p, int q) {
   else if(tokens[p].type == TK_DEREF)
   {
     
-    word_t addr = eval(p - 1, q);
+    word_t addr = eval(p + 1, q);
     word_t data = paddr_read(addr, 1);
     return data;
   }
