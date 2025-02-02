@@ -345,6 +345,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 3 || sign == 0) && (tokens[i].type == '1' || tokens[i].type == '3'))
       {
+        assert(0);
         sign = 3;
         op = i;
       }
