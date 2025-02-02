@@ -62,8 +62,8 @@ static struct rule {
   {"\\-", '-'}, //minus
   {"\\*", '*'}, //mutilply
   {"\\/", '/'}, //divide
-  {"\\(", '('}, 
-  {"\\)", ')'},
+  {"\\(", '('}, //left
+  {"\\)", ')'}, //right
   {"\\!\\=", TK_NEQ},
   {"\\$\\w+", TK_REG},
   {"\\&\\&", TK_AND},
@@ -134,18 +134,8 @@ static bool make_token(char *e) {
             nr_token++;
             break;
           case '*':
-            /* if(i == 0 || tokens[i - 1].type == '(' || 
-                         tokens[i - 1].type != 2   || 
-                         tokens[i - 1].type != 16)
-            {
-              tokens[nr_token].type = 7;
-              nr_token++;
-            } 
-            else
-            { */
             tokens[nr_token].type = '*';
             nr_token++;
-             
             break; 
           case '/':
             tokens[nr_token].type = '/';
@@ -268,7 +258,7 @@ bool check_parentheses(int p, int q)
 }
 
 
-//#define max(a, b) ((a) > (b) ? (a) : (b))    unsure to use it.
+#define max(a, b) ((a) > (b) ? (a) : (b))
 
 
 uint32_t eval(int p, int q) {
@@ -335,7 +325,7 @@ uint32_t eval(int p, int q) {
     //find major
     
     int op = -1;
-    bool sign = false;
+    int sign = 0;
     
     for(int i = p; i <= q; i++)
     {
@@ -346,15 +336,32 @@ uint32_t eval(int p, int q) {
           i++;
         }
       }
-      if(!sign && (tokens[i].type == '*' || tokens[i].type == '/'))
+      if((sign >= 1) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
+        sign = 1;
         op = i;
       }
-      else if(!sign && (tokens[i].type == '+' || tokens[i].type == '-'))
+      if((sign >= 2) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        sign = true;
+        sign = 2;
         op = i;
       }
+      if((sign >= 3) && (tokens[i].type == '1' || tokens[i].type == '3'))
+      {
+        sign = 3;
+        op = i;
+      }
+      if((sign >= 4) && tokens[i].type == '5')
+      {
+        sign = 4;
+        op = i;
+      }
+      if((sign >= 5) && tokens[i].type == '6')
+      {
+        sign = 5;
+        op = i;
+      }
+      
     }
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
