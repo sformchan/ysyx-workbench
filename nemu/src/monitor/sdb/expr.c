@@ -333,7 +333,7 @@ uint32_t eval(int p, int q) {
           i++;
         }
       }
-      if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
+      if(((sign >= 1) || (sign == 0)) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
         sign = 1;
         op = i;
@@ -343,7 +343,7 @@ uint32_t eval(int p, int q) {
         sign = 2;
         op = i;
       }
-      if((sign >= 3 || sign == 0) && (tokens[i].type == '1' || tokens[i].type == '3'))
+      if(((sign >= 3) || (sign == 0)) && (tokens[i].type == '1' || tokens[i].type == '3'))
       {
         assert(0);
         sign = 3;
