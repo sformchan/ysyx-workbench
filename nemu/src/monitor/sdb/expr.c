@@ -37,7 +37,8 @@ enum {
   TK_REG = 4,
   TK_AND = 5,
   TK_OR = 6,
-  TK_DEREF = 7
+  TK_DEREF = 7,
+  TK_NEG = 8
   
 
   /* TODO: Add more token types */
@@ -223,7 +224,15 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '/' ))
     {
       
-      tokens[i].type = TK_DEREF;
+      tokens[i].type = 7;
+    }
+    if(tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '+' ||
+                                           tokens[i - 1].type == '-' ||
+                                           tokens[i - 1].type == '*' ||
+                                           tokens[i - 1].type == '/' ))
+    {
+      
+      tokens[i].type = 8;
     }
   }
   uint32_t result = eval(0, nr_token - 1);
@@ -293,12 +302,17 @@ uint32_t eval(int p, int q) {
      return atoi(tokens[p].str);
      
   }
-  else if(tokens[p].type == TK_DEREF)
+  else if(tokens[p].type == 7)
   {
     
     word_t addr = eval(p + 1, q);
     word_t data = paddr_read(addr, 4);
     return data;
+  }
+  else if(tokens[p].type == 8)
+  {
+    word_t result = eval(p + 1, q);
+    return -1 * result;
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
