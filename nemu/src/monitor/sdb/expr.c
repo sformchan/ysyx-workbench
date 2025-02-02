@@ -222,6 +222,7 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ))
     {
+      assert(0);
       tokens[i].type = TK_DEREF;
     }
   }
