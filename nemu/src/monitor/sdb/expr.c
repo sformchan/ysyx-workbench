@@ -326,12 +326,25 @@ uint32_t eval(int p, int q) {
     
     for(int i = p; i <= q; i++)
     {
+      int num = 1;
       if(tokens[i].type == '(')
       {
-        while(tokens[i].type != ')')
+        while(num != 0)
         {
+          if(tokens[i].type == '(')
+          {
+            num++;
+          }
+          if(tokens[i].type == ')')
+          {
+            num--;
+          }
           i++;
         }
+        /*while(tokens[i].type != ')')
+        {
+          i++;
+        }*/
       }
       if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
