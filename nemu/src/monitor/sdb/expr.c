@@ -316,7 +316,6 @@ uint32_t eval(int p, int q) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-     assert(0);
     return eval(p + 1, q - 1);
   }
   else {
