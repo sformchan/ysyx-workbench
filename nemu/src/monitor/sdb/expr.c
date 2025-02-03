@@ -329,7 +329,7 @@ uint32_t eval(int p, int q) {
       
       if(tokens[i].type == '(')
       {
-        int num = 1;
+        /*int num = 1;
         i++;
         while(num != 0)
         {
@@ -343,11 +343,11 @@ uint32_t eval(int p, int q) {
           }
           i++;
         }
-        printf("%d\n", i);
-        /*while(tokens[i].type != ')')
+        printf("%d\n", i); */
+        while(tokens[i].type != ')')
         {
           i++;
-        }*/
+        }
       }
       if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
