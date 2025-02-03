@@ -329,6 +329,7 @@ uint32_t eval(int p, int q) {
       int num = 1;
       if(tokens[i].type == '(')
       {
+        i++;
         while(num != 0)
         {
           if(tokens[i].type == '(')
