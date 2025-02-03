@@ -212,7 +212,7 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == ')' ))
+                                           tokens[i - 1].type == '(' ))
     {
       
       tokens[i].type = 7;
@@ -221,7 +221,7 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == ')' ))
+                                           tokens[i - 1].type == '(' ))
     {
       
       tokens[i].type = 8;
@@ -329,7 +329,7 @@ uint32_t eval(int p, int q) {
       
       if(tokens[i].type == '(')
       {
-        /*int num = 1;
+        int num = 1;
         i++;
         while(num != 0)
         {
@@ -343,14 +343,11 @@ uint32_t eval(int p, int q) {
           }
           i++;
         }
-        printf("%d\n", i); */
-        while(tokens[i].type != ')')
-        {
-          i++;
-        }
+        printf("%d\n", i); 
       }
       if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
+        assert(0);
         sign = 1;
         op = i;
       }
