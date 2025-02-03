@@ -343,7 +343,7 @@ uint32_t eval(int p, int q) {
           }
           i++;
         }
-        printf("%d", i);
+        printf("%d\n", i);
         /*while(tokens[i].type != ')')
         {
           i++;
