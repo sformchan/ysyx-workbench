@@ -254,7 +254,7 @@ bool check_parentheses(int p, int q)
           if(left + right == 0)
           {
             left--;
-            if(i == q && left == 1)
+            if(i == q)
             {
               return true;
             }
