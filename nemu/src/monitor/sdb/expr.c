@@ -227,6 +227,7 @@ word_t expr(char *e, bool *success) {
       tokens[i].type = 8;
     }
   }
+  
   uint32_t result = eval(0, nr_token - 1);
   *success = true;
   return result;
@@ -288,10 +289,10 @@ uint32_t eval(int p, int q) {
   if (p > q) {
     /* Bad expression */
     printf("%d %d\n", p, q);
-    assert(0);
+    //assert(0);
     printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
     printf("please prompt again\n");
-    return 0;
+    return eval(p, p);
   }
   else if (p == q) {
     /* Single token.
