@@ -343,8 +343,9 @@ uint32_t eval(int p, int q) {
             num--;
           }
           i++;
+          printf("%d\n", i);
         }
-        printf("%d\n", i); 
+         
       }
       if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
