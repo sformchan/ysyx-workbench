@@ -233,7 +233,32 @@ word_t expr(char *e, bool *success) {
   
 }
 
-
+/*bool check_parentheses(int p, int q)
+{
+  if(tokens[p].type == '(')
+  { 
+    int left = 1;
+    int right = 0;
+    for(int i = p + 1; i <= q; i++)
+    {
+      if(tokens[p].type == ')')
+      {
+        right = -1 * left;
+        if(left + right == 0)
+        {
+          if(i == q)
+          {
+            return true;
+          }
+        }
+      }
+      else if(tokens[p].type == '(')
+      {
+        left++;
+      }
+    }
+  }
+}*/
 bool check_parentheses(int p, int q)
 {
   if(tokens[p].type != '('  || tokens[q].type != ')')
@@ -324,7 +349,7 @@ uint32_t eval(int p, int q) {
     int op = -1;
     int sign = 0;
     
-    for(int i = p; i <= q; i++)
+    for(int i = p; i < q; i++)
     {
       
       if(tokens[i].type == '(')
