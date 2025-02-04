@@ -331,7 +331,7 @@ uint32_t eval(int p, int q) {
       if(tokens[i].type == '(')
       {
         int num = 1;
-        assert(0);
+        //assert(0);
         for(int j = i + 1; j <= q; j++)
         {
           if(tokens[j].type == ')')
