@@ -386,7 +386,7 @@ uint32_t eval(int p, int q) {
     if(p > op - 1 || op + 1 > q)
     {
       printf("error:%d %d %d %d\n", p, op-1, op+1, q);
-      assert(0);
+      //assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       printf("please prompt again\n");
       return -1;
