@@ -354,6 +354,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
+        printf("hello\n");
         sign = 2;
         op = i;
       }
