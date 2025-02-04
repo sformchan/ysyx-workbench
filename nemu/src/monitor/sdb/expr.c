@@ -396,7 +396,7 @@ uint32_t eval(int p, int q) {
       printf("please prompt again\n");
       return -1;
     }
-    printf("%d %d %d %d\n", p, op-1, op+1, q);
+    //printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     
