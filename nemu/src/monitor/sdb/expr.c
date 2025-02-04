@@ -382,7 +382,7 @@ uint32_t eval(int p, int q) {
     //op = the position of 主运算符 in the token expression;
     if(p > op - 1 || op + 1 > q)
     {
-      printf("%d %d %d %d\n", p, op-1, op+1, q);
+      printf("error:%d %d %d %d\n", p, op-1, op+1, q);
       assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       printf("please prompt again\n");
