@@ -244,10 +244,15 @@ bool check_parentheses(int p, int q)
       if(tokens[i].type == ')')
       {
         num--;
+        if(num == 0 && i != q)
+        {
+          return false;
+        }
         if(num == 0 && i == q)
         {
           return true;
         }
+        
       }
       else if(tokens[i].type == '(')
       {
