@@ -288,8 +288,10 @@ uint32_t eval(int p, int q) {
   if (p > q) {
     /* Bad expression */
     printf("%d %d\n", p, q);
-    assert(0);
-    return -1;
+    //assert(0);
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
+    printf("please prompt again\n");
+    return 0;
   }
   else if (p == q) {
     /* Single token.
