@@ -327,7 +327,7 @@ uint32_t eval(int p, int q) {
     printf("%d %d %d\n", p, q, op);
     for(int i = p; i <= q; i++)
     {
-      
+      printf("%d %d %d\n", p, q, op);
       if(tokens[i].type == '(')
       {
         int num = 1;
