@@ -234,7 +234,7 @@ word_t expr(char *e, bool *success) {
   
 }
 
-/*bool check_parentheses(int p, int q)
+bool check_parentheses(int p, int q)
 {
   if(tokens[p].type == '(')
   { 
@@ -245,12 +245,18 @@ word_t expr(char *e, bool *success) {
       if(tokens[p].type == ')')
       {
         right = -1 * left;
+        if(left == 0)
+        {
+          return false;
+        }
         if(left + right == 0)
         {
-          if(i == q)
+          left--;
+          if(i == q && left == 1)
           {
             return true;
           }
+          
         }
       }
       else if(tokens[p].type == '(')
@@ -259,8 +265,9 @@ word_t expr(char *e, bool *success) {
       }
     }
   }
-}*/
-bool check_parentheses(int p, int q)
+  return false;
+}
+/*bool check_parentheses(int p, int q)
 {
   if(tokens[p].type != '('  || tokens[q].type != ')')
     return false;
@@ -281,7 +288,7 @@ bool check_parentheses(int p, int q)
     else l ++;
   }
   return true;
-}
+}*/
 
 
 uint32_t eval(int p, int q) {
