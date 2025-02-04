@@ -346,6 +346,7 @@ uint32_t eval(int p, int q) {
           {
             break;
           }
+          printf("hello\n");
         }
          
       }
