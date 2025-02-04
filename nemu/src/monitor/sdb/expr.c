@@ -244,20 +244,28 @@ bool check_parentheses(int p, int q)
     {
       if(tokens[p].type == ')')
       {
-        right = -1 * left;
-        if(left == 0)
+        if(left + right != 0) 
         {
-          return false;
+          right = -1 * left;
+          if(left == 0)
+          {
+            return false;
+          }
+          if(left + right == 0)
+          {
+            left--;
+            if(i == q && left == 1)
+            {
+              return true;
+            }
+          
+          }
         }
-        if(left + right == 0)
+        else
         {
           left--;
-          if(i == q && left == 1)
-          {
-            return true;
-          }
-          
         }
+        
       }
       else if(tokens[p].type == '(')
       {
