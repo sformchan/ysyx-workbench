@@ -334,7 +334,7 @@ uint32_t eval(int p, int q) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    //assert(0);
+    assert(0);
     return eval(p + 1, q - 1);
   }
   else {
@@ -406,7 +406,7 @@ uint32_t eval(int p, int q) {
       printf("please prompt again\n");
       return 0;
     }
-    
+    printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     
