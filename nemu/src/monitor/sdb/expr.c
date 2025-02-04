@@ -334,6 +334,7 @@ uint32_t eval(int p, int q) {
         //assert(0);
         for(int j = i + 1; j <= q; j++)
         {
+          i++;
           if(tokens[j].type == ')')
           {
             num--;
