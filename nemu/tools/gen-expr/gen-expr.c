@@ -23,24 +23,14 @@
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
-/*static char *code_format =
+static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
 "  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
-"}"; */
-static char *code_format =
-"#include <stdio.h>\n"
-"int main() { "
-"  unsigned result = %s; "
-"  if (result == 0) { "
-"    printf(\"DIV0\"); "  // 检测到除零行为时输出 "DIV0"
-"  } else { "
-"    printf(\"%%u\", result); "  // 否则输出计算结果
-"  } "
-"  return 0; "
-"}";
+"}"; 
+
 
 
 #define MAX_DEPTH 100
@@ -108,7 +98,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc -Wno-overflow -Wno-div-by-zero /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp.c -o /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp");
+    int ret = system("gcc -Wno-overflow -Wall -Werror /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp.c -o /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp");
     if (ret != 0) continue;
 
     fp = popen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp", "r");

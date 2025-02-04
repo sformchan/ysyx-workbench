@@ -262,29 +262,6 @@ bool check_parentheses(int p, int q)
   }
   return false;
 }
-/*bool check_parentheses(int p, int q)
-{
-  if(tokens[p].type != '('  || tokens[q].type != ')')
-    return false;
-  int l = p , r = q;
-  while(l < r)
-  {
-    if(tokens[l].type == '('){
-      if(tokens[r].type == ')')
-      {       
-        l ++ , r --;
-          continue;
-      }
-      else       
-        r --;
-    }
-    else if(tokens[l].type == ')')
-      return false;
-    else l ++;
-  }
-  return true;
-}*/
-
 
 uint32_t eval(int p, int q) {
   
@@ -409,7 +386,7 @@ uint32_t eval(int p, int q) {
       assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       printf("please prompt again\n");
-      return 0;
+      return -1;
     }
     printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
