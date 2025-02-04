@@ -327,7 +327,7 @@ uint32_t eval(int p, int q) {
     printf("%d %d %d\n", p, q, op);
     for(int i = p; i <= q; i++)
     {
-      printf("%d %d %d\n", p, q, op);
+      
       if(tokens[i].type == '(')
       {
         int num = 1;
@@ -374,7 +374,7 @@ uint32_t eval(int p, int q) {
         sign = 4;
         op = i;
       }
-      
+      printf("%d %d %d\n", p, q, op);
     }
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
