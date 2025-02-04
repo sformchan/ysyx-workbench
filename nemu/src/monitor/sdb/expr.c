@@ -316,7 +316,7 @@ uint32_t eval(int p, int q) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    //assert(0);
+    assert(0);
     return eval(p + 1, q - 1);
   }
   else {
@@ -354,7 +354,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        printf("hello\n");
+        //printf("hello\n");
         sign = 2;
         op = i;
       }
