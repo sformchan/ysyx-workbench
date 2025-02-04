@@ -237,39 +237,21 @@ word_t expr(char *e, bool *success) {
 bool check_parentheses(int p, int q)
 {
   if(tokens[p].type == '(')
-  { 
-    int left = 1;
-    int right = 0;
+  {
+    int num = 1;
     for(int i = p + 1; i <= q; i++)
     {
       if(tokens[i].type == ')')
       {
-        if(left + right != 0) 
+        num--;
+        if(num == 0 && i == q)
         {
-          right = -1 * left;
-          if(left == 0)
-          {
-            return false;
-          }
-          if(left + right == 0)
-          {
-            left--;
-            if(i == q)
-            {
-              return true;
-            }
-          
-          }
+          return true;
         }
-        else
-        {
-          left--;
-        }
-        
       }
-      else if(tokens[i].type == '(')
+      else if(tokens[i].type == ')')
       {
-        left++;
+        num++;
       }
     }
   }
