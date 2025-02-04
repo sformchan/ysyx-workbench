@@ -347,7 +347,7 @@ uint32_t eval(int p, int q) {
           {
             break;
           }
-          printf("hello\n");
+          //printf("hello\n");
         }
          
       }
@@ -379,14 +379,14 @@ uint32_t eval(int p, int q) {
         sign = 4;
         op = i;
       }
-      printf("%d %d %d\n", p, q, op);
+      //printf("%d %d %d\n", p, q, op);
     }
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
     printf("%c\n", tokens[op].type);
     printf("%d\n", op);
     int op_type = tokens[op].type;
-    printf("%d\n", op_type);
+    //printf("%d\n", op_type);
     //op = the position of 主运算符 in the token expression;
     if(p > op - 1 || op + 1 > q)
     {
