@@ -286,15 +286,8 @@ bool check_parentheses(int p, int q)
 
 uint32_t eval(int p, int q) {
   
-  if (p > q) {
-    /* Bad expression */
-    printf("%d %d\n", p, q);
-    //assert(0);
-    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
-    printf("please prompt again\n");
-    return eval(p, p);
-  }
-  else if (p == q) {
+
+  if (p == q) {
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
@@ -407,8 +400,17 @@ uint32_t eval(int p, int q) {
     int op_type = tokens[op].type;
     printf("%d\n", op_type);
     //op = the position of 主运算符 in the token expression;
+    if(p > op - 1 || op + 1 > q)
+    {
+      printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+      printf("please prompt again\n");
+      return 0;
+    }
+    
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
+    
+    
 
     switch (op_type) {
       case '+': return val1 + val2;
