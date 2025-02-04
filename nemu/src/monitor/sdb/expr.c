@@ -242,7 +242,7 @@ bool check_parentheses(int p, int q)
     int right = 0;
     for(int i = p + 1; i <= q; i++)
     {
-      if(tokens[p].type == ')')
+      if(tokens[i].type == ')')
       {
         if(left + right != 0) 
         {
@@ -267,7 +267,7 @@ bool check_parentheses(int p, int q)
         }
         
       }
-      else if(tokens[p].type == '(')
+      else if(tokens[i].type == '(')
       {
         left++;
       }
