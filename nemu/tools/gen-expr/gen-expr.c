@@ -19,6 +19,7 @@
 #include <time.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 
 // this should be enough
 static char buf[65536] = {};
@@ -33,7 +34,7 @@ static char *code_format =
 
 
 
-#define MAX_DEPTH 100
+#define MAX_DEPTH 150
 
 
 int choose(int n)
@@ -55,6 +56,7 @@ void gen(char e) {
 }
 
 static void gen_rand_expr(int depth) {
+    
     if (depth > MAX_DEPTH) {
         gen_num();  // 达到最大深度时，生成一个数字
         return;
@@ -78,6 +80,57 @@ static void gen_rand_expr(int depth) {
 }
 
 
+bool check_zero(char *expr) //undone
+{
+  for(int i = 0, length = strlen(expr); i < length; i++)
+  {
+    if(expr[i] == '/')
+    {
+      i++;
+      char temp_buf[65536] = {};
+      int j = 0;
+      if(expr[i] == '(')
+      {
+        int num = 1;
+        sprintf(temp_buf + strlen(temp_buf), "%c", expr[i]);
+        //assert(0);
+        for(int k = i + 1; k <= length; k++)
+        {
+          sprintf(temp_buf + strlen(temp_buf), "%c", expr[k]);
+          if(expr[k] == ')')
+          {
+            num--;
+          }
+          else if(expr[k] == '(')
+          {
+            num++;
+          }
+          if(num == 0)
+          {
+            break;
+          }
+        }
+      }
+      else
+      {
+        while(i < length && expr[i] != '+' && expr[i] != '-')
+        { 
+          temp_buf[j++] = expr[i++];
+        }
+        temp_buf[j] = '\0';
+        
+        
+      }
+      unsigned result = strtoul(temp_buf, NULL, 10);
+      if(result == 0)
+      {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 int main(int argc, char *argv[]) {
   int seed = time(0);
   srand(seed);
@@ -88,8 +141,14 @@ int main(int argc, char *argv[]) {
   int i;
   for (i = 0; i < loop; i ++) {
     buf[0] = '\0';
-    
     gen_rand_expr(0);
+    
+    while(!check_zero(buf))
+    {
+      buf[0] = '\0';
+      gen_rand_expr(0);
+    }
+    
 
     sprintf(code_buf, code_format, buf); //code_format是buf插入code_buf的格式 相当于将buf格式化为c代码按照code_format的格式放入到code_buf
 

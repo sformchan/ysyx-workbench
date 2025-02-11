@@ -1,2 +1,2 @@
 #include <stdio.h>
-int main() {   unsigned result = (47) - 89 * 38 + (80) + (((74) * 92 + (((21 - 58 - 33 - ((19 * 92)) - (41) + (((2))) * 34))))) - (59) / 29 + (78);   printf("%u", result);   return 0; }
+int main() {   unsigned result = 33;   printf("%u", result);   return 0; }
