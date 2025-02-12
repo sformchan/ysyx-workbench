@@ -278,7 +278,7 @@ uint32_t eval(int p, int q) {
        if(!success)
        {
          printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
-         printf("please prompt again\n");
+         
          return 0;
        }
        return reg_value;
@@ -295,19 +295,23 @@ uint32_t eval(int p, int q) {
      else
      {
        printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
-       printf("please prompt again\n");
+       
        return 0;
      }
      
   }
-  else if(tokens[p].type == 7)
+  else if(tokens[p].type == 7)  //deref
   {
-    
     word_t addr = eval(p + 1, q);
+    if(addr < 0x80000000 || addr > 0x87ffffff)
+    {
+        printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
+        return 0;
+    }
     word_t data = paddr_read(addr, 4);
     return data;
   }
-  else if(tokens[p].type == 8)
+  else if(tokens[p].type == 8)  //negetive
   {
     word_t result = eval(p + 1, q);
     return -1 * result;
@@ -393,7 +397,6 @@ uint32_t eval(int p, int q) {
       printf("error:%d %d %d %d\n", p, op-1, op+1, q);
       assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
-      printf("please prompt again\n");
       return -1;
     }
     //printf("%d %d %d %d\n", p, op-1, op+1, q);
