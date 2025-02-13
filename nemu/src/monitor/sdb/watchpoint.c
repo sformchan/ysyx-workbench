@@ -176,6 +176,7 @@ bool check_wp()
     if(success && new_value != wp->value)
     {
       printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->value);
+      wp->value = new_value;
       return true;
     }
     wp = wp->next;
