@@ -107,7 +107,7 @@ void set_wp(char *expr_str)
 {
   WP *wp = new_wp();          
   wp->expr = expr_str;
-  printf("%s\n", wp->expr);
+  printf("%p\n", wp->expr);
   bool success = false;
   wp->old_value = expr(wp->expr, &success);
   if(!success)
@@ -131,7 +131,8 @@ void display_wp()
   
   for(WP *wp = head; wp != NULL; wp = wp->next)
   {
-    printf("Wp %d: Expression = %s,  Old value = %x,  Enable = %s\n", wp->NO, wp->expr, wp->old_value, wp->enable ? "Yes" : "No");
+    printf("Wp %d: Expression = %s,  Old value = 0x%x,  Enable = %s\n", wp->NO, wp->expr, wp->old_value, wp->enable ? "Yes" : "No");
+    printf("%p\n", wp->expr);
   }
 }
 
