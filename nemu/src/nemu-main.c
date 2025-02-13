@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     perror("failed to open file");
   }
   
-  char line[1024];
+  char line[65536];
   while(fgets(line, sizeof(line), file))
   {
     bool *success = false;
