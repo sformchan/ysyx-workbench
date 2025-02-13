@@ -132,7 +132,7 @@ void display_wp()
   for(WP *wp = head; wp != NULL; wp = wp->next)
   {
     printf("Wp %d: Expression = %s,  Old value = 0x%x,  Enable = %s\n", wp->NO, wp->expr, wp->old_value, wp->enable ? "Yes" : "No");
-    printf("%p\n", wp->expr);
+    printf("%s\n", wp->expr);
   }
 }
 
