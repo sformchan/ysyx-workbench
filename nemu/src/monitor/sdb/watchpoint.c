@@ -105,20 +105,24 @@ void free_wp(WP *wp)
 
 void set_wp(char *expr_str)
 {
-  WP *wp = new_wp();          
-  wp->expr = strdup(expr_str);
-  //printf("%p\n", wp->expr);
-  char real_expr[100];
-  real_expr[0] = '*';
-  strcpy(real_expr + 1, wp->expr);
-  bool success = false;
-  wp->value = expr(real_expr, &success);
   unsigned check = strtol(expr_str, NULL, 16);
-  if(!success || !(0x80000000 <= check && check <= 0x87ffffff))
+  if(!(0x80000000 <= check && check <= 0x87ffffff))
   {
-    printf("invalid input: %s\n", wp->expr);
+    printf("invalid input: %s\n", expr_str);
   }
-  printf("watchpoint set successfully: No.%d --> %s\n", wp->NO, wp->expr);
+  else
+  {
+    WP *wp = new_wp();          
+    wp->expr = strdup(expr_str);
+    //printf("%p\n", wp->expr);
+    char real_expr[100];
+    real_expr[0] = '*';
+    strcpy(real_expr + 1, wp->expr);
+    bool success = false;
+    wp->value = expr(real_expr, &success);
+    printf("watchpoint set successfully: No.%d --> %s\n", wp->NO, wp->expr);
+  }
+  
   
 }
 
