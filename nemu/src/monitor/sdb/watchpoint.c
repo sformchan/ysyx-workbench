@@ -22,7 +22,7 @@ typedef struct watchpoint {
   struct watchpoint *next;
   
   char *expr;
-  uint32_t old_value;
+  uint32_t value;
   bool enable;
 
   /* TODO: Add more members if necessary */
@@ -39,7 +39,7 @@ void init_wp_pool() {
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
     wp_pool[i].enable = false;
     wp_pool[i].expr = NULL;
-    wp_pool[i].old_value = 0;
+    wp_pool[i].value = 0;
   }
 
   head = NULL;
@@ -112,7 +112,7 @@ void set_wp(char *expr_str)
   real_expr[0] = '*';
   strcpy(real_expr + 1, wp->expr);
   bool success = false;
-  wp->old_value = expr(real_expr, &success);
+  wp->value = expr(real_expr, &success);
   if(!success)
   {
     printf("invalid input: %s\n", wp->expr);
@@ -134,7 +134,7 @@ void display_wp()
   
   for(WP *wp = head; wp != NULL; wp = wp->next)
   {
-    printf("Wp %d: Expression = %s,  Old value = 0x%x,  Enable = %s\n", wp->NO, wp->expr, wp->old_value, wp->enable ? "Yes" : "No");
+    printf("Wp %d: Expression = %s,  Value = 0x%x,  Enable = %s\n", wp->NO, wp->expr, wp->value, wp->enable ? "Yes" : "No");
     //printf("%s\n", wp->expr);
   }
 }
@@ -173,9 +173,9 @@ bool check_wp()
     real_expr[0] = '*';
     strcpy(real_expr + 1, wp->expr);
     uint32_t new_value = expr(real_expr, &success);
-    if(success && new_value != wp->old_value)
+    if(success && new_value != wp->value)
     {
-      printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->old_value);
+      printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->value);
       return true;
     }
     wp = wp->next;
