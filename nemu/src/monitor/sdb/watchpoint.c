@@ -108,7 +108,7 @@ void set_wp(char *expr_str)
   unsigned check = strtol(expr_str, NULL, 16);
   if(!(0x80000000 <= check && check <= 0x87ffffff))
   {
-    printf(ANSI_FG_RED "invalid input:" ANSI_NONE "%s\n", expr_str);
+    printf(ANSI_FG_RED "invalid input" ANSI_NONE ": %s\n", expr_str);
   }
   else
   {
