@@ -113,7 +113,8 @@ void set_wp(char *expr_str)
   strcpy(real_expr + 1, wp->expr);
   bool success = false;
   wp->value = expr(real_expr, &success);
-  if(!success)
+  unsigned check = strtol(expr_str, NULL, 16);
+  if(!success || !(0x80000000 <= check && check <= 0x87ffffff))
   {
     printf("invalid input: %s\n", wp->expr);
   }
