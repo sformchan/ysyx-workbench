@@ -148,9 +148,9 @@ static bool make_token(char *e) {
             break; 
           case 2:
             tokens[nr_token].type = 2;
-            printf("%s\n", tokens[nr_token].str);
+            //printf("%s\n", tokens[nr_token].str);
             strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
-            printf("%s\n", tokens[nr_token].str);
+            //printf("%s\n", tokens[nr_token].str);
             nr_token++;
             break; 
           case 1:
@@ -298,7 +298,7 @@ uint32_t eval(int p, int q) {
      {
        //assert(0);
        int value = strtol(tokens[p].str, NULL, 10);
-       printf("%s %d\n", tokens[p].str, value);
+       //printf("%s %d\n", tokens[p].str, value);
        return value;
      }
      else
