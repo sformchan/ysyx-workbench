@@ -40,13 +40,16 @@ int main(int argc, char *argv[]) {
   char line[65536];
   while(fgets(line, sizeof(line), file))
   {
-    bool *success = false;
+    bool success = false;
     char *expression = strchr(line, ' ');
     if(expression)
     {
       expression++;
-      expression[strcspn(expression, "\n")] = '\0';
-      unsigned result = expr(expression, success);
+      size_t len = strcspn(expression, "\n");
+      if (len < strlen(expression)) {
+          expression[len] = '\0';  
+      }
+      unsigned result = expr(expression, &success);
       printf("result: %x\n", result);
     }
   }
