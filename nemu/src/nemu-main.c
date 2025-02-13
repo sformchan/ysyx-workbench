@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
           expression[len] = '\0';  
       }
       unsigned result = expr(expression, &success);
-      printf("result %d: %x %s\n", count, result, expression);
+      printf("%d: %x %s\n", count, result, expression);
     }
     count++;
   }
