@@ -106,12 +106,11 @@ void free_wp(WP *wp)
 void set_wp(char *expr_str)
 {
   WP *wp = new_wp();          
-  wp->expr = strdup(expr_str);
+  wp->expr[0] = '*';
+  strcpy(wp->expr + 1, expr_str); 
   //printf("%p\n", wp->expr);
-  char new_expr[32];
-  sprintf(new_expr, "*%s", wp->expr);
   bool success = false;
-  wp->old_value = expr(new_expr, &success);
+  wp->old_value = expr(wp->expr, &success);
   if(!success)
   {
     printf("invalid input: %s\n", wp->expr);
