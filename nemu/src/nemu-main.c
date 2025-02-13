@@ -19,6 +19,8 @@ void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
+word_t expr(char *e, bool *success);
+
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
@@ -29,7 +31,26 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
+  FILE *file = fopen("~/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  if(!file)
+  {
+    perror("failed to open file");
+  }
   
+  char line[1024];
+  while(fgets(line, sizeof(line), file))
+  {
+    bool *success = false;
+    char *expression = strchr(line, ' ');
+    if(expression)
+    {
+      expression++;
+      expression[strcspn(expression, "\n")] = '\0';
+      unsigned result = expr(expression, success);
+      printf("result: %x\n", result);
+    }
+  }
+  fclose(file);
   
   
   

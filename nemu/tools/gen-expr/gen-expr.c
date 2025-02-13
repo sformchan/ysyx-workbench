@@ -34,7 +34,7 @@ static char *code_format =
 
 
 
-#define MAX_DEPTH 150
+#define MAX_DEPTH 10
 
 
 int choose(int n)
@@ -55,10 +55,10 @@ void gen(char e) {
   sprintf(buf + strlen(buf), "%c", e);  // 将单字符添加到buf末尾
 }
 
-static void gen_rand_expr(int depth) {
+static void gen_rand_expr() {
     
-    if (depth > MAX_DEPTH) {
-        gen_num();  // 达到最大深度时，生成一个数字
+    if (strlen(buf) >= 60000) {
+        gen_num();  
         return;
     }
 
@@ -68,33 +68,34 @@ static void gen_rand_expr(int depth) {
             break;
         case 1:
             gen('(');
-            gen_rand_expr(depth + 1);
+            gen_rand_expr();
             gen(')');
             break;
         default:
-            gen_rand_expr(depth + 1);
+            gen_rand_expr();
             gen_rand_op();
-            gen_rand_expr(depth + 1);
+            gen_rand_expr();
             break;
     }
 }
 
 
-bool check_zero(char *expr) //undone
+bool check_zero(char *expr) //seemingly done
 {
   for(int i = 0, length = strlen(expr); i < length; i++)
   {
     if(expr[i] == '/')
     {
-      i++;
+      
       char temp_buf[65536] = {};
+      int z = i + 1;
       int j = 0;
-      if(expr[i] == '(')
+      if(expr[z] == '(')
       {
         int num = 1;
-        sprintf(temp_buf + strlen(temp_buf), "%c", expr[i]);
+        sprintf(temp_buf + strlen(temp_buf), "%c", expr[z]);
         //assert(0);
-        for(int k = i + 1; k <= length; k++)
+        for(int k = z + 1; k <= length; k++)
         {
           sprintf(temp_buf + strlen(temp_buf), "%c", expr[k]);
           if(expr[k] == ')')
@@ -113,19 +114,20 @@ bool check_zero(char *expr) //undone
       }
       else
       {
-        while(i < length && expr[i] != '+' && expr[i] != '-')
+        while(i < length && expr[i] != '+' && expr[i] != '-' && expr[i] != '*' && expr[i] != '/')
         { 
           temp_buf[j++] = expr[i++];
         }
         temp_buf[j] = '\0';
         
-        
       }
       unsigned result = strtoul(temp_buf, NULL, 10);
+      
       if(result == 0)
       {
         return false;
       }
+      
     }
   }
   return true;
@@ -141,13 +143,13 @@ int main(int argc, char *argv[]) {
   int i;
   for (i = 0; i < loop; i ++) {
     buf[0] = '\0';
-    gen_rand_expr(0);
+    gen_rand_expr();
     
-    while(!check_zero(buf))
+    /*while(!check_zero(buf))
     {
       buf[0] = '\0';
       gen_rand_expr(0);
-    }
+    }*/
     
 
     sprintf(code_buf, code_format, buf); //code_format是buf插入code_buf的格式 相当于将buf格式化为c代码按照code_format的格式放入到code_buf
