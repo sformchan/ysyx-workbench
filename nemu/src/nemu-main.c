@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
   }
   
   char line[65536];
+  int count = 1;
   while(fgets(line, sizeof(line), file))
   {
     bool success = false;
@@ -50,8 +51,9 @@ int main(int argc, char *argv[]) {
           expression[len] = '\0';  
       }
       unsigned result = expr(expression, &success);
-      printf("result: %x\n", result);
+      printf("result %d: %x\n", count, result);
     }
+    count++;
   }
   fclose(file);
   
