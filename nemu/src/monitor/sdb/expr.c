@@ -418,7 +418,7 @@ uint32_t eval(int p, int q) {
         if(val2 == 0)
         {
           printf("%d %d %d\n", p, op, q);
-          printf("%s %s\n", tokens[p].str, tokens[q].str);
+          printf("%s %s %s\n", tokens[196].str, tokens[p].str, tokens[q].str);
           printf(ANSI_FG_RED "ERROR" ANSI_NONE ": cannot divised by ZERO\n");
           return 0;
         }
