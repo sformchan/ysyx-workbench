@@ -59,82 +59,38 @@ void gen(char e) {
 static void gen_rand_expr() {
     
     if (strlen(buf) >= 60000) {
-        gen_num();  
+        gen_num(); 
+        gen('u'); 
         return;
     }
 
     switch(choose(3)) {
         case 0:
+            
             gen_num();
             gen('u');
+            if(!choose(10)) gen(' ');
             break;
         case 1:
+            
             gen('(');
+            
             gen_rand_expr();
             gen(')');
-            
+            if(!choose(10)) gen(' ');
             break;
         default:
+            
             gen_rand_expr();
+            
             gen_rand_op();
+            if(!choose(10)) gen(' ');
             gen_rand_expr();
+            
             break;
     }
 }
 
-
-bool check_zero(char *expr) //seemingly done
-{
-  for(int i = 0, length = strlen(expr); i < length; i++)
-  {
-    if(expr[i] == '/')
-    {
-      
-      char temp_buf[65536] = {};
-      int z = i + 1;
-      int j = 0;
-      if(expr[z] == '(')
-      {
-        int num = 1;
-        sprintf(temp_buf + strlen(temp_buf), "%c", expr[z]);
-        //assert(0);
-        for(int k = z + 1; k <= length; k++)
-        {
-          sprintf(temp_buf + strlen(temp_buf), "%c", expr[k]);
-          if(expr[k] == ')')
-          {
-            num--;
-          }
-          else if(expr[k] == '(')
-          {
-            num++;
-          }
-          if(num == 0)
-          {
-            break;
-          }
-        }
-      }
-      else
-      {
-        while(i < length && expr[i] != '+' && expr[i] != '-' && expr[i] != '*' && expr[i] != '/')
-        { 
-          temp_buf[j++] = expr[i++];
-        }
-        temp_buf[j] = '\0';
-        
-      }
-      unsigned result = strtoul(temp_buf, NULL, 10);
-      
-      if(result == 0)
-      {
-        return false;
-      }
-      
-    }
-  }
-  return true;
-}
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -148,13 +104,7 @@ int main(int argc, char *argv[]) {
     buf[0] = '\0';
     gen_rand_expr();
     
-    /*while(!check_zero(buf))
-    {
-      buf[0] = '\0';
-      gen_rand_expr(0);
-    }*/
     
-
     sprintf(code_buf, code_format, buf); //code_format是buf插入code_buf的格式 相当于将buf格式化为c代码按照code_format的格式放入到code_buf
 
     FILE *fp = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp.c", "w");
