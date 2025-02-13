@@ -417,6 +417,7 @@ uint32_t eval(int p, int q) {
       case '/': 
         if(val2 == 0)
         {
+          printf("%d %d %d\n", p, op, q);
           printf(ANSI_FG_RED "ERROR" ANSI_NONE ": cannot divised by ZERO\n");
           return 0;
         }
