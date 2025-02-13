@@ -106,8 +106,7 @@ void free_wp(WP *wp)
 void set_wp(char *expr_str)
 {
   WP *wp = new_wp();          
-  wp->expr[0] = '*';
-  strcpy(wp->expr + 1, expr_str); 
+  wp->expr = strdup(expr_str);
   //printf("%p\n", wp->expr);
   bool success = false;
   wp->old_value = expr(wp->expr, &success);
