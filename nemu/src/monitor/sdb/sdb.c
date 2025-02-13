@@ -18,11 +18,17 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
-
+void set_wp(char *expr_str);
 void init_regex();
 void init_wp_pool();
+void display_wp();
+void delete_wp(int num);
+word_t expr(char *e, bool *success);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -49,23 +55,150 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
 }
 
 static int cmd_help(char *args);
+
+static int cmd_si(char *args)
+{
+  int step;
+  if(args == NULL)
+  {
+    step = 1;
+  }
+  else
+  {
+    int result = sscanf(args, "%d", &step);
+    if(result != 1 || step < 1)
+    {
+      step = 1;
+      printf("already put step as 1. pls prompt a valid integer\n");
+    } 
+  }
+  cpu_exec(step);
+  return 0;
+}
+
+
+static int cmd_info(char *args)
+{
+  char letter;
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": try entering 'w' or 'r'.\n");
+  }
+  else
+  {
+    sscanf(args, "%c", &letter);
+    if(letter == 'r')
+    {
+      isa_reg_display();
+    }
+    else if(letter == 'w')
+    {
+      display_wp();
+    }
+  }
+  return 0;
+}
+  
+
+
+static int cmd_x(char *args)
+{
+  int length;
+  char start[256];
+  bool success = false;
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+  }
+  else
+  {
+    sscanf(args, "%d %s", &length, start);
+    uint32_t result = expr(start, &success);
+    printf("%x\n", result);
+    if( length > 0 && (result >= 0x80000000 && result <= 0x87ffffff))
+    {
+      for(int i = 0; i < length; i++)
+      {
+        printf("%d 0x%x 0x%x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+      }
+    }
+    else
+    {
+      printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    }  
+  }
+  return 0;
+}
+
+
+
+static int cmd_p(char *args)
+{
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  bool sign = false;
+ 
+  printf(ANSI_FG_WHITE "result" ANSI_NONE "  0x%x\n", expr(args, &sign));
+
+  return 0;
+}
+
+
+
+static int cmd_w(char *args)
+{
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  set_wp(args);
+  return 0;
+}
+
+
+
+static int cmd_d(char *args)
+{
+  
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  int num = atoi(args);
+  delete_wp(num);
+  return 0;
+}
+
+
 
 static struct {
   const char *name;
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display information about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_q },
+  {"help" , ANSI_FG_CYAN "Display information about all supported commands" ANSI_NONE , cmd_help },
+  { "c", "   Continue the execution of the program", cmd_c },
+  { "q", ANSI_FG_CYAN "   Exit NEMU" ANSI_NONE , cmd_q },
+  { "si", "  Let the program step, you can enter a number after 'si'", cmd_si },
+  { "info", ANSI_FG_CYAN "Print info of reg or wp" ANSI_NONE, cmd_info },
+  { "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
+  { "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
+  { "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
+  { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d}
 
   /* TODO: Add more commands */
 
-};
+}; 
 
 #define NR_CMD ARRLEN(cmd_table)
 

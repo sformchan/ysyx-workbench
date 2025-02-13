@@ -19,21 +19,78 @@
 #include <time.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"#include <stdint.h>\n"
 "int main() { "
-"  unsigned result = %s; "
+"  uint32_t result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
-"}";
+"}"; 
+
+
+
+#define MAX_DEPTH 10
+
+
+int choose(int n)
+{
+  return rand() % n;
+}
+
+void gen_num() {
+  sprintf(buf + strlen(buf), "%d", 1 + rand() % 100);  // 生成随机数字并拼接到buf
+}
+
+void gen_rand_op() {
+  char ops[] = {'+', '-', '*', '/'};
+  sprintf(buf + strlen(buf), " %c ", ops[choose(4)]);  // 生成随机运算符并拼接
+}
+
+void gen(char e) {
+  sprintf(buf + strlen(buf), "%c", e);  // 将单字符添加到buf末尾
+}
 
 static void gen_rand_expr() {
-  buf[0] = '\0';
+    
+    if (strlen(buf) >= 60000) {
+        gen_num(); 
+        gen('u'); 
+        return;
+    }
+
+    switch(choose(3)) {
+        case 0:
+            
+            gen_num();
+            gen('u');
+            if(!choose(10)) gen(' ');
+            break;
+        case 1:
+            
+            gen('(');
+            
+            gen_rand_expr();
+            gen(')');
+            if(!choose(10)) gen(' ');
+            break;
+        default:
+            
+            gen_rand_expr();
+            
+            gen_rand_op();
+            if(!choose(10)) gen(' ');
+            gen_rand_expr();
+            
+            break;
+    }
 }
+
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -44,26 +101,37 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    buf[0] = '\0';
     gen_rand_expr();
+    
+    
+    sprintf(code_buf, code_format, buf); //code_format是buf插入code_buf的格式 相当于将buf格式化为c代码按照code_format的格式放入到code_buf
 
-    sprintf(code_buf, code_format, buf);
-
-    FILE *fp = fopen("/tmp/.code.c", "w");
+    FILE *fp = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp.c", "w");
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc -Wno-overflow -Wall -Werror /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp.c -o /home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp");
     if (ret != 0) continue;
 
-    fp = popen("/tmp/.expr", "r");
+    fp = popen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/temp", "r");
     assert(fp != NULL);
 
     int result;
-    ret = fscanf(fp, "%d", &result);
+    ret = fscanf(fp, "%u", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    printf("%x %s\n", result, buf);
   }
   return 0;
 }
+
+
+
+
+
+
+
+
+

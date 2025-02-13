@@ -19,9 +19,28 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <ctype.h>
+#include <memory/paddr.h>
+
+
+bool check_parentheses(int p, int q);
+uint32_t eval(int p, int q);
+word_t isa_reg_str2val(const char *s, bool *success);
+
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_DEQ = 1,
+  TK_NUM = 2,
+  TK_NOTYPE = 256,
+  TK_HEX = 16,
+  TK_NEQ = 3,
+  TK_REG = 4,
+  TK_AND = 5,
+  TK_OR = 6,
+  TK_DEREF = 7,
+  TK_NEG = 8,
+  TK_U = 9
+  
 
   /* TODO: Add more token types */
 
@@ -37,11 +56,25 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
+  {"u", TK_U},
   {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  {"\\=\\=", TK_DEQ},        // equal
+  {"0x[0-9a-fA-F]+", TK_HEX}, //heximal
+  {"[0-9]+", TK_NUM}, //decimal
+  {"\\-", '-'}, //minus
+  {"\\*", '*'}, //mutilply
+  {"\\/", '/'}, //divide
+  {"\\(", '('}, //left
+  {"\\)", ')'}, //right
+  {"\\!\\=", TK_NEQ},
+  {"\\$\\w+", TK_REG},
+  {"\\&\\&", TK_AND},
+  {"\\|\\|", TK_OR}
+  
+  
 };
 
-#define NR_REGEX ARRLEN(rules)
+#define NR_REGEX ARRLEN(rules)  //calculate the length of array
 
 static regex_t re[NR_REGEX] = {};
 
@@ -67,7 +100,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[65536] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -81,33 +114,93 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
+        //char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+         // i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+        /* TODO: Now a new tok en is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
         switch (rules[i].token_type) {
-          default: TODO();
+          case '+':
+            tokens[nr_token].type = '+';
+            nr_token++;
+            break;
+          case '-':
+            tokens[nr_token].type = '-';
+            nr_token++;
+            break;
+          case '*':
+            tokens[nr_token].type = '*';
+            nr_token++;
+            break; 
+          case '/':
+            tokens[nr_token].type = '/';
+            nr_token++;
+            break; 
+          case 16:
+            tokens[nr_token].type = 16;
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
+            nr_token++;
+            break; 
+          case 2:
+            tokens[nr_token].type = 2;
+            //printf("%s\n", tokens[nr_token].str);
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
+            //printf("%s\n", tokens[nr_token].str);
+            nr_token++;
+            break; 
+          case 1:
+            tokens[nr_token].type = 1;
+            nr_token++;
+            break;
+          case 256:
+            break;
+          case '(':
+            tokens[nr_token].type = '(';
+            nr_token++;
+            break;
+          case ')':
+            tokens[nr_token].type = ')';
+            nr_token++;
+            break;
+          case 3:
+            tokens[nr_token].type = 3;
+            nr_token++;
+            break;
+          case 9:
+            break;
+          case 4:
+            tokens[nr_token].type = 4; //reg
+            strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+            nr_token++;
+            break;
+          case 5:
+            tokens[nr_token].type = 5;
+            nr_token++;
+            break;
+          case 6:
+            tokens[nr_token].type = 6;
+            nr_token++;
+            break;
+          default: 
+            printf(ANSI_FG_RED "ERROR" ANSI_NONE ": invalid input: %d %c\n", position, e[position]);
+            break;
         }
-
         break;
       }
     }
-
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
+  
+    if  (i == NR_REGEX) {
+        printf(ANSI_FG_RED "ERROR" ANSI_NONE ": no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        return false;
     }
   }
-
   return true;
 }
 
@@ -117,9 +210,236 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  //printf("result: 0x%x\n", eval(0, nr_token - 1));
+  for(int i = 0; i < nr_token; i++)
+  {
+    if(tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' ||
+                                           tokens[i - 1].type == '-' ||
+                                           tokens[i - 1].type == '*' ||
+                                           tokens[i - 1].type == '/' ||
+                                           tokens[i - 1].type == '(' ))
+    {
+      
+      tokens[i].type = 7;
+    }
+    if(tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '+' ||
+                                           tokens[i - 1].type == '-' ||
+                                           tokens[i - 1].type == '*' ||
+                                           tokens[i - 1].type == '/' ||
+                                           tokens[i - 1].type == '(' ))
+    {
+      
+      tokens[i].type = 8;
+    }
+  }
+  
+  uint32_t result = eval(0, nr_token - 1);
+  *success = true;
+  memset(tokens, 0, sizeof(tokens));   //important!!!!!!!!
+  return result;
+  
 }
+
+bool check_parentheses(int p, int q)
+{
+  if(tokens[p].type == '(')
+  {
+    int num = 1;
+    for(int i = p + 1; i <= q; i++)
+    {
+      if(tokens[i].type == ')')
+      {
+        num--;
+        if(num == 0 && i != q)
+        {
+          return false;
+        }
+        if(num == 0 && i == q)
+        {
+          return true;
+        }
+        
+      }
+      else if(tokens[i].type == '(')
+      {
+        num++;
+      }
+    }
+  }
+  return false;
+}
+
+uint32_t eval(int p, int q) {
+  
+  if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */ 
+     bool success = false;
+     if(tokens[p].type == 4)
+     {
+       word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
+       if(!success)
+       {
+         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
+         
+         return 0;
+       }
+       return reg_value;
+     }
+     else if(tokens[p].type == 16)
+     {
+       word_t hex_value = (word_t)strtol(tokens[p].str, NULL, 16); 
+       return hex_value;
+     }
+     else if(tokens[p].type == 2)
+     {
+       //assert(0);
+       int value = strtol(tokens[p].str, NULL, 10);
+       //printf("%s %d\n", tokens[p].str, value);
+       return value;
+     }
+     else
+     {
+       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+       
+       return 0;
+     }
+     
+  }
+  else if(tokens[p].type == 7)  //deref
+  {
+    word_t addr = eval(p + 1, q);
+    if(addr < 0x80000000 || addr > 0x87ffffff)
+    {
+        printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
+        return 0;
+    }
+    word_t data = paddr_read(addr, 4);
+    return data;
+  }
+  else if(tokens[p].type == 8)  //negetive
+  {
+    word_t result = eval(p + 1, q);
+    return -1 * result;
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    //assert(0);
+    return eval(p + 1, q - 1);
+  }
+  else {
+    //find major
+    
+    int op = -1;
+    int sign = 0;
+    //printf("%d %d %d\n", p, q, op);
+    for(int i = p; i <= q; i++)
+    {
+      
+      if(tokens[i].type == '(')
+      {
+        int num = 1;
+        //assert(0);
+        for(int j = i + 1; j <= q; j++)
+        {
+          i++;
+          if(tokens[j].type == ')')
+          {
+            num--;
+          }
+          else if(tokens[j].type == '(')
+          {
+            num++;
+          }
+          if(num == 0)
+          {
+            break;
+          }
+          //printf("hello\n");
+        }
+         
+      }
+      if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
+      {
+        //assert(0);
+        sign = 1;
+        op = i;
+      }
+      if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
+      {
+        //printf("hello\n");
+        sign = 2;
+        op = i;
+      }
+      if((sign >= 5 || sign == 0) && (tokens[i].type == 1 || tokens[i].type == 3))
+      {
+        //assert(0);
+        sign = 5;
+        op = i;
+      }
+      if((sign >= 3 || sign == 0) && tokens[i].type == 5)
+      {
+        sign = 3;
+        op = i;
+      }
+      if((sign >= 4 || sign == 0) && tokens[i].type == 6)
+      {
+        sign = 4;
+        op = i;
+      }
+      //printf("%d %d %d\n", p, q, op);
+    }
+    //printf("%d\n", op);
+    //printf("flag is %s\n", sign ? "true" : "false");
+    //printf("%c\n", tokens[op].type);
+    //printf("%d\n", op);
+    int op_type = tokens[op].type;
+    //printf("%d\n", op_type);
+    //op = the position of 主运算符 in the token expression;
+    if(p > op - 1 || op + 1 > q)
+    {
+      //printf("error:%d %d %d %d\n", p, op-1, op+1, q);
+      //assert(0);
+      printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+      return -1;
+    }
+    //printf("%d %d %d %d\n", p, op-1, op+1, q);
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
+    
+    
+
+    switch (op_type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': 
+        if(val2 == 0)
+        {
+          printf("%d %d %d\n", p, op, q);
+          printf("%d %d %s\n", tokens[op].type, tokens[p].type, tokens[q].str);
+          printf(ANSI_FG_RED "ERROR" ANSI_NONE ": cannot divised by ZERO\n");
+          return 0;
+        }
+        else
+          return val1 / val2;
+      case 1: return val1 == val2;
+      case 3: return val1 != val2;
+      case 5: return val1 && val2;
+      case 6: return val1 || val2;
+      default:
+        {
+          printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
+          printf("please prompt again\n");
+          return 0;
+        }
+    }
+  }
+} 
+
+
