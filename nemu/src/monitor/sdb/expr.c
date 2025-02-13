@@ -295,7 +295,7 @@ uint32_t eval(int p, int q) {
      {
        //assert(0);
        int value = strtol(tokens[p].str, NULL, 10);
-       printf("%s %d", tokens[p].str, value);
+       printf("%s %d\n", tokens[p].str, value);
        return value;
      }
      else
