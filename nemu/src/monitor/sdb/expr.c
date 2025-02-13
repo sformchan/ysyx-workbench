@@ -293,6 +293,7 @@ uint32_t eval(int p, int q) {
      }
      else if(tokens[p].type == 2)
      {
+       assert(0);
        int value = strtol(tokens[p].str, NULL, 10);
        return value;
      }
