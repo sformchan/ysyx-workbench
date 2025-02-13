@@ -87,7 +87,7 @@ static int cmd_info(char *args)
   char letter;
   if(args == NULL)
   {
-    printf("nothing output cause of INVALID INPUT.\n");
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": try entering 'w' or 'r'.\n");
   }
   else
   {
