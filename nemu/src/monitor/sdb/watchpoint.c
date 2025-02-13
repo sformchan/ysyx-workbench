@@ -107,7 +107,7 @@ void set_wp(char *expr_str)
 {
   WP *wp = new_wp();          
   wp->expr = expr_str;
-  
+  printf("%s\n", wp->expr);
   bool success = false;
   wp->old_value = expr(wp->expr, &success);
   if(!success)
@@ -115,6 +115,7 @@ void set_wp(char *expr_str)
     printf("invalid input: %s\n", wp->expr);
   }
   printf("watchpoint set successfully: No.%d --> %s\n", wp->NO, wp->expr);
+  
 }
 
 
