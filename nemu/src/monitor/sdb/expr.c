@@ -58,7 +58,7 @@ static struct rule {
   {"\\+", '+'},         // plus
   {"\\=\\=", TK_DEQ},        // equal
   {"0x[0-9a-fA-F]+", TK_HEX}, //heximal
-  {"^\\d+$", TK_NUM}, //decimal
+  {"\\d+", TK_NUM}, //decimal
   {"\\-", '-'}, //minus
   {"\\*", '*'}, //mutilply
   {"\\/", '/'}, //divide
