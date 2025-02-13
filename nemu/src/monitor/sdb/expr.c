@@ -38,7 +38,8 @@ enum {
   TK_AND = 5,
   TK_OR = 6,
   TK_DEREF = 7,
-  TK_NEG = 8
+  TK_NEG = 8,
+  TK_U = 9
   
 
   /* TODO: Add more token types */
@@ -55,6 +56,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
+  {"u", TK_U},
   {"\\+", '+'},         // plus
   {"\\=\\=", TK_DEQ},        // equal
   {"0x[0-9a-fA-F]+", TK_HEX}, //heximal
@@ -170,6 +172,8 @@ static bool make_token(char *e) {
           case 3:
             tokens[nr_token].type = 3;
             nr_token++;
+            break;
+          case 9:
             break;
           case 4:
             tokens[nr_token].type = 4; //reg
