@@ -112,11 +112,11 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
+        //char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-          i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+         // i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -232,7 +232,7 @@ word_t expr(char *e, bool *success) {
   
   uint32_t result = eval(0, nr_token - 1);
   *success = true;
-  memset(tokens, 0, sizeof(tokens));
+  memset(tokens, 0, sizeof(tokens));   //important!!!!!!!!
   return result;
   
 }
@@ -268,11 +268,7 @@ bool check_parentheses(int p, int q)
 
 uint32_t eval(int p, int q) {
   
-  if(p > q)
-  {
-    assert(0);
-  }
-  else if (p == q) {
+  if (p == q) {
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
@@ -397,17 +393,17 @@ uint32_t eval(int p, int q) {
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
     //printf("%c\n", tokens[op].type);
-    printf("%d\n", op);
+    //printf("%d\n", op);
     int op_type = tokens[op].type;
     //printf("%d\n", op_type);
     //op = the position of 主运算符 in the token expression;
-    /*if(p > op - 1 || op + 1 > q)
+    if(p > op - 1 || op + 1 > q)
     {
       printf("error:%d %d %d %d\n", p, op-1, op+1, q);
       assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       return -1;
-    }*/
+    }
     //printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
