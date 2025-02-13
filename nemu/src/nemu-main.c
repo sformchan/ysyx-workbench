@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
- /* FILE *file = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  FILE *file = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/input", "r");
   if(!file)
   {
     perror("failed to open file");
@@ -51,11 +51,11 @@ int main(int argc, char *argv[]) {
           expression[len] = '\0';  
       }
       unsigned result = expr(expression, &success);
-      printf("result %d: %x\n", count, result);
+      printf("result %d: %s %x\n", count, expression, result);
     }
     count++;
   }
-  fclose(file); */
+  fclose(file); 
   
   
   
