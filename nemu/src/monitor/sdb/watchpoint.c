@@ -105,7 +105,7 @@ void free_wp(WP *wp)
 
 void set_wp(char *expr_str)
 {
-  WP *wp = new_wp();
+  WP *wp = new_wp();          
   wp->expr = expr_str;
   
   bool success = false;
