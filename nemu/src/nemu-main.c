@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-/*  FILE *file = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  FILE *file = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/input", "r");
   if(!file)
   {
     perror("failed to open file");
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     }
     count++;
   }
-  fclose(file);  */
+  fclose(file);  
   
   
   
