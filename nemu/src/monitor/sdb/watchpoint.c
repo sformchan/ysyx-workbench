@@ -108,8 +108,11 @@ void set_wp(char *expr_str)
   WP *wp = new_wp();          
   wp->expr = strdup(expr_str);
   //printf("%p\n", wp->expr);
+  char real_expr[100];
+  real_expr[0] = '*';
+  strcpy(real_expr + 1, wp->expr);
   bool success = false;
-  wp->old_value = expr(wp->expr, &success);
+  wp->old_value = expr(real_expr, &success);
   if(!success)
   {
     printf("invalid input: %s\n", wp->expr);
@@ -166,7 +169,10 @@ bool check_wp()
   while(wp != NULL)
   {
     bool success = false;
-    uint32_t new_value = expr(wp->expr, &success);
+    char real_expr[100];
+    real_expr[0] = '*';
+    strcpy(real_expr + 1, wp->expr);
+    uint32_t new_value = expr(real_expr, &success);
     if(success && new_value != wp->old_value)
     {
       printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->old_value);
