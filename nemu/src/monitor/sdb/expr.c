@@ -148,7 +148,9 @@ static bool make_token(char *e) {
             break; 
           case 2:
             tokens[nr_token].type = 2;
+            printf("%s\n", tokens[nr_token].str);
             strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len); // avoid overflow
+            printf("%s\n", tokens[nr_token].str);
             nr_token++;
             break; 
           case 1:
