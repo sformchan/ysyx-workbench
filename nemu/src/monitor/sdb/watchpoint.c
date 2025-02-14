@@ -168,7 +168,7 @@ bool check_wp()
     uint32_t new_value = expr(wp->expr, &success);
     if(success && new_value != wp->value)
     {
-      printf("wp triggered at %x: 0x%x <-- 0x%x\n", cpu.pc, new_value, wp->value);
+      printf("wp triggered at 0x%x: 0x%x <-- 0x%x\n", cpu.pc, new_value, wp->value);
       wp->value = new_value;
       return true;
     }
