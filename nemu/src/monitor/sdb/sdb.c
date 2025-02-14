@@ -66,7 +66,7 @@ void expr_cp(FILE *file)
   }
   else
   {
-    printf(ANSI_FG_GREEN"EVERY RESULT IS CORRECT!\n"ANSI_NONE);
+    printf(ANSI_FG_YELLOW"EVERY RESULT IS CORRECT!\n"ANSI_NONE);
   }
 }
 
