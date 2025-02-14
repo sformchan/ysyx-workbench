@@ -45,7 +45,7 @@ void expr_cp(FILE *file)
     unsigned result1 = expr(expression, &success);
     if(result0 && expression)
     {
-      printf(ANSI_FG_WHITE "%d" ANSI_NONE "%s %x %s\n", count, result0, result1, expression);
+      printf(ANSI_FG_WHITE "%d" ANSI_NONE " %s %x %s\n", count, result0, result1, expression);
       unsigned result2 = strtol(result0, NULL, 16);
       if(result1 != result2)
       {
