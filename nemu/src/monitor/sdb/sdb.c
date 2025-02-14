@@ -256,7 +256,7 @@ static struct {
   { "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
   { "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
   { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
-  { "t", "   Test your expr_function", cmd_t}
+  { "test", "   Test your expr_function", cmd_t}
 
   /* TODO: Add more commands */
 
