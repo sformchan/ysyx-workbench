@@ -53,7 +53,8 @@ void expr_cp(FILE *file)
       }
     }
     count++;
-  } 
+  }
+  printf("\n"); 
   if(i > 0)
   {
     printf("where it went wrong: ");
@@ -65,7 +66,7 @@ void expr_cp(FILE *file)
   }
   else
   {
-    printf("every result is correct!\n");
+    printf(ANSI_FG_GREEN"EVERY RESULT IS CORRECT!\n"ANSI_NONE);
   }
 }
 
