@@ -40,7 +40,7 @@ void expr_cp(FILE *file)
     line[strcspn(line, "\n")] = 0;
     
     char *result0 = strtok(line, " ");
-    char *expression = strtok(NULL, " ");
+    char *expression = strtok(NULL, "");
     bool success = false;
     unsigned result1 = expr(expression, &success);
     if(result0 && expression)
