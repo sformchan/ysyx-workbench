@@ -21,6 +21,7 @@
 #include <regex.h>
 #include <ctype.h>
 #include <memory/paddr.h>
+#include "isa.h"
 
 
 bool check_parentheses(int p, int q);
@@ -280,14 +281,23 @@ uint32_t eval(int p, int q) {
      bool success = false;
      if(tokens[p].type == 4)
      {
-       word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
-       if(!success)
+       if(strcmp(tokens[p].str, "$pc") == 0)
        {
-         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
-         
-         return 0;
+         word_t reg_value = cpu.pc;
+         return reg_value;
        }
-       return reg_value;
+       else
+       {
+         word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
+         if(!success)
+         {
+           printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
+         
+           return 0;
+         }
+         return reg_value;
+       }
+       
      }
      else if(tokens[p].type == 16)
      {

@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include "sdb.h"
+#include "isa.h"
 word_t expr(char *e, bool *success);
 #define NR_WP 32
 
@@ -105,23 +106,13 @@ void free_wp(WP *wp)
 
 void set_wp(char *expr_str)
 {
-  unsigned check = strtol(expr_str, NULL, 16);
-  if(!(0x80000000 <= check && check <= 0x87ffffff))
-  {
-    printf(ANSI_FG_RED "invalid input" ANSI_NONE ": %s\n", expr_str);
-  }
-  else
-  {
-    WP *wp = new_wp();          
-    wp->expr = strdup(expr_str);
-    //printf("%p\n", wp->expr);
-    char real_expr[100];
-    real_expr[0] = '*';
-    strcpy(real_expr + 1, wp->expr);
-    bool success = false;
-    wp->value = expr(real_expr, &success);
-    printf("watchpoint set successfully: No.%d --> %s\n", wp->NO, wp->expr);
-  }
+  
+  WP *wp = new_wp();          
+  wp->expr = strdup(expr_str);
+  bool success = false;
+  wp->value = expr(wp->expr, &success);
+  printf("watchpoint set successfully: No.%d --> %s\n", wp->NO, wp->expr);
+  
   
   
 }
@@ -174,13 +165,10 @@ bool check_wp()
   while(wp != NULL)
   {
     bool success = false;
-    char real_expr[100];
-    real_expr[0] = '*';
-    strcpy(real_expr + 1, wp->expr);
-    uint32_t new_value = expr(real_expr, &success);
+    uint32_t new_value = expr(wp->expr, &success);
     if(success && new_value != wp->value)
     {
-      printf("wp triggered at %s: 0x%x <-- 0x%x\n", wp->expr, new_value, wp->value);
+      printf("wp triggered at 0x%x: 0x%x <-- 0x%x\n", cpu.pc, new_value, wp->value);
       wp->value = new_value;
       return true;
     }

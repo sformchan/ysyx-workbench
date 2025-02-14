@@ -29,6 +29,48 @@ void display_wp();
 void delete_wp(int num);
 word_t expr(char *e, bool *success);
 
+void expr_cp(FILE *file)
+{
+  char line[65536];
+  int num[100];
+  int i = 0;
+  int count = 1;
+  while(fgets(line, sizeof(line), file))
+  {
+    line[strcspn(line, "\n")] = 0;
+    
+    char *result0 = strtok(line, " ");
+    char *expression = strtok(NULL, "");
+    bool success = false;
+    unsigned result1 = expr(expression, &success);
+    if(result0 && expression)
+    {
+      printf(ANSI_FG_WHITE "%d" ANSI_NONE ANSI_FG_GREEN " %s %x " ANSI_NONE "  %s\n", count, result0, result1, expression);
+      unsigned result2 = strtol(result0, NULL, 16);
+      if(result1 != result2)
+      {
+        num[i++] = count;
+      }
+    }
+    count++;
+  }
+  printf("\n"); 
+  if(i > 0)
+  {
+    printf("where it went wrong: ");
+    for(int j = 0; j < i; j++)
+    {
+      printf("%d ", num[j]);
+    }
+    printf("\n");
+  }
+  else
+  {
+    printf(ANSI_FG_YELLOW"EVERY RESULT IS CORRECT!\n"ANSI_NONE);
+  }
+}
+
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -180,6 +222,26 @@ static int cmd_d(char *args)
 }
 
 
+static int cmd_t(char *args)
+{
+  if(args == NULL)
+  {
+    FILE *file = fopen("/home/leonard/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+    if(!file)
+    {
+      perror("failed to open file");
+    }
+    expr_cp(file);
+    fclose(file);
+    return 0;
+  }
+  else
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+}
+
 
 static struct {
   const char *name;
@@ -194,7 +256,8 @@ static struct {
   { "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
   { "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
   { "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
-  { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d}
+  { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
+  { "test", "   Test your expr_function", cmd_t}
 
   /* TODO: Add more commands */
 
@@ -229,7 +292,7 @@ void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
 
-void sdb_mainloop() {
+void sdb_mainloop() {   
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
@@ -258,7 +321,7 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
+        if (cmd_table[i].handler(args) < 0) { return; }   
         break;
       }
     }
