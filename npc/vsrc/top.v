@@ -3,6 +3,7 @@ module top(
     input rst,
     input wen,
     output reg [31:0] pc,
+    output [31:0] gpr0, gpr1, gpr2,
     input [31:0] inst
 );
 
@@ -47,6 +48,9 @@ npc_gpr u2(
     .raddr1    (Irs1),
     .waddr      (Ird),
     .rdata1  (rdata1),
+    .gpr0      (gpr0),
+    .gpr1      (gpr1),
+    .gpr2      (gpr2),
     .wdata    (wdata)
 );
 

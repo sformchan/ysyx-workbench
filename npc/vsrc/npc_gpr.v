@@ -30,10 +30,16 @@ module npc_gpr(
     input [4:0] raddr1,
     input [4:0] waddr,
     output [31:0] rdata1,
+    output [31:0] gpr0,
+    output [31:0] gpr1,
+    output [31:0] gpr2,
     input  [31:0] wdata
 );
 
     reg [31:0] gpr [31:0];
+    assign gpr0 = gpr[0];
+    assign gpr1 = gpr[1];
+    assign gpr2 = gpr[2];
     assign rdata1 = gpr[raddr1];
     initial begin
         integer i;

@@ -29,8 +29,11 @@ int main(int argc, char** argv)
 		top->eval();
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
-		printf("pc:   %u\n", top->pc);
-		printf("inst: %u\n", top->inst);
+		printf("pc:   %x\n", top->pc);
+		printf("inst: %x\n", top->inst);
+		printf("gpr0: %x\n", top->gpr0);
+		printf("gpr1: %x\n", top->gpr1);
+		printf("gpr2: %x\n", top->gpr2);
 
 	}
 	delete top;
