@@ -5,6 +5,11 @@ module npc_pc(
 );
 
 
+initial begin
+    pc = 32'h80000000;
+end
+
+
 
 always @(posedge clk or posedge rst) begin
     if(rst) pc <= 32'h80000000;
