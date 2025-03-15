@@ -2,7 +2,7 @@
 #define ROM_H
 
 #include <stdint.h>
-
+#define INITADDR 0x80000000
 #define SIZE 2
 
 extern uint32_t rom[SIZE]; 

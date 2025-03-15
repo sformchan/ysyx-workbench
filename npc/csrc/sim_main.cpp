@@ -17,7 +17,8 @@ int main(int argc, char** argv)
 	//top->trace(tfp,0);
 	//tfp->open("wave.fst");
 	int wen = 1;
-	
+	top->rst = 1;
+	top->pc = INITADDR;
 
 	while(contextp->time() <= 10)
 	{
