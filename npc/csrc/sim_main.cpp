@@ -1,31 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Vnpc_top.h"
+#include "rom.h"
+#include "Vtop.h"
 #include "verilated.h"
-#include "verilated_fst_c.h"
+//#include "verilated_fst_c.h"
 
 int main(int argc, char** argv)
 {
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
-	Vnpc_top* top = new Vnpc_top{contextp};
+	Vtop* top = new Vtop{contextp};
 
 
-	VerilatedFstC* tfp = new VerilatedFstC;
+	//VerilatedFstC* tfp = new VerilatedFstC;
 	contextp->traceEverOn(true);
-	top->trace(tfp,0);
-	tfp->open("wave.fst");
+	//top->trace(tfp,0);
+	//tfp->open("wave.fst");
+	int wen = 1;
+	
 
-	while(contextp->time() <= 5)
+	while(contextp->time() <= 10)
 	{
-        top->inst = pmem(top->pc);
+		top->rst = 0;
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;
+		top->wen = wen;
+        top->inst = read_inst(top->pc);
 		top->eval();
-		tfp->dump(contextp->time());
+		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
+		printf("pc:   %u\n", top->pc);
+		printf("inst: %u\n", top->inst);
 
 	}
 	delete top;
-	tfp->close();
+	//tfp->close();
 	delete contextp;
 	return 0;	
 }

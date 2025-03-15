@@ -30,7 +30,7 @@ module npc_dc(
     output [2:0] Ifunct3,
     output [11:0]   Iimm,
     output [4:0]    Irs1,
-    output [4:0]     Ird,                         
+    output [4:0]     Ird                         
 );
 
 assign Ioc = inst[6:0];

@@ -37,7 +37,7 @@ module npc_aul(
             result = 32'b0;
             case (oc)
                 7'b0010011: begin
-                    case (funtc3)
+                    case (funct3)
                         3'b000: result = data1 + imm; 
                         default: result = result;
                     endcase

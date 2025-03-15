@@ -26,7 +26,6 @@
 
 module npc_gpr(
     input clk,
-    input rst,
     input wen,
     input [4:0] raddr1,
     input [4:0] waddr,
@@ -35,9 +34,12 @@ module npc_gpr(
 );
 
     reg [31:0] gpr [31:0];
-    assign rdata = gpr[raddr];
+    assign rdata1 = gpr[raddr1];
     initial begin
-        gpr
+        integer i;
+        for (i = 0; i < 32; i++) begin
+            gpr[i] = 32'b0;
+        end
     end
     always @(posedge clk)           
         begin
