@@ -5,9 +5,7 @@ module npc_pc(
 );
 
 
-initial begin
-    pc = 32'h80000000;
-end
+
 
 
 
