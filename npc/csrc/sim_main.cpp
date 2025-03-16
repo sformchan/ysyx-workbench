@@ -3,10 +3,20 @@
 #include "rom.h"
 #include "Vtop.h"
 #include "verilated.h"
+#include "svdpi.h"
+#include "Vtop__Dpi.h"
 //#include "verilated_fst_c.h"
+
+int stop = 0;
+void stop_stimulation()
+{
+	printf("Simulation stopped due to ebreak!\n");
+	stop = 1;
+}
 
 int main(int argc, char** argv)
 {
+	printf("Stimulation starting...\n");
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
 	Vtop* top = new Vtop{contextp};
@@ -16,15 +26,14 @@ int main(int argc, char** argv)
 	contextp->traceEverOn(true);
 	//top->trace(tfp,0);
 	//tfp->open("wave.fst");
-	int wen = 1;
 	top->rst = 1;
-	top->pc = INITADDR;
+	top->pc = ysyx_25020047_INITADDR;
+
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
-	while(contextp->time() < 10)
-	{
+	while(!stop)
+	{		
 		top->rst = 0;
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
-		top->wen = wen;
         top->inst = read_inst(top->pc);
 		top->eval();
 		//tfp->dump(contextp->time());

@@ -4,10 +4,11 @@
 
 
 
-uint32_t rom[SIZE] = {
+uint32_t rom[ysyx_25020047_SIZE] = {
     0b00000000111100001000000000010011, // r0 <- r1 + imm
     0b00000000111100010000000100010011, // r2 <- r2 + imm
-    0b00000000111100010000000010010011  // r1 <- r2 + imm
+    0b00000000111100010000000010010011, // r1 <- r2 + imm
+    0b00000000000100000000000001110011  // ebreak
 };
 
 uint32_t read_inst(uint32_t pc) {
@@ -18,13 +19,13 @@ uint32_t read_inst(uint32_t pc) {
     }
 
     // 检查地址是否在合法范围内
-    if (pc < INITADDR || pc >= INITADDR + SIZE * 4) {
+    if (pc < ysyx_25020047_INITADDR || pc >= ysyx_25020047_INITADDR + ysyx_25020047_SIZE * 4) {
         printf("Error: PC address 0x%08x is out of ROM range.\n", pc);
         return 0xFFFFFFFF; // 返回错误码
     }
 
     // 计算数组索引
-    uint32_t real_addr = (pc - INITADDR) / 4;
+    uint32_t real_addr = (pc - ysyx_25020047_INITADDR) / 4;
 
     // 返回指令
     return rom[real_addr];

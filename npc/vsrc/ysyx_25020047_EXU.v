@@ -24,21 +24,45 @@
 //----------------------------------------------------------------------------------------
 //****************************************************************************************//
 
-module npc_aul(
+
+
+module ysyx_25020047_EXU(
     input [6:0] oc,
     input [2:0] funct3,
     input [31:0] data1,
-    input [31:0] imm,
-    output reg [31:0] result
+    input [11:0] imm,
+    output reg [31:0] result,
+    output wen
 );
+
+wire [31:0]  simm;
+assign simm = $signed({20'b0, imm});
 
     always @(*)           
         begin
             result = 32'b0;
+            wen = 1'b0;
             case (oc)
                 7'b0010011: begin
                     case (funct3)
-                        3'b000: result = data1 + imm; 
+                        3'b000: begin
+                            result = data1 + simm;
+                            wen = 1;
+                        end 
+                        default: result = result;
+                    endcase
+                end
+                7'b1110011: begin
+                    case (funct3)
+                        3'b000: begin
+                            case (imm)
+                                000000000001: begin
+                                    wen = 0;
+                                    stop_stimulation();
+                                end
+                                default: result = result;
+                            endcase
+                        end
                         default: result = result;
                     endcase
                 end
