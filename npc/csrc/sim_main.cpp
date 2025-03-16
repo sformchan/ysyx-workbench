@@ -16,6 +16,7 @@ void stop_stimulation()
 
 int main(int argc, char** argv)
 {
+	printf("welcome to \033[41;37mNPC\033[0m!\n");
 	printf("Stimulation starting...\n");
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
