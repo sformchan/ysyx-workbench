@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	while(!stop)
 	{		
 		top->rst = 0;
-		top->clk = (contextp->time() % 2 == 0) ? 0 : 1;   //驱动系统时钟
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
         top->inst = read_inst(top->pc);
 		top->eval();
 		//tfp->dump(contextp->time());
