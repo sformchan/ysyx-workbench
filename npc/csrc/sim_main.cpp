@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	//tfp->open("wave.fst");
 	int wen = 1;
 	top->rst = 1;
-	//top->pc = INITADDR;
+	top->pc = INITADDR;
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(contextp->time() <= 10)
 	{
