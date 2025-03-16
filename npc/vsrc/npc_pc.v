@@ -8,7 +8,7 @@ module npc_pc(
 always @(posedge clk or posedge rst) begin
     if(rst) pc <= 32'h80000000;
     else
-        if (pc == 32'h80000004) begin
+        if (pc == 32'h80000008) begin
             pc <= pc;
         end
         else pc <= pc + 32'h4;            
