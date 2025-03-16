@@ -29,16 +29,16 @@ int main(int argc, char** argv)
 	//tfp->open("wave.fst");
 	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
-	top->clk = 1;
+	top->clk = 0;
 
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(!stop)
 	{	
 			
 		top->rst = 0;
-		top->inst = read_inst(top->pc);
+		
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
-        
+        top->inst = read_inst(top->pc);
 		top->eval();
 		if(top->clk)
 		{
