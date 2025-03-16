@@ -10,7 +10,7 @@
 int stop = 0;
 void stop_stimulation()
 {
-	printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
+	//printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	stop = 1;
 }
 
@@ -47,6 +47,10 @@ int main(int argc, char** argv)
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 		
+	}
+	if(stop)
+	{
+		printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	}
 	delete top;
 	//tfp->close();
