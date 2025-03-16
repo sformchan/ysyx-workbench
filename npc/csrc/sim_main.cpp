@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 	//tfp->open("wave.fst");
 	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
+	top->clk = 0;
 
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(!stop)
