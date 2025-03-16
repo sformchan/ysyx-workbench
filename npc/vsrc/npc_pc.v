@@ -5,10 +5,6 @@ module npc_pc(
 );
 
 
-
-
-
-
 always @(posedge clk or posedge rst) begin
     if(rst) pc <= 32'h80000000;
     else
