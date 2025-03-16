@@ -29,8 +29,11 @@ int main(int argc, char** argv)
 		top->eval();
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
+		if(top->clk)
+		{
+			printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, top->inst, top->gpr0, top->gpr1, top->gpr2);
+		}
 		
-		printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, top->inst, top->gpr0, top->gpr1, top->gpr2);
 		
 
 	}
