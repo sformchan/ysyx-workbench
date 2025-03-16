@@ -10,7 +10,7 @@
 int stop = 0;
 void stop_stimulation()
 {
-	printf("Simulation stopped due to ebreak!\n");
+	printf("Simulation stopped successfully due to ebreak!\n");
 	stop = 1;
 }
 
