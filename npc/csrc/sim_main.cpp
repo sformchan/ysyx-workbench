@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	int wen = 1;
 	top->rst = 1;
 	top->pc = INITADDR;
-
+    printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(contextp->time() <= 10)
 	{
 		top->rst = 0;
@@ -29,11 +29,9 @@ int main(int argc, char** argv)
 		top->eval();
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
-		printf("pc:   %x\n", top->pc);
-		printf("inst: %u\n", top->inst);
-		printf("gpr0: %x\n", top->gpr0);
-		printf("gpr1: %x\n", top->gpr1);
-		printf("gpr2: %x\n", top->gpr2);
+		
+		printf("|0x%x  |  0x%x  |  0x%x  |  0x%x  |  0x%x  |\n", top->pc, top->inst, top->gpr0, top->gpr1, top->gpr2);
+		
 
 	}
 	delete top;
