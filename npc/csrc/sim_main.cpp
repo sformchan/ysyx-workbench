@@ -32,17 +32,19 @@ int main(int argc, char** argv)
 
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(!stop)
-	{		
+	{	
+			
 		top->rst = 0;
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
-        top->inst = read_inst(top->pc);
-		top->eval();
-		//tfp->dump(contextp->time());
-		contextp->timeInc(1);
 		if(!top->clk)
 		{
 			printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, top->inst, top->gpr0, top->gpr1, top->gpr2);
 		}
+        top->inst = read_inst(top->pc);
+		top->eval();
+		//tfp->dump(contextp->time());
+		contextp->timeInc(1);
+		
 	}
 	delete top;
 	//tfp->close();
