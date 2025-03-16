@@ -2,7 +2,7 @@ module top(
     input clk,
     input rst,
     input wen,
-    output reg [31:0] pc,
+    output [31:0] pc,
     output [31:0] gpr0, gpr1, gpr2,
     input [31:0] inst
 );
