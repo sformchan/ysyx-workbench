@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	top->rst = 1;
 	top->pc = INITADDR;
     printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
-	while(contextp->time() <= 10)
+	while(contextp->time() < 10)
 	{
 		top->rst = 0;
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
