@@ -31,7 +31,24 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  panic("Not implemented");
+  if (src == NULL || dst == NULL) {
+    return dst;
+  }
+  char *ans = dst;
+  while (*src != '\0' && n != 0) {
+    *dst = *src;
+    ++dst;
+    ++src;
+    --n;
+  }
+  // 将额外的空字符写入dest，直到写入了n个字符的总数。
+  while (n != 0) {
+    *dst = '\0';
+    ++dst;
+    --n;
+  }
+  return ans;
+  //panic("Not implemented");
 }
 
 char *strcat(char *dst, const char *src) {
@@ -60,7 +77,17 @@ int strcmp(const char *s1, const char *s2) {
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  panic("Not implemented");
+  if (s1 == NULL || s2 == NULL) {
+    return 0;
+  }
+  while (n != 0 && *s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
+    --n;
+    ++s1;
+    ++s2;
+  }
+  // 当比较了n次后，即新n变为0时，此时两个字符串也是相等得，memcmp同理
+  return *s1 == *s2 || n == 0 ? 0 : (unsigned char)*s1 < (unsigned char)*s2 ? -1 : 1;
+  //panic("Not implemented");
 }
 
 void *memset(void *s, int c, size_t n) {
@@ -76,7 +103,30 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  panic("Not implemented");
+  if (dst == NULL || src == NULL || n == 0 || dst == src) {
+    return dst;
+  }
+  unsigned char *dest = dst;
+  const unsigned char *source = src;
+  if (dst < src) {
+    while (n != 0) {
+      --n;
+      *dest = *source;
+      ++dest;
+      ++source;
+    }
+  } else {
+    dest += n;
+    source += n;
+    while (n != 0) {
+      --n;
+      --dest;
+      --source;
+      *dest = *source;
+    }
+  }
+  return dst;
+  //panic("Not implemented");
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
@@ -94,7 +144,18 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  panic("Not implemented");
+  if (s1 == NULL || s2 == NULL) {
+    return 0;
+  }
+  const unsigned char *src1 = s1;
+  const unsigned char *src2 = s2;
+  while (n != 0 && *src1 != '\0' && *src2 != '\0' && *src1 == *src2) {
+    --n;
+    ++src1;
+    ++src2;
+  }
+  return *src1 == *src2 || n == 0 ? 0 : *src1 < *src2 ? -1 : 1;
+  //panic("Not implemented");
 }
 
 #endif
