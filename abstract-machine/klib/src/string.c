@@ -30,14 +30,16 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-  size_t length = strlen(dst);
-  size_t i;
-  for(i = 0; src[i] != '\0'; i++)
+  char *tmp = dst;
+  while(*dst) dst++;
+  while(*src != '\0')
   {
-    dst[length + i] = src[i];
+    *dst = *src;
+    dst++;
+    src++;
   }
-  dst[length + i] = '\0';
-  return dst;
+  *dst = '\0';
+  return tmp;
   //panic("Not implemented");
 }
 
