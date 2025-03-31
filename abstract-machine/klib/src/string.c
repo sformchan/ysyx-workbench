@@ -16,6 +16,7 @@ size_t strlen(const char *s) {
 }
 
 char *strcpy(char *dst, const char *src) {
+  if(dst == NULL || src == NULL) return dst;
   size_t i;
   for(i = 0; src[i] != '\0'; i++)
   {
@@ -31,6 +32,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
+  if(dst == NULL || src == NULL) return dst;
   size_t length = strlen(dst);
   size_t i;
   for(i = 0; src[i] != '\0'; i++)
@@ -43,6 +45,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
+  if(s1 == NULL || s2 == NULL) return 0;
   while(*s1 && (*s1 == *s2))
   {
     s1++;
