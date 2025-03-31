@@ -60,6 +60,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
+  if(s == NULL) return s;
   unsigned char *dst = (unsigned char *)s;  
   unsigned char value = (unsigned char)c;   
   for (size_t i = 0; i < n; i++) {
@@ -75,6 +76,7 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
+  if(out == NULL || in == NULL || n == 0 || out == in) return out;
   size_t i;
   unsigned char *dst = (unsigned char *)out;
   const unsigned char *src = (const unsigned char *)in;
