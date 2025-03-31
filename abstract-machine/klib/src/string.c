@@ -22,7 +22,7 @@ char *strcpy(char *dst, const char *src) {
   }
   dst[i] = src[i];
   return dst;
-  panic("Not implemented");
+  //panic("Not implemented");
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
