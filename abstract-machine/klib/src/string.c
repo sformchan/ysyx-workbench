@@ -30,16 +30,14 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-  char *tmp = dst;
-  while(*dst) dst++;
-  while(*src != '\0')
+  size_t length = strlen(dst);
+  size_t i;
+  for(i = 0; src[i] != '\0'; i++)
   {
-    *dst = *src;
-    dst++;
-    src++;
+    dst[length + i] = src[i];
   }
-  *dst = '\0';
-  return tmp;
+  dst[length + i] = '\0';
+  return dst;
   //panic("Not implemented");
 }
 
@@ -58,9 +56,11 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
-  char *xs = s;
-
-  while(n--) *xs++ = c;
+  unsigned char *dst = (unsigned char *)s;  
+  unsigned char value = (unsigned char)c;   
+  for (size_t i = 0; i < n; i++) {
+    dst[i] = value;  // 按字节设置内存
+  }
   return s;
 
   //panic("Not implemented");
@@ -72,8 +72,8 @@ void *memmove(void *dst, const void *src, size_t n) {
 
 void *memcpy(void *out, const void *in, size_t n) {
   size_t i;
-  char *dst = out;
-  const char *src = in;
+  unsigned char *dst = (unsigned char *)out;
+  const unsigned char *src = (const unsigned char *)in;
   
   for (i = 0; i < n; i++) {
     dst[i] = src[i];
