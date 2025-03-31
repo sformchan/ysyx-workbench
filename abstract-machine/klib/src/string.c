@@ -5,7 +5,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  size_t num;
+  size_t num = 0;
   while(s[num] != '\0')
   {
     num++;
@@ -30,7 +30,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-  size_t length = strlen(*dst);
+  size_t length = strlen(dst);
   size_t i;
   for(i = 0; src[i] != '\0'; i++)
   {
