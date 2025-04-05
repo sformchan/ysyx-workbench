@@ -68,7 +68,7 @@ static struct rule {
   {"\\(", '('}, //left
   {"\\)", ')'}, //right
   {"\\!\\=", TK_NEQ},
-  {"\\$[a-zA-Z0-9]+$", TK_REG},
+  {"\\^$[a-zA-Z0-9]+$", TK_REG},
   {"\\&\\&", TK_AND},
   {"\\|\\|", TK_OR}
   
