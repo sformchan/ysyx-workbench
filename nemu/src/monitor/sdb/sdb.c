@@ -162,7 +162,7 @@ static int cmd_x(char *args)
   {
     sscanf(args, "%d %s", &length, start);
     uint32_t result = expr(start, &success);
-    printf("%x\n", result);
+    //printf("%x\n", result);
     if( length > 0 && (result >= 0x80000000 && result <= 0x87ffffff))
     {
       for(int i = 0; i < length; i++)
