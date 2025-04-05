@@ -275,6 +275,11 @@ bool check_parentheses(int p, int q)
   return false;
 }
 
+bool loop = false; //让第一个元素为解指针符号和负数符号的情况正确运行 
+  //如果第一个元素是上述两种情况 将会使得这两种符号优先级最低
+  //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
+  //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
+
 uint32_t eval(int p, int q) {
   
   if (p == q) {
@@ -323,7 +328,7 @@ uint32_t eval(int p, int q) {
      }
      
   }
-  else if(tokens[p].type == 7 && p != 0)  //deref
+  else if(tokens[p].type == 7 && loop)  //deref
   {
     word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
@@ -335,7 +340,7 @@ uint32_t eval(int p, int q) {
     word_t data = paddr_read(addr, 4);
     return data;
   }
-  else if(tokens[p].type == 8 && p != 0)  //negetive
+  else if(tokens[p].type == 8 && loop)  //negetive
   {
     word_t result = eval(p + 1, q);
     return -1 * result;
@@ -349,7 +354,7 @@ uint32_t eval(int p, int q) {
   }
   else {
     //find major
-    
+    loop = true;
     int op = -1;
     int sign = 0;
     printf("%d %d %d\n", p, q, op);
