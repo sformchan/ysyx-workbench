@@ -387,7 +387,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        //printf("hello\n");
+        printf("hello\n");
         sign = 2;
         op = i;
       }
@@ -419,7 +419,7 @@ uint32_t eval(int p, int q) {
     if(p > op - 1 || op + 1 > q)
     {
       //printf("error:%d %d %d %d\n", p, op-1, op+1, q);
-      assert(0);
+      //assert(0);
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       return -1;
     }
