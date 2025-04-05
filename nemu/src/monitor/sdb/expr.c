@@ -230,7 +230,9 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == '(' ))
+                                           tokens[i - 1].type == '(' ||
+                                           tokens[i - 1].type == TK_NEQ ||
+                                           tokens[i - 1].type == TK_DEQ))
     {
       
       tokens[i].type = 8;
@@ -326,6 +328,7 @@ uint32_t eval(int p, int q) {
     word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
     {
+        printf("%x\n", addr);
         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
         return 0;
     }
