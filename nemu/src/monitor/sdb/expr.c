@@ -366,7 +366,7 @@ uint32_t eval(int p, int q) {
 
     int op = -1;
     int sign = 0;
-    printf("%d %d %d\n", p, q, op);
+    //printf("%d %d %d\n", p, q, op);
     for(int i = p; i <= q; i++)
     {
       
@@ -439,7 +439,7 @@ uint32_t eval(int p, int q) {
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       return -1;
     }
-    printf("%d %d %d %d\n", p, op-1, op+1, q);
+    //printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     
