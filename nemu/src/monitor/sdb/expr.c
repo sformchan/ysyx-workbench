@@ -247,7 +247,9 @@ word_t expr(char *e, bool *success) {
   }
   
   uint32_t result = eval(0, nr_token - 1);
-  loop = false;
+
+  loop = false; //执行完一次计算后初始化loop
+  
   *success = true;
   memset(tokens, 0, sizeof(tokens));   //important!!!!!!!!
   return result;
@@ -359,10 +361,12 @@ uint32_t eval(int p, int q) {
   }
   else {
     //find major
-    loop = true;
+    
+    loop = true; //嵌套开始
+
     int op = -1;
     int sign = 0;
-    printf("%d %d %d\n", p, q, op);
+    //printf("%d %d %d\n", p, q, op);
     for(int i = p; i <= q; i++)
     {
       
@@ -433,7 +437,7 @@ uint32_t eval(int p, int q) {
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       return -1;
     }
-    printf("%d %d %d %d\n", p, op-1, op+1, q);
+    //printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     
