@@ -206,6 +206,13 @@ static bool make_token(char *e) {
 }
 
 
+
+bool loop = false; //用于eval函数.
+  //让第一个元素为解指针符号和负数符号的情况正确运行 
+  //如果第一个元素是上述两种情况 将会使得这两种符号优先级最低
+  //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
+  //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -240,6 +247,7 @@ word_t expr(char *e, bool *success) {
   }
   
   uint32_t result = eval(0, nr_token - 1);
+  loop = false;
   *success = true;
   memset(tokens, 0, sizeof(tokens));   //important!!!!!!!!
   return result;
@@ -275,10 +283,7 @@ bool check_parentheses(int p, int q)
   return false;
 }
 
-bool loop = false; //让第一个元素为解指针符号和负数符号的情况正确运行 
-  //如果第一个元素是上述两种情况 将会使得这两种符号优先级最低
-  //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
-  //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
+
 
 uint32_t eval(int p, int q) {
   
