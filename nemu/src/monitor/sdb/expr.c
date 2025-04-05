@@ -419,7 +419,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 5 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        printf("hello\n");
+        //printf("hello\n");
         sign = 5;
         op = i;
       }
