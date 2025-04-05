@@ -167,7 +167,7 @@ static int cmd_x(char *args)
     {
       for(int i = 0; i < length; i++)
       {
-        printf("%d 0x%x 0x%x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
       }
     }
     else
