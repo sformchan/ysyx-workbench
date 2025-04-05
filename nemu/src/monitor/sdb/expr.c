@@ -219,7 +219,9 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == '(' ))
+                                           tokens[i - 1].type == '(' ||
+                                           tokens[i - 1].type == TK_NEQ ||
+                                           tokens[i - 1].type == TK_DEQ))
     {
       
       tokens[i].type = 7;
