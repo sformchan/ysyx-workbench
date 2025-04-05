@@ -335,7 +335,7 @@ uint32_t eval(int p, int q) {
      }
      
   }
-  else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 2))  //deref
+  else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 1))  //deref
   {
     word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
