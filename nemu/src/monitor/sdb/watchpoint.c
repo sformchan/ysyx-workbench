@@ -130,7 +130,7 @@ void display_wp()
   
   for(WP *wp = head; wp != NULL; wp = wp->next)
   {
-    printf("Wp %d: Expression = %s,  Value = 0x%x,  Enable = %s\n", wp->NO, wp->expr, wp->value, wp->enable ? "Yes" : "No");
+    printf("Wp %d: Expression = %s,  Value = 0x%08x,  Enable = %s\n", wp->NO, wp->expr, wp->value, wp->enable ? "Yes" : "No");
     //printf("%s\n", wp->expr);
   }
 }
@@ -168,7 +168,7 @@ bool check_wp()
     uint32_t new_value = expr(wp->expr, &success);
     if(success && new_value != wp->value)
     {
-      printf("wp triggered at 0x%x: 0x%x <-- 0x%x\n", cpu.pc, new_value, wp->value);
+      printf("wp triggered at 0x%08x: 0x%08x <-- 0x%08x\n", cpu.pc, new_value, wp->value);
       wp->value = new_value;
       return true;
     }
