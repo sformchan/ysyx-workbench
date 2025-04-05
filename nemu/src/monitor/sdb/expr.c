@@ -393,32 +393,34 @@ uint32_t eval(int p, int q) {
         }
          
       }
-      if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
+      
+      
+      if((sign >= 1 || sign == 0) && tokens[i].type == 6) //or
       {
-        //assert(0);
         sign = 1;
         op = i;
       }
-      if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
+      if((sign >= 2 || sign == 0) && tokens[i].type == 5) //and
       {
-        printf("hello\n");
         sign = 2;
         op = i;
       }
-      if((sign >= 5 || sign == 0) && (tokens[i].type == 1 || tokens[i].type == 3))
+      if((sign >= 3 || sign == 0) && (tokens[i].type == 1 || tokens[i].type == 3)) //eq/neq
       {
         //assert(0);
-        sign = 5;
-        op = i;
-      }
-      if((sign >= 3 || sign == 0) && tokens[i].type == 5)
-      {
         sign = 3;
         op = i;
       }
-      if((sign >= 4 || sign == 0) && tokens[i].type == 6)
+      if((sign >= 4 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
+        //assert(0);
         sign = 4;
+        op = i;
+      }
+      if((sign >= 5 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
+      {
+        printf("hello\n");
+        sign = 5;
         op = i;
       }
       //printf("%d %d %d\n", p, q, op);
