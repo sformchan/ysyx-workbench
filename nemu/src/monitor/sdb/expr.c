@@ -335,7 +335,7 @@ uint32_t eval(int p, int q) {
      }
      
   }
-  else if(tokens[p].type == 7 && loop)  //deref
+  else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 2))  //deref
   {
     word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
@@ -347,7 +347,7 @@ uint32_t eval(int p, int q) {
     word_t data = paddr_read(addr, 4);
     return data;
   }
-  else if(tokens[p].type == 8 && loop)  //negetive
+  else if(tokens[p].type == 8 && (check_parentheses(p + 1, q) || q - p == 2))  //negetive
   {
     word_t result = eval(p + 1, q);
     return -1 * result;
@@ -362,7 +362,7 @@ uint32_t eval(int p, int q) {
   else {
     //find major
     
-    loop = true; //嵌套开始
+    //loop = true; //嵌套开始
 
     int op = -1;
     int sign = 0;
