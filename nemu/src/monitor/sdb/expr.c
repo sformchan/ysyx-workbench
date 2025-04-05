@@ -387,7 +387,7 @@ uint32_t eval(int p, int q) {
       }
       if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
       {
-        printf("hello\n");
+        //printf("hello\n");
         sign = 2;
         op = i;
       }
@@ -411,7 +411,7 @@ uint32_t eval(int p, int q) {
     }
     //printf("%d\n", op);
     //printf("flag is %s\n", sign ? "true" : "false");
-    //printf("%c\n", tokens[op].type);
+    printf("%c\n", tokens[op].type);
     printf("%d\n", op);
     int op_type = tokens[op].type;
     printf("%d\n", op_type);
@@ -423,7 +423,7 @@ uint32_t eval(int p, int q) {
       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL EXPRESSION\n");
       return -1;
     }
-    //printf("%d %d %d %d\n", p, op-1, op+1, q);
+    printf("%d %d %d %d\n", p, op-1, op+1, q);
     uint32_t val1 = eval(p, op - 1);
     uint32_t val2 = eval(op + 1, q);
     
