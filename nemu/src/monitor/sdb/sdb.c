@@ -55,7 +55,7 @@ void expr_cp(FILE *file)
     count++;
   }
   printf("\n"); 
-  printf("pass:%d all:%d\n", count - i, count);
+  printf("pass:%d all:%d\n", count - i - 1, count - 1);
   if(i > 0)
   {
     printf("where it went wrong: ");
