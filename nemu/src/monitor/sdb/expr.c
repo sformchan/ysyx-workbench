@@ -288,7 +288,7 @@ bool check_parentheses(int p, int q)
 
 
 uint32_t eval(int p, int q) {
-  
+  loop = false;
   if (p == q) {
     /* Single token.
      * For now this token should be a number.
