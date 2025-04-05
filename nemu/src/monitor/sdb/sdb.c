@@ -190,7 +190,7 @@ static int cmd_p(char *args)
   }
   bool sign = false;
  
-  printf(ANSI_FG_WHITE "result" ANSI_NONE "  0x%08x\n", expr(args, &sign));
+  printf(ANSI_FG_WHITE "result" ANSI_NONE "  0x%x\n", expr(args, &sign));
 
   return 0;
 }
