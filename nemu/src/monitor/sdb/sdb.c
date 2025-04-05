@@ -137,7 +137,7 @@ static int cmd_info(char *args)
     sscanf(args, "%c", &letter);
     if(letter == 'r')
     {
-      printf(ANSI_FG_GREEN "PC : 0x%08x\n", cpu.pc);
+      printf(ANSI_FG_GREEN "PC : 0x%08x\n" ANSI_NONE, cpu.pc);
       isa_reg_display();
     }
     else if(letter == 'w')
