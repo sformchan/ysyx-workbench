@@ -5,20 +5,21 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  if(s == NULL) return 0;
-  size_t num = 0;
-  while(s[num] != '\0')
+  //if(s == NULL) return 0; 
+  size_t len = 0;
+  while(*s != '\0')
   {
-    num++;
+    len++;
+    s++;
   }
-  return num;
+  return len;
   //panic("Not implemented");
 }
 
 char *strcpy(char *dst, const char *src) {
-  if (src == NULL || dst == NULL) {   // 没有所指，直接返回dst
+  /*if (src == NULL || dst == NULL) {   // 没有所指，直接返回dst
     return dst;
-  }
+  } */
   // 当成指向字符数组处理，所以即使没有空字符，导致内存访问越界，或修改了其他有用的数据也不管，因为这是函数调用者所需要保证的，下面一些string函数都是这样对带非字符串数组
   char *res = dst;
   do {
@@ -31,9 +32,9 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  if (src == NULL || dst == NULL) {
+  /* if (src == NULL || dst == NULL) {
     return dst;
-  }
+  } */
   char *ans = dst;
   while (*src != '\0' && n != 0) {
     *dst = *src;
@@ -52,7 +53,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-  if(dst == NULL || src == NULL) return dst;
+  //if(dst == NULL || src == NULL) return dst;
   char *ans = dst;
   while (*dst != '\0') {
     ++dst;
@@ -67,7 +68,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  if(s1 == NULL || s2 == NULL) return 0;
+  //if(s1 == NULL || s2 == NULL) return 0;
   while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
     s1++;
     s2++;
@@ -77,9 +78,9 @@ int strcmp(const char *s1, const char *s2) {
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  if (s1 == NULL || s2 == NULL) {
+  /*if (s1 == NULL || s2 == NULL) {
     return 0;
-  }
+  } */
   while (n != 0 && *s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
     --n;
     ++s1;
@@ -91,7 +92,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
-  if(s == NULL) return s;
+  //if(s == NULL) return s;
   unsigned char *src = s;   // 先讲传入得指针，做无符号字符解释
   while (n != 0) {
     --n;
@@ -103,9 +104,9 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  if (dst == NULL || src == NULL || n == 0 || dst == src) {
+  /*if (dst == NULL || src == NULL || n == 0 || dst == src) {
     return dst;
-  }
+  } */
   unsigned char *dest = dst;
   const unsigned char *source = src;
   if (dst < src) {
@@ -130,7 +131,7 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
-  if(out == NULL || in == NULL || n == 0 || out == in) return out;
+  //if(out == NULL || in == NULL || n == 0 || out == in) return out;
   unsigned char *dest = out;
   const unsigned char *src = in;
   while (n != 0) {
@@ -144,9 +145,9 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  if (s1 == NULL || s2 == NULL) {
+  /*if (s1 == NULL || s2 == NULL) {
     return 0;
-  }
+  }*/
   const unsigned char *src1 = s1;
   const unsigned char *src2 = s2;
   while (n != 0 && *src1 != '\0' && *src2 != '\0' && *src1 == *src2) {
