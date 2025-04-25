@@ -18,6 +18,7 @@
 
 void init_rand();
 void init_log(const char *log_file);
+void init_ringbuf();
 void init_mem();
 void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
@@ -30,6 +31,7 @@ static void welcome() {
         "to record the trace. This may lead to a large log file. "
         "If it is not necessary, you can disable it in menuconfig"));
   Log("WATCHPOINT: %s", MUXDEF(CONFIG_WATCHPOINT, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("IRINGBUF: %s", MUXDEF(CONFIG_IRINGBUF, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
@@ -109,6 +111,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Open the log file. */
   init_log(log_file);
+
+  /* Initialize ringbuf. */
+  init_ringbuf();
 
   /* Initialize memory. */
   init_mem();
