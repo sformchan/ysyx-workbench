@@ -90,6 +90,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char log[128];
   snprintf(log, sizeof(log), FMT_WORD ":", s->pc);
   ringbuf_push(log);
+  if(nemu_state.state == NEMU_END)
+  {
+    ringbuf_print();
+  }
 #endif
 }
 
@@ -139,7 +143,6 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-      ringbuf_print();
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
