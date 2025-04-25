@@ -27,5 +27,5 @@ void ringbuf_push(const char *log)
 void ringbuf_print()
 {
     printf(ANSI_FG_YELLOW"IRINGBUFFER:\n"ANSI_NONE);
-    for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[ringbuf.index]);
+    for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
 }
