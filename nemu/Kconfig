@@ -225,4 +225,3 @@ config IRINGBUF
   bool "Enable instruction ring buffer"
   default y
 
-
