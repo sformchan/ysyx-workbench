@@ -6,6 +6,7 @@
 typedef struct {
     char buffer[128][RINGBUF_SIZE];
     int index;
+    int count;
 } RingBuffer;
 
 static RingBuffer ringbuf;
@@ -18,14 +19,16 @@ void init_ringbuf()
 }
 
 
-void ringbuf_push(const char *log)
+void ringbuf_push(char *log)
 {
     snprintf(ringbuf.buffer[ringbuf.index], 128, "%s", log);
     ringbuf.index = (ringbuf.index + 1) % RINGBUF_SIZE;
+    ringbuf.count++;
 }
 
 void ringbuf_print()
 {
     printf(ANSI_FG_YELLOW"IRINGBUFFER:\n"ANSI_NONE);
-    for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
+    if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
+    else for(int i = 0; i < ringbuf.count; i++) printf("%s\n", ringbuf.buffer[i]); 
 }
