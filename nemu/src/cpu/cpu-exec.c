@@ -90,9 +90,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char log[128];
   char *r = log;
   r += snprintf(r, sizeof(log) / 2, FMT_WORD ":", s->pc);
-
-  r += snprintf(r, 4, " %02x", inst[i]);
-
+  r += snprintf(r, 4, " %02x", inst[0]);
+  r += snprintf(r, 4, " %02x", inst[1]);
+  r += snprintf(r, 4, " %02x", inst[2]);
+  r += snprintf(r, 4, " %02x", inst[3]);
   ringbuf_push(log);
   if(nemu_state.state == NEMU_END)
   {
