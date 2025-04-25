@@ -89,7 +89,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_IRINGBUF
   char log[128];
   char *r = log;
-  snprintf(r, sizeof(log), FMT_WORD ":", s->pc);
+  r += snprintf(r, sizeof(log) / 2, FMT_WORD ":", s->pc);
   for (int i = 0; i < ilen; i++) {
     r += snprintf(r, 4, " %02x", inst[i]);
   }
