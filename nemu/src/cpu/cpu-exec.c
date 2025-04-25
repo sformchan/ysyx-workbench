@@ -88,10 +88,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 #ifdef CONFIG_IRINGBUF
   char log[128];
-  char *r = log;
+
   //r += snprintf(r, 32, FMT_WORD ":", s->pc);
-  snprintf(r, sizeof(log), FMT_WORD ": %08x", s->pc, s->isa.inst);
-  r += strlen(r);
+  snprintf(log, sizeof(log), FMT_WORD ": %08x", s->pc, s->isa.inst);
   ringbuf_push(log);
   if(nemu_state.state == NEMU_END)
   {
