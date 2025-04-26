@@ -91,9 +91,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char instbuf[64];
   //r += snprintf(r, 32, FMT_WORD ":", s->pc);
   snprintf(destbuf, sizeof(destbuf) / 2, FMT_WORD ":", s->pc);
-  snprintf(instbuf, sizeof(instbuf), " %08x", s->isa.inst);
+  snprintf(instbuf, sizeof(instbuf), " %x", s->isa.inst);
   strcat(destbuf, instbuf);
   ringbuf_push(destbuf);
+
   if(nemu_state.state == NEMU_END)
   {
     ringbuf_print();
