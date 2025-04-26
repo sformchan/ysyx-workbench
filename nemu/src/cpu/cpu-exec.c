@@ -88,12 +88,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 #ifdef CONFIG_IRINGBUF
   char destbuf[128];
-  char instbuf[64];
+  //char instbuf[64];
   //r += snprintf(r, 32, FMT_WORD ":", s->pc);
   snprintf(destbuf, sizeof(destbuf) / 2, FMT_WORD ":", s->pc);
-  snprintf(instbuf, sizeof(instbuf), " %.8x", s->isa.inst);
-  strcat(destbuf, instbuf);
-  ringbuf_push(instbuf);
+  //snprintf(instbuf, sizeof(instbuf), " %.8x", s->isa.inst);
+  size_t len = strlen(destbuf);
+  snprintf(destbuf + len, sizeof(destbuf) - len, " %.8x", s->isa.inst);
+  ringbuf_push(destbuf);
 
   if(nemu_state.state == NEMU_END)
   {
