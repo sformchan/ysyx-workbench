@@ -21,9 +21,7 @@ void init_ringbuf()
 
 void ringbuf_push(char *log)
 {
-    char *entry = strdup(log);
-    snprintf(ringbuf.buffer[ringbuf.index], 128, "%s", entry);
-    free(entry);
+    snprintf(ringbuf.buffer[ringbuf.index], 128, "%s", log);
     ringbuf.index = (ringbuf.index + 1) % RINGBUF_SIZE;
     ringbuf.count++;
 }
