@@ -93,7 +93,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   snprintf(destbuf, sizeof(destbuf) / 2, FMT_WORD ":", s->pc);
   //snprintf(instbuf, sizeof(instbuf), " %.8x", s->isa.inst);
   size_t len = strlen(destbuf);
-  snprintf(destbuf + len, sizeof(destbuf) - len, " %.8x", s->isa.inst);
+  snprintf(destbuf + len + 1, sizeof(destbuf) - len, " %.8x", s->isa.inst);
   ringbuf_push(destbuf);
 
   if(nemu_state.state == NEMU_END)
