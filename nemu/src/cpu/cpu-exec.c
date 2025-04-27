@@ -21,6 +21,7 @@
 bool check_wp();
 void ringbuf_push(const char *log);
 void ringbuf_print();
+
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -93,9 +94,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   for (i = ilen - 1; i >= 0; i --) {
     r += snprintf(r, 4, " %02x", inst[i]);
   }
-  //char *dest = strdup(destbuf);
+  char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
-  ringbuf_push(destbuf);
+  ringbuf_push(dest);
   if(nemu_state.state == NEMU_END)
   {
     ringbuf_print();
