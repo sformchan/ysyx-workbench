@@ -33,7 +33,7 @@ void ringbuf_push(char *log)
     ringbuf.count++;
 }
 
-void ringbuf_print()
+void ringbuf_print()      //add it when ABORT or assert
 {
     printf("======== " ANSI_FG_YELLOW"IRINGBUFFER"ANSI_NONE " ========\n");
     //printf("\n");

@@ -141,6 +141,9 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+#ifdef CONFIG_IRINGBUF
+  ringbuf_print();
+#endif
 }
 
 /* Simulate how the CPU works. */
