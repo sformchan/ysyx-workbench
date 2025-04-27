@@ -6,6 +6,7 @@ typedef struct {
     char *buffer[RINGBUF_SIZE];
     int index;
     int count;
+    int crash;
 } RingBuffer;
 
 static RingBuffer ringbuf;
@@ -15,6 +16,7 @@ void init_ringbuf()
 {
     ringbuf.index = 0;
     ringbuf.count = 0;
+    ringbuf.crash = 0;
     for (int i = 0; i < RINGBUF_SIZE; i++) ringbuf.buffer[i] = NULL;
 }
 
@@ -26,6 +28,7 @@ void ringbuf_push(char *log)
         ringbuf.count--; // 防止 count 溢出
     }
     ringbuf.buffer[ringbuf.index] = log;
+    ringbuf.crash = ringbuf.index;
     ringbuf.index = (ringbuf.index + 1) % RINGBUF_SIZE;
     ringbuf.count++;
 }
@@ -36,7 +39,7 @@ void ringbuf_print()
     //if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
     for(int i = 0; i < ringbuf.count; i++)
     {
-        if(i == ringbuf.index) printf("==> ");
+        if(i == ringbuf.crash) printf("==> ");
         else printf("    ");
         printf("%s\n", ringbuf.buffer[i]); 
     }
