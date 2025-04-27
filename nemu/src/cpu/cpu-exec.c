@@ -111,7 +111,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
   ringbuf_push(dest);
-  if(nemu_state.state == NEMU_END)
+  if(nemu_state.state == NEMU_ABORT)
   {
     ringbuf_print();
   }
