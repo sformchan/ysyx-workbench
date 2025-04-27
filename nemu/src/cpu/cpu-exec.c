@@ -103,8 +103,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
     r += snprintf(r, 4, " %02x", inst_r[j]);
   }
 
-  //disassemble(r, destbuf + sizeof(destbuf) - r,
-      //MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
+  disassemble(r, destbuf + sizeof(destbuf) - r,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
 
   char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
