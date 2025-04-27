@@ -93,8 +93,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   for (i = ilen - 1; i >= 0; i --) {
     r += snprintf(r, 4, " %02x", inst[i]);
   }
+  char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
-  ringbuf_push(destbuf);
+  ringbuf_push(dest);
   if(nemu_state.state == NEMU_END)
   {
     ringbuf_print();
