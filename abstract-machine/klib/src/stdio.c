@@ -57,7 +57,7 @@ int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   int len = vsprintf(out, fmt, ap);
-  va_end(ap);
+  //va_end(ap);
   return len;
   //panic("Not implemented");
 }
