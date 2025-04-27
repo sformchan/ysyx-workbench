@@ -90,7 +90,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char destbuf[128];
   char *r = destbuf;
   r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
-
+  r += snprintf(r, 8, "  ");
   int rlen = s->snpc - s->pc;
   int j;
   uint8_t *inst_r = (uint8_t *)&s->isa.inst;
@@ -104,7 +104,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   r += snprintf(r, 8, "  ");
 
 #ifdef CONFIG_ITRACE
-  //disassemble(r, destbuf + sizeof(destbuf) / 2 + 12 - r,
+  //disassemble(r, destbuf + sizeof(destbuf) / 2 + 20 - r,
       //MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
 #endif
 
