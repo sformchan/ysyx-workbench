@@ -34,5 +34,10 @@ void ringbuf_print()
 {
     printf("=== " ANSI_FG_YELLOW"IRINGBUFFER"ANSI_NONE " ===\n");
     //if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
-    for(int i = 0; i < ringbuf.count; i++) printf("%s\n", ringbuf.buffer[i]); 
+    for(int i = 0; i < ringbuf.count; i++)
+    {
+        if(i == ringbuf.index) printf("==> ");
+        else printf("    ");
+        printf("%s\n", ringbuf.buffer[i]); 
+    }
 }   
