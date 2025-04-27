@@ -102,7 +102,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
     r += snprintf(r, 4, "%02x ", inst_r[j]);
   }
-
+  r += snprintf(r, 8, "  ");
   disassemble(r, destbuf + sizeof(destbuf) - r,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
 
