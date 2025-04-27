@@ -104,10 +104,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   }
   r += snprintf(r, 8, "  ");
 
-#ifdef CONFIG_ITRACE
+//#ifdef CONFIG_ITRACE
   disassemble(r, destbuf + sizeof(destbuf) / 2 + 12 - r,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
-#endif
+//#endif
 
   char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
