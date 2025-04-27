@@ -13,7 +13,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *ptr = out;
   while (*fmt) {
     if (*fmt == '%') {
-      fmt++;
+      fmt+= 2;
       switch (*fmt) {
         case 'd': { // 整数
           int num = va_arg(ap, int);
