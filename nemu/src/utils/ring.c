@@ -1,6 +1,6 @@
 #include <common.h>
 
-#define RINGBUF_SIZE 3
+#define RINGBUF_SIZE 16
 
 typedef struct {
     char *buffer[RINGBUF_SIZE];
