@@ -36,7 +36,7 @@ void ringbuf_push(char *log)
 void ringbuf_print()
 {
     printf("=== " ANSI_FG_YELLOW"IRINGBUFFER"ANSI_NONE " ===\n");
-    printf("you should open Trace to output the diassembly\n");
+    printf(ANSI_FG_CYAN"you should open Trace to output the diassembly\n"ANSI_NONE);
     printf("\n");
     //if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
     for(int i = 0; i < ringbuf.count; i++)
