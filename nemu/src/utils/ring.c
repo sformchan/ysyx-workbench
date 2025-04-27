@@ -41,7 +41,7 @@ void ringbuf_print()
     //if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
     for(int i = 0; i < ringbuf.count; i++)
     {
-        if(i == ringbuf.crash) printf(ANSI_BG_RED"--> "ANSI_NONE);
+        if(i == ringbuf.crash) printf(ANSI_FG_RED"--> "ANSI_NONE);
         else printf("    ");
         printf("%s\n", ringbuf.buffer[i]); 
     }
