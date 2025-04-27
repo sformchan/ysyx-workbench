@@ -91,12 +91,16 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char destbuf[128];
   char *r = destbuf;
   r += snprintf(r, sizeof(destbuf), FMT_WORD ":", s->pc);
+
+  int rlen = s->snpc - s->pc;
+  int j;
+  uint8_t *inst_r = (uint8_t *)&s->isa.inst;
   #ifdef CONFIG_ISA_x86
-  for (i = 0; i < ilen; i ++) {
+  for (j = 0; j < ilen; j ++) {
 #else
-  for (i = ilen - 1; i >= 0; i --) {
+  for (j = rlen - 1; j >= 0; j --) {
 #endif
-    r += snprintf(r, 4, " %02x", inst[i]);
+    r += snprintf(r, 4, " %02x", inst_r[j]);
   }
   char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
