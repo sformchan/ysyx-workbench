@@ -21,7 +21,6 @@
 bool check_wp();
 void ringbuf_push(const char *log);
 void ringbuf_print();
-void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -82,7 +81,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-  //void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
 #endif
@@ -104,10 +103,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   }
   r += snprintf(r, 8, "  ");
 
-//#ifdef CONFIG_ITRACE
+#ifdef CONFIG_ITRACE
   //disassemble(r, destbuf + sizeof(destbuf) / 2 + 12 - r,
       //MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
-//#endif
+#endif
 
   char *dest = strdup(destbuf);
   //printf("%s\n", destbuf);
