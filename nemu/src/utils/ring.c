@@ -39,7 +39,7 @@ void ringbuf_print()
     //if(ringbuf.count > RINGBUF_SIZE) for(int i = 0; i < RINGBUF_SIZE; i++) printf("%s\n", ringbuf.buffer[i]);
     for(int i = 0; i < ringbuf.count; i++)
     {
-        if(i == ringbuf.crash) printf("==> ");
+        if(i == ringbuf.crash) printf("--> ");
         else printf("    ");
         printf("%s\n", ringbuf.buffer[i]); 
     }
