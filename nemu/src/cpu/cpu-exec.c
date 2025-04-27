@@ -90,7 +90,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_IRINGBUF
   char destbuf[128];
   char *r = destbuf;
-  r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ":", s->pc);
+  r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
 
   int rlen = s->snpc - s->pc;
   int j;
@@ -100,7 +100,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #else
   for (j = rlen - 1; j >= 0; j --) {
 #endif
-    r += snprintf(r, 4, " %02x", inst_r[j]);
+    r += snprintf(r, 4, "%02x ", inst_r[j]);
   }
 
   disassemble(r, destbuf + sizeof(destbuf) - r,
