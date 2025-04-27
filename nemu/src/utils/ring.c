@@ -21,15 +21,11 @@ void init_ringbuf()
 
 void ringbuf_push(char *log)
 {
-    char *dest = strdup(log);
-    ringbuf.buffer[ringbuf.index] = dest;
     if (ringbuf.count >= RINGBUF_SIZE) {
-        free(ringbuf.buffer[ringbuf.index]);
-        ringbuf.buffer[ringbuf.index] = NULL;
+        free(ringbuf.buffer[ringbuf.index]); // 释放旧数据
+        ringbuf.count--; // 防止 count 溢出
     }
-    else if (ringbuf.count < RINGBUF_SIZE) {
-        ringbuf.count++;
-    }
+    ringbuf.buffer[ringbuf.index] = log;
     ringbuf.index = (ringbuf.index + 1) % RINGBUF_SIZE;
     ringbuf.count++;
 }
