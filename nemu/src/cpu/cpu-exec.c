@@ -21,6 +21,7 @@
 bool check_wp();
 void ringbuf_push(const char *log);
 void ringbuf_print();
+void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
