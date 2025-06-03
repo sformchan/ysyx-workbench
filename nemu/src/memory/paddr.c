@@ -56,7 +56,7 @@ word_t paddr_read(paddr_t addr, int len) {
   out_of_bound(addr);
 
   #ifdef CONFIG_MTRACE
-  printf("[MTARCE] READ addr = " FMT_PADDR "  len = %d\n", addr, len);
+  printf("[MTARCE] " ANSI_FG_BLUE "READ " ANSI_NONE "addr = " FMT_PADDR "  len = %d\n", addr, len);
   #endif
 
   return 0;
@@ -68,6 +68,6 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   out_of_bound(addr);
 
   #ifdef CONFIG_MTRACE
-  printf("[MTARCE] WRITE addr = " FMT_PADDR "  len = %d\n", addr, len);
+  printf("[MTARCE] " ANSI_FG_MAGENTA "WRITE" ANSI_NONE "addr = " FMT_PADDR "  len = %d\n", addr, len);
   #endif
 }
