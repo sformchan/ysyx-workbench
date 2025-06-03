@@ -52,7 +52,7 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
   #ifdef CONFIG_MTRACE
-  printf("[MTARCE] " ANSI_FG_BLUE "READ  " ANSI_NONE "addr=" FMT_PADDR "  len=%d\n", addr, len);
+  printf("[MTARCE] " ANSI_FG_CYAN "READ  " ANSI_NONE "addr=" FMT_PADDR "  len=%d\n", addr, len);
   #endif
 
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
