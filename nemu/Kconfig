@@ -225,3 +225,6 @@ config IRINGBUF
   bool "Enable instruction ring buffer"
   default y
 
+config MTRACE
+  bool "Enable memory trace"
+  default n
