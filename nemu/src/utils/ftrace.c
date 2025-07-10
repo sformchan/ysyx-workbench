@@ -159,22 +159,39 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
   }
   
   void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-    int rd = (inst >> 7) & 0x1f;
-    int rs1 = (inst >> 15) & 0x1f;
-    int imm = (int32_t)inst >> 20; // sign-extend 12 bits
-  
-    // Detect ret = jalr x0, x1, 0
-    if (((inst & 0x707f) == 0x67) && rd == 0 && rs1 == 1 && imm == 0) {
-      // Return detected
-      call_depth--;
-      if (call_depth < 0) call_depth = 0;
-      printf("[depth=%d] Return %s@0x%08x\n", call_depth, find_func(pc, NULL), pc);
+    // Extract instruction fields
+    int rd = (inst >> 7) & 0x1f;   // Destination register
+    int rs1 = (inst >> 15) & 0x1f; // Source register
+    int imm = (int32_t)(inst >> 20) >> 20; // Sign-extend 12-bit immediate
+
+    // Check for JALR (opcode 0x67, funct3 = 0)
+    if ((inst & 0x707f) == 0x67) {
+        // Detect return: jalr x0, x1, 0 (standard return using x1 as link register)
+        if (rd == 0 && rs1 == 1 && imm == 0) {
+            call_depth--;
+            if (call_depth < 0) {
+                call_depth = 0; // Prevent underflow
+                fprintf(stderr, "Warning: Call depth underflow at PC=0x%08x\n", pc);
+            }
+            printf("[depth=%d] Return %s@0x%08x\n", call_depth, find_func(pc, NULL) ? find_func(pc, NULL) : "unknown", pc);
+        } else {
+            // Assume JALR is a call if rd is x1 or x5 (link registers)
+            if (rd == 1 || rd == 5) {
+                call_depth++;
+                printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+            } else {
+                // Non-call/return JALR (e.g., computed jump)
+                printf("[depth=%d] Jump %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+            }
+        }
+    } else if ((inst & 0x7f) == 0x6f) { // Check for JAL (opcode 0x6f)
+        call_depth++;
+        printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
     } else {
-      // Normal call
-      call_depth++;
-      printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL), target);
+        // Ignore other instructions
+        return;
     }
-  }
+}
   
   
   
