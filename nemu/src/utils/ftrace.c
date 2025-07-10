@@ -16,6 +16,7 @@ typedef struct {
 FuncInfo func_table[MAX_FUNCS];
 int func_cnt = 0;
 
+
 void read_elf_symbols(const char *elf_path) {
   FILE *fp = fopen(elf_path, "rb");
   if (!fp) {
@@ -23,7 +24,7 @@ void read_elf_symbols(const char *elf_path) {
     exit(1);
   }
 
-  // 1. Read ELF header
+  // Read ELF header
   Elf32_Ehdr ehdr;
   if (fread(&ehdr, 1, sizeof(ehdr), fp) != sizeof(ehdr)) {
     perror("Failed to read ELF header");
@@ -31,76 +32,55 @@ void read_elf_symbols(const char *elf_path) {
   }
   assert(*(uint32_t *)ehdr.e_ident == 0x464C457F && "Not a valid ELF");
 
-  // 2. Read section headers
+  // Read section headers
   Elf32_Shdr *shdrs = malloc(ehdr.e_shentsize * ehdr.e_shnum);
-  if (!shdrs) {
-    perror("malloc failed");
-    exit(1);
-  }
+  assert(shdrs);
   fseek(fp, ehdr.e_shoff, SEEK_SET);
   if (fread(shdrs, ehdr.e_shentsize, ehdr.e_shnum, fp) != ehdr.e_shnum) {
     perror("Failed to read section headers");
     exit(1);
   }
 
-  // 3. Read section header string table (.shstrtab)
+  // Read .shstrtab
   Elf32_Shdr shstr = shdrs[ehdr.e_shstrndx];
   char *shstrtab = malloc(shstr.sh_size);
-  if (!shstrtab) {
-    perror("malloc failed");
-    exit(1);
-  }
+  assert(shstrtab);
   fseek(fp, shstr.sh_offset, SEEK_SET);
   if (fread(shstrtab, 1, shstr.sh_size, fp) != shstr.sh_size) {
-    perror("Failed to read section header string table");
+    perror("Failed to read .shstrtab");
     exit(1);
   }
 
-  // 4. Locate .symtab and .strtab sections
+  // Find .symtab and .strtab
   Elf32_Shdr symtab_hdr = {0}, strtab_hdr = {0};
-  int found_symtab = 0, found_strtab = 0;
   for (int i = 0; i < ehdr.e_shnum; i++) {
     const char *name = &shstrtab[shdrs[i].sh_name];
-    if (strcmp(name, ".symtab") == 0) {
-      symtab_hdr = shdrs[i];
-      found_symtab = 1;
-    }
-    if (strcmp(name, ".strtab") == 0) {
-      strtab_hdr = shdrs[i];
-      found_strtab = 1;
-    }
-  }
-  if (!found_symtab || !found_strtab) {
-    fprintf(stderr, "Missing .symtab or .strtab sections\n");
-    exit(1);
+    if (strcmp(name, ".symtab") == 0) symtab_hdr = shdrs[i];
+    if (strcmp(name, ".strtab") == 0) strtab_hdr = shdrs[i];
   }
 
-  // 5. Read string table
+  assert(symtab_hdr.sh_size > 0 && strtab_hdr.sh_size > 0);
+
+  // Read .strtab
   char *strtab = malloc(strtab_hdr.sh_size);
-  if (!strtab) {
-    perror("malloc failed");
-    exit(1);
-  }
+  assert(strtab);
   fseek(fp, strtab_hdr.sh_offset, SEEK_SET);
   if (fread(strtab, 1, strtab_hdr.sh_size, fp) != strtab_hdr.sh_size) {
-    perror("Failed to read string table");
+    perror("Failed to read .strtab");
     exit(1);
   }
 
-  // 6. Read symbol table
+  // Read .symtab
   int num_syms = symtab_hdr.sh_size / symtab_hdr.sh_entsize;
   Elf32_Sym *syms = malloc(symtab_hdr.sh_size);
-  if (!syms) {
-    perror("malloc failed");
-    exit(1);
-  }
+  assert(syms);
   fseek(fp, symtab_hdr.sh_offset, SEEK_SET);
   if (fread(syms, symtab_hdr.sh_entsize, num_syms, fp) != num_syms) {
-    perror("Failed to read symbol table");
+    perror("Failed to read .symtab");
     exit(1);
   }
 
-  // 7. Filter functions
+  // Store function symbols
   func_cnt = 0;
   for (int i = 0; i < num_syms && func_cnt < MAX_FUNCS; i++) {
     Elf32_Sym sym = syms[i];
@@ -114,7 +94,6 @@ void read_elf_symbols(const char *elf_path) {
 
   printf("Loaded %d functions from ELF file.\n", func_cnt);
 
-  // Cleanup
   free(shstrtab);
   free(shdrs);
   free(strtab);
@@ -124,51 +103,51 @@ void read_elf_symbols(const char *elf_path) {
 
 
 
+
 static int call_depth = 0;
 
-static const char *lookup_func_name(uint32_t addr) {
-  for (int i = 0; i < func_cnt; i++) {
-    uint32_t start = func_table[i].addr;
-    uint32_t end = start + func_table[i].size;
-    if (addr >= start && addr < end) {
-      return func_table[i].name;
-    }
-  }
-  return NULL;
-}
-
-void ftrace_exec(uint32_t pc, uint32_t next_pc, uint32_t instr) {
-  uint32_t opcode = instr & 0x7f;
-  if (opcode == 0x6f) {  // JAL
-    uint32_t rd = (instr >> 7) & 0x1f;
-    int32_t imm =
-      ((int32_t)(instr & 0x80000000) >> 11) |  // imm[20]
-      ((instr >> 20) & 0x7fe) |                // imm[10:1]
-      ((instr >> 9) & 0x100) |                 // imm[11]
-      ((instr >> 21) & 0xff000);               // imm[19:12]
-    imm = (imm << 11) >> 11;  // sign extend
-
-    uint32_t target = pc + imm;
-    if (rd == 1) {  // jal to ra = function call
-      const char *name = lookup_func_name(target);
-      if (name) {
-        printf("%*sCall %s@0x%x\n", call_depth * 2, "", name, target);
-        call_depth++;
+// Helper: find function name given an address
+const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out) {
+    for (int i = 0; i < func_cnt; i++) {
+      uint32_t start = func_table[i].addr;
+      uint32_t end = start + func_table[i].size;
+      if (addr >= start && addr < end) {
+        if (func_addr_out) *func_addr_out = start;
+        return func_table[i].name;
       }
     }
+    return NULL;
+  }
+  
+
+// Main ftrace logic
+void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
+  uint32_t opcode = inst & 0x7f;
+
+  // Function call: jal or jalr
+  if (opcode == 0b1101111 || opcode == 0b1100111) {
+    const char *func_name = find_func_name_by_addr(target, NULL);
+    if (func_name) {
+      for (int i = 0; i < call_depth; i++) printf("  ");
+      printf("Call %s@0x%08x\n", func_name, target);
+      call_depth++;
+    }
   }
 
-  else if (opcode == 0x67) {  // JALR
-    uint32_t rd = (instr >> 7) & 0x1f;
-    uint32_t rs1 = (instr >> 15) & 0x1f;
-    int32_t imm = (int32_t)instr >> 20;
+  // Function return: jalr x0, ra, 0
+  if (opcode == 0b1100111) {
+    int rd  = (inst >> 7) & 0x1f;
+    int rs1 = (inst >> 15) & 0x1f;
+    int imm = (int32_t)inst >> 20;
 
-    if (rd == 0 && rs1 == 1 && imm == 0) {
-      // jalr x0, ra, 0 --> return
-      const char *name = lookup_func_name(pc);
-      if (name && call_depth > 0) {
-        call_depth--;
-        printf("%*sReturn %s@0x%x\n", call_depth * 2, "", name, pc);
+    if (rd == 0 && rs1 == 1 && imm == 0) { // ret
+      call_depth--;
+      if (call_depth < 0) call_depth = 0; // safety
+      uint32_t func_addr = 0;
+      const char *func_name = find_func_name_by_addr(pc, &func_addr);
+      if (func_name) {
+        for (int i = 0; i < call_depth; i++) printf("  ");
+        printf("Return %s@0x%08x\n", func_name, func_addr);
       }
     }
   }
