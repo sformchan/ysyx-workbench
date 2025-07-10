@@ -6,6 +6,7 @@
 #include <assert.h>
 
 #define MAX_FUNCS 1024
+#define MAX_CALL_DEPTH 100
 
 typedef struct {
   uint32_t addr;
@@ -16,6 +17,9 @@ typedef struct {
 static FuncInfo func_table[MAX_FUNCS];
 static int func_cnt = 0;
 
+static int call_depth = 0;
+
+// Load ELF symbols (functions) from ELF file
 void read_elf_symbols(const char *elf_path) {
   FILE *fp = fopen(elf_path, "rb");
   if (!fp) {
@@ -26,6 +30,7 @@ void read_elf_symbols(const char *elf_path) {
   Elf32_Ehdr ehdr;
   if (fread(&ehdr, 1, sizeof(ehdr), fp) != sizeof(ehdr)) {
     perror("Failed to read ELF header");
+    fclose(fp);
     exit(1);
   }
   assert(*(uint32_t *)ehdr.e_ident == 0x464C457F && "Not a valid ELF");
@@ -33,11 +38,14 @@ void read_elf_symbols(const char *elf_path) {
   Elf32_Shdr *shdrs = malloc(ehdr.e_shentsize * ehdr.e_shnum);
   if (!shdrs) {
     perror("malloc failed");
+    fclose(fp);
     exit(1);
   }
   fseek(fp, ehdr.e_shoff, SEEK_SET);
   if (fread(shdrs, ehdr.e_shentsize, ehdr.e_shnum, fp) != ehdr.e_shnum) {
     perror("Failed to read section headers");
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
 
@@ -45,11 +53,16 @@ void read_elf_symbols(const char *elf_path) {
   char *shstrtab = malloc(shstr.sh_size);
   if (!shstrtab) {
     perror("malloc failed");
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
   fseek(fp, shstr.sh_offset, SEEK_SET);
   if (fread(shstrtab, 1, shstr.sh_size, fp) != shstr.sh_size) {
     perror("Failed to read section header string table");
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
 
@@ -68,17 +81,27 @@ void read_elf_symbols(const char *elf_path) {
   }
   if (!found_symtab || !found_strtab) {
     fprintf(stderr, "Missing .symtab or .strtab sections\n");
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
 
   char *strtab = malloc(strtab_hdr.sh_size);
   if (!strtab) {
     perror("malloc failed");
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
   fseek(fp, strtab_hdr.sh_offset, SEEK_SET);
   if (fread(strtab, 1, strtab_hdr.sh_size, fp) != strtab_hdr.sh_size) {
     perror("Failed to read string table");
+    free(strtab);
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
 
@@ -86,11 +109,20 @@ void read_elf_symbols(const char *elf_path) {
   Elf32_Sym *syms = malloc(symtab_hdr.sh_size);
   if (!syms) {
     perror("malloc failed");
+    free(strtab);
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
   fseek(fp, symtab_hdr.sh_offset, SEEK_SET);
   if (fread(syms, symtab_hdr.sh_entsize, num_syms, fp) != num_syms) {
     perror("Failed to read symbol table");
+    free(syms);
+    free(strtab);
+    free(shstrtab);
+    free(shdrs);
+    fclose(fp);
     exit(1);
   }
 
@@ -107,16 +139,15 @@ void read_elf_symbols(const char *elf_path) {
 
   printf("Loaded %d functions from ELF file.\n", func_cnt);
 
+  free(syms);
+  free(strtab);
   free(shstrtab);
   free(shdrs);
-  free(strtab);
-  free(syms);
   fclose(fp);
 }
 
-static int call_depth = 0;
-
-static const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out) {
+// Find function name by PC address (return name or NULL)
+const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out) {
   for (int i = 0; i < func_cnt; i++) {
     uint32_t start = func_table[i].addr;
     uint32_t end = start + func_table[i].size;
@@ -128,41 +159,46 @@ static const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out
   return NULL;
 }
 
+// Main ftrace exec function
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-    uint32_t opcode = inst & 0x7f;
-  
-    int indent = call_depth;
-    if (indent > 20) indent = 20; // max indent limit
-  
-    // Function call: jal or jalr
-    if (opcode == 0x6f || opcode == 0x67) {
-      const char *func_name = find_func_name_by_addr(target, NULL);
-      if (func_name) {
-        printf("[depth=%d] ", call_depth);
-        for (int i = 0; i < indent; i++) printf("  ");
-        printf("Call %s@0x%08x\n", func_name, target);
-        call_depth++;
-      }
+  uint32_t opcode = inst & 0x7f;
+
+  // Detect function call (jal=0x6f or jalr=0x67)
+  if (opcode == 0x6f || opcode == 0x67) {
+    int rd  = (inst >> 7) & 0x1f;
+    int rs1 = (inst >> 15) & 0x1f;
+    int32_t imm = (int32_t)inst >> 20;
+
+    // Return detection: jalr rd=0 rs1=1 imm=0 (ret)
+    int is_return = 0;
+    if (opcode == 0x67 && rd == 0 && rs1 == 1 && imm == 0) {
+      is_return = 1;
     }
-  
-    // Function return: jalr x0, ra, 0
-    if (opcode == 0x67) {
-      int rd  = (inst >> 7) & 0x1f;
-      int rs1 = (inst >> 15) & 0x1f;
-      int imm = (int32_t)inst >> 20;
-  
-      if (rd == 0 && rs1 == 1 && imm == 0) { // ret
-        call_depth--;
-        if (call_depth < 0) call_depth = 0;
-        uint32_t func_addr = 0;
-        const char *func_name = find_func_name_by_addr(pc, &func_addr);
-        if (func_name) {
-          indent = call_depth;
-          if (indent > 20) indent = 20;
-          printf("[depth=%d] ", call_depth);
-          for (int i = 0; i < indent; i++) printf("  ");
-          printf("Return %s@0x%08x\n", func_name, func_addr);
-        }
+
+    if (is_return) {
+      call_depth--;
+      if (call_depth < 0) call_depth = 0;
+
+      uint32_t func_addr = 0;
+      const char *func_name = find_func_name_by_addr(pc, &func_addr);
+      if (!func_name) func_name = "unknown";
+
+      for (int i = 0; i < call_depth; i++) printf("  ");
+      printf("[depth=%d] Return %s@0x%08x\n", call_depth, func_name, func_addr);
+    } else {
+      // Normal call
+      const char *func_name = find_func_name_by_addr(target, NULL);
+      if (!func_name) func_name = "unknown";
+
+      if (call_depth >= MAX_CALL_DEPTH) {
+        fprintf(stderr, "[WARN] call depth limit reached at %s@0x%08x\n", func_name, target);
+        return;
       }
+
+      for (int i = 0; i < call_depth; i++) printf("  ");
+      printf("[depth=%d] Call %s@0x%08x\n", call_depth, func_name, target);
+      call_depth++;
     }
   }
+}
+
