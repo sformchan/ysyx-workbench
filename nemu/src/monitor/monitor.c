@@ -94,7 +94,7 @@ static int parse_args(int argc, char *argv[]) {
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
-        //printf("\t-e,--elf=FILE           load the elf file\n");
+        printf("\t-e,--elf=FILE           load the elf file\n");
         printf("\t-b,--batch              run with batch mode\n");
         printf("\t-l,--log=FILE           output log to FILE\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
