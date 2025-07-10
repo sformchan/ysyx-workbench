@@ -159,40 +159,23 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
   }
   
   void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-    uint32_t opcode = inst & 0x7f;
+    int rd = (inst >> 7) & 0x1f;
+    int rs1 = (inst >> 15) & 0x1f;
+    int imm = (int32_t)inst >> 20; // sign-extend 12 bits
   
-    if (opcode == 0x6f) { // JAL
-      const char *callee = find_func(target, NULL);
-      if (callee) {
-        printf("[depth=%d] Call %s@0x%08x\n", call_depth, callee, target);
-        call_depth++;
-      }
-    } else if (opcode == 0x67) { // JALR
-      int rd  = (inst >> 7) & 0x1f;
-      int rs1 = (inst >> 15) & 0x1f;
-      int imm = (int32_t)inst >> 20;
-  
-      // Return detection: ret == jalr x0, x1, 0
-      if (rd == 0 && rs1 == 1 && imm == 0) {
-        call_depth--;
-        if (call_depth < 0) call_depth = 0;
-  
-        // Use the return address to find the function returned from
-        // But pc here is the return instruction itself, which is inside the function that is ending
-        const char *func = find_func(pc, NULL);
-  
-        if (func) {
-          printf("[depth=%d] Return %s@0x%08x\n", call_depth, func, pc);
-        }
-      } else {
-        const char *callee = find_func(target, NULL);
-        if (callee) {
-          printf("[depth=%d] Call %s@0x%08x\n", call_depth, callee, target);
-          call_depth++;
-        }
-      }
+    // Detect ret = jalr x0, x1, 0
+    if (((inst & 0x707f) == 0x67) && rd == 0 && rs1 == 1 && imm == 0) {
+      // Return detected
+      call_depth--;
+      if (call_depth < 0) call_depth = 0;
+      printf("[depth=%d] Return %s@0x%08x\n", call_depth, find_func(pc, NULL), pc);
+    } else {
+      // Normal call
+      call_depth++;
+      printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL), target);
     }
   }
+  
   
   
 
