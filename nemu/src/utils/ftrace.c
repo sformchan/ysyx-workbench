@@ -162,36 +162,43 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
     // Extract instruction fields
     int rd = (inst >> 7) & 0x1f;   // Destination register
     int rs1 = (inst >> 15) & 0x1f; // Source register
-    int imm = (int32_t)(inst >> 20) >> 20; // Sign-extend 12-bit immediate
+    int imm = (int32_t)(inst >> 20); // Sign-extend 12-bit immediate
 
-    // Check for JALR (opcode 0x67, funct3 = 0)
-    if ((inst & 0x707f) == 0x67) {
-        // Detect return: jalr x0, x1, 0 (standard return using x1 as link register)
-        if (rd == 0 && rs1 == 1 && imm == 0) {
+    // Check for JAL (opcode 0x6f)
+    if ((inst & 0x7f) == 0x6f) {
+        // JAL is typically a call, stores return address in rd (usually x1 or x5)
+        if (rd == 1 || rd == 5) { // Link registers
+            call_depth++;
+            printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+        } else {
+            // Non-call JAL (e.g., jump)
+            printf("[depth=%d] Jump %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+        }
+    }
+    // Check for JALR (opcode 0x67)
+    else if ((inst & 0x707f) == 0x67) {
+        // Detect return: jalr x0, rs1, imm (rs1 typically x1 or x5, imm usually 0)
+        if (rd == 0 && (rs1 == 1 || rs1 == 5) && imm == 0) {
             call_depth--;
             if (call_depth < 0) {
-                call_depth = 0; // Prevent underflow
+                call_depth = 0;
                 fprintf(stderr, "Warning: Call depth underflow at PC=0x%08x\n", pc);
             }
             printf("[depth=%d] Return %s@0x%08x\n", call_depth, find_func(pc, NULL) ? find_func(pc, NULL) : "unknown", pc);
-        } else {
-            // Assume JALR is a call if rd is x1 or x5 (link registers)
-            if (rd == 1 || rd == 5) {
-                call_depth++;
-                printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
-            } else {
-                // Non-call/return JALR (e.g., computed jump)
-                printf("[depth=%d] Jump %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
-            }
         }
-    } else if ((inst & 0x7f) == 0x6f) { // Check for JAL (opcode 0x6f)
-        call_depth++;
-        printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
-    } else {
-        // Ignore other instructions
-        return;
+        // Detect call: jalr rd, rs1, imm (rd typically x1 or x5)
+        else if (rd == 1 || rd == 5) {
+            call_depth++;
+            printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+        }
+        // Non-call/return JALR (e.g., computed jump)
+        else {
+            printf("[depth=%d] Jump %s@0x%08x\n", call_depth, find_func(target, NULL) ? find_func(target, NULL) : "unknown", target);
+        }
     }
+    // Ignore other instructions
 }
+
   
   
   
