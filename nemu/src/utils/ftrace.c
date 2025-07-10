@@ -146,59 +146,43 @@ void read_elf_symbols(const char *elf_path) {
   fclose(fp);
 }
 
-// Find function name by PC address (return name or NULL)
-const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out) {
-  for (int i = 0; i < func_cnt; i++) {
-    uint32_t start = func_table[i].addr;
-    uint32_t end = start + func_table[i].size;
-    if (addr >= start && addr < end) {
-      if (func_addr_out) *func_addr_out = start;
-      return func_table[i].name;
-    }
-  }
-  return NULL;
-}
-
-// Main ftrace exec function
-void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-  uint32_t opcode = inst & 0x7f;
-
-  // Detect function call (jal=0x6f or jalr=0x67)
-  if (opcode == 0x6f || opcode == 0x67) {
-    int rd  = (inst >> 7) & 0x1f;
-    int rs1 = (inst >> 15) & 0x1f;
-    int32_t imm = (int32_t)inst >> 20;
-
-    // Return detection: jalr rd=0 rs1=1 imm=0 (ret)
-    int is_return = 0;
-    if (opcode == 0x67 && rd == 0 && rs1 == 1 && imm == 0) {
-      is_return = 1;
-    }
-
-    if (is_return) {
-      call_depth--;
-      if (call_depth < 0) call_depth = 0;
-
-      uint32_t func_addr = 0;
-      const char *func_name = find_func_name_by_addr(pc, &func_addr);
-      if (!func_name) func_name = "unknown";
-
-      for (int i = 0; i < call_depth; i++) printf("  ");
-      printf("[depth=%d] Return %s@0x%08x\n", call_depth, func_name, func_addr);
-    } else {
-      // Normal call
-      const char *func_name = find_func_name_by_addr(target, NULL);
-      if (!func_name) func_name = "unknown";
-
-      if (call_depth >= MAX_CALL_DEPTH) {
-        fprintf(stderr, "[WARN] call depth limit reached at %s@0x%08x\n", func_name, target);
-        return;
+const char *find_func(uint32_t addr, uint32_t *start_out) {
+    for (int i = 0; i < func_cnt; i++) {
+      uint32_t start = func_table[i].addr;
+      uint32_t end = start + func_table[i].size;
+      if (addr >= start && addr < end) {
+        if (start_out) *start_out = start;
+        return func_table[i].name;
       }
-
-      for (int i = 0; i < call_depth; i++) printf("  ");
-      printf("[depth=%d] Call %s@0x%08x\n", call_depth, func_name, target);
-      call_depth++;
+    }
+    return NULL;
+  }
+  
+  void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
+    uint32_t opcode = inst & 0x7f;
+  
+    if (opcode == 0x6f || opcode == 0x67) {
+      const char *callee = find_func(target, NULL);
+      if (callee) {
+        printf("[depth=%d] Call %s@0x%08x\n", call_depth, callee, target);
+        call_depth++;
+      }
+    }
+  
+    if (opcode == 0x67) {
+      int rd = (inst >> 7) & 0x1f;
+      int rs1 = (inst >> 15) & 0x1f;
+      int imm = (int32_t)inst >> 20;
+      if (rd == 0 && rs1 == 1 && imm == 0) {
+        call_depth--;
+        if (call_depth < 0) call_depth = 0;
+        uint32_t func_start = 0;
+        const char *func = find_func(pc, &func_start);
+        if (func) {
+          printf("[depth=%d] Return %s@0x%08x\n", call_depth, func, func_start);
+        }
+      }
     }
   }
-}
+  
 
