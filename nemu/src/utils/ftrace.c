@@ -121,3 +121,55 @@ void read_elf_symbols(const char *elf_path) {
   free(syms);
   fclose(fp);
 }
+
+
+
+static int call_depth = 0;
+
+static const char *lookup_func_name(uint32_t addr) {
+  for (int i = 0; i < func_cnt; i++) {
+    uint32_t start = func_table[i].addr;
+    uint32_t end = start + func_table[i].size;
+    if (addr >= start && addr < end) {
+      return func_table[i].name;
+    }
+  }
+  return NULL;
+}
+
+void ftrace_exec(uint32_t pc, uint32_t next_pc, uint32_t instr) {
+  uint32_t opcode = instr & 0x7f;
+  if (opcode == 0x6f) {  // JAL
+    uint32_t rd = (instr >> 7) & 0x1f;
+    int32_t imm =
+      ((int32_t)(instr & 0x80000000) >> 11) |  // imm[20]
+      ((instr >> 20) & 0x7fe) |                // imm[10:1]
+      ((instr >> 9) & 0x100) |                 // imm[11]
+      ((instr >> 21) & 0xff000);               // imm[19:12]
+    imm = (imm << 11) >> 11;  // sign extend
+
+    uint32_t target = pc + imm;
+    if (rd == 1) {  // jal to ra = function call
+      const char *name = lookup_func_name(target);
+      if (name) {
+        printf("%*sCall %s@0x%x\n", call_depth * 2, "", name, target);
+        call_depth++;
+      }
+    }
+  }
+
+  else if (opcode == 0x67) {  // JALR
+    uint32_t rd = (instr >> 7) & 0x1f;
+    uint32_t rs1 = (instr >> 15) & 0x1f;
+    int32_t imm = (int32_t)instr >> 20;
+
+    if (rd == 0 && rs1 == 1 && imm == 0) {
+      // jalr x0, ra, 0 --> return
+      const char *name = lookup_func_name(pc);
+      if (name && call_depth > 0) {
+        call_depth--;
+        printf("%*sReturn %s@0x%x\n", call_depth * 2, "", name, pc);
+      }
+    }
+  }
+}
