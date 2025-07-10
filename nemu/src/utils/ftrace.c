@@ -6,6 +6,7 @@
 #include <assert.h>
 
 #define MAX_FUNCS 1024
+#define MAX_CALL_DEPTH 100
 
 typedef struct {
   uint32_t addr;
@@ -15,7 +16,17 @@ typedef struct {
 
 static FuncInfo func_table[MAX_FUNCS];
 static int func_cnt = 0;
+static int call_depth = 0;
 
+static int cmp_func(const void *a, const void *b) {
+  const FuncInfo *fa = (const FuncInfo*)a;
+  const FuncInfo *fb = (const FuncInfo*)b;
+  if (fa->addr < fb->addr) return -1;
+  if (fa->addr > fb->addr) return 1;
+  return 0;
+}
+
+// Load ELF and read function symbols into func_table
 void read_elf_symbols(const char *elf_path) {
   FILE *fp = fopen(elf_path, "rb");
   if (!fp) {
@@ -105,7 +116,10 @@ void read_elf_symbols(const char *elf_path) {
     }
   }
 
-  printf("Loaded %d functions from ELF file.\n", func_cnt);
+  // Sort by address for faster search
+  qsort(func_table, func_cnt, sizeof(FuncInfo), cmp_func);
+
+  printf("Loaded %d functions from ELF.\n", func_cnt);
 
   free(shstrtab);
   free(shdrs);
@@ -114,55 +128,56 @@ void read_elf_symbols(const char *elf_path) {
   fclose(fp);
 }
 
-static int call_depth = 0;
-
-static const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out) {
-  for (int i = 0; i < func_cnt; i++) {
-    uint32_t start = func_table[i].addr;
-    uint32_t end = start + func_table[i].size;
+// Binary search func_table for addr; return function name or NULL
+const char* get_func_name(uint32_t addr) {
+  int left = 0, right = func_cnt -1;
+  while (left <= right) {
+    int mid = (left + right) / 2;
+    uint32_t start = func_table[mid].addr;
+    uint32_t end = start + func_table[mid].size;
     if (addr >= start && addr < end) {
-      if (func_addr_out) *func_addr_out = start;
-      return func_table[i].name;
+      return func_table[mid].name;
+    } else if (addr < start) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
     }
   }
   return NULL;
 }
 
+// Call this on each executed instruction
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-    uint32_t opcode = inst & 0x7f;
-  
-    int indent = call_depth;
-    if (indent > 20) indent = 20; // max indent limit
-  
-    // Function call: jal or jalr
-    if (opcode == 0x6f || opcode == 0x67) {
-      const char *func_name = find_func_name_by_addr(target, NULL);
-      if (func_name) {
-        printf("[depth=%d] ", call_depth);
-        for (int i = 0; i < indent; i++) printf("  ");
-        printf("Call %s@0x%08x\n", func_name, target);
+  uint32_t opcode = inst & 0x7f;
+
+  // call: jal (0x6f) or jalr (0x67)
+  if (opcode == 0x6f || opcode == 0x67) {
+    const char *func_name = get_func_name(target);
+    if (func_name) {
+      if (call_depth < MAX_CALL_DEPTH) {
+        for (int i = 0; i < call_depth; i++) printf("  ");
+        printf("[depth=%d] Call %s@0x%08x\n", call_depth, func_name, target);
         call_depth++;
-      }
-    }
-  
-    // Function return: jalr x0, ra, 0
-    if (opcode == 0x67) {
-      int rd  = (inst >> 7) & 0x1f;
-      int rs1 = (inst >> 15) & 0x1f;
-      int imm = (int32_t)inst >> 20;
-  
-      if (rd == 0 && rs1 == 1 && imm == 0) { // ret
-        call_depth--;
-        if (call_depth < 0) call_depth = 0;
-        uint32_t func_addr = 0;
-        const char *func_name = find_func_name_by_addr(pc, &func_addr);
-        if (func_name) {
-          indent = call_depth;
-          if (indent > 20) indent = 20;
-          printf("[depth=%d] ", call_depth);
-          for (int i = 0; i < indent; i++) printf("  ");
-          printf("Return %s@0x%08x\n", func_name, func_addr);
-        }
+      } else {
+        printf("Warning: call depth exceeded max %d\n", MAX_CALL_DEPTH);
       }
     }
   }
+
+  // return: jalr x0, ra, 0
+  if (opcode == 0x67) {
+    int rd  = (inst >> 7) & 0x1f;
+    int rs1 = (inst >> 15) & 0x1f;
+    int imm = (int32_t)inst >> 20;
+
+    if (rd == 0 && rs1 == 1 && imm == 0) {
+      if (call_depth > 0) call_depth--;
+      else call_depth = 0;
+      const char *func_name = get_func_name(pc);
+      if (func_name) {
+        for (int i = 0; i < call_depth; i++) printf("  ");
+        printf("[depth=%d] Return %s@0x%08x\n", call_depth, func_name, pc);
+      }
+    }
+  }
+}
