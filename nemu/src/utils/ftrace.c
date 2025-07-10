@@ -129,33 +129,40 @@ static const char *find_func_name_by_addr(uint32_t addr, uint32_t *func_addr_out
 }
 
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
-  uint32_t opcode = inst & 0x7f;
-
-  // jal (opcode 0x6f) or jalr (opcode 0x67) indicates call
-  if (opcode == 0x6f || opcode == 0x67) {
-    const char *func_name = find_func_name_by_addr(target, NULL);
-    if (func_name) {
-      for (int i = 0; i < call_depth; i++) printf("  ");
-      printf("Call %s@0x%08x\n", func_name, target);
-      call_depth++;
-    }
-  }
-
-  // Detect function return: jalr x0, ra, 0
-  if (opcode == 0x67) {
-    int rd  = (inst >> 7) & 0x1f;
-    int rs1 = (inst >> 15) & 0x1f;
-    int imm = (int32_t)inst >> 20;
-
-    if (rd == 0 && rs1 == 1 && imm == 0) {
-      call_depth--;
-      if (call_depth < 0) call_depth = 0;
-      uint32_t func_addr = 0;
-      const char *func_name = find_func_name_by_addr(pc, &func_addr);
+    uint32_t opcode = inst & 0x7f;
+  
+    int indent = call_depth;
+    if (indent > 20) indent = 20; // max indent limit
+  
+    // Function call: jal or jalr
+    if (opcode == 0x6f || opcode == 0x67) {
+      const char *func_name = find_func_name_by_addr(target, NULL);
       if (func_name) {
-        for (int i = 0; i < call_depth; i++) printf("  ");
-        printf("Return %s@0x%08x\n", func_name, func_addr);
+        printf("[depth=%d] ", call_depth);
+        for (int i = 0; i < indent; i++) printf("  ");
+        printf("Call %s@0x%08x\n", func_name, target);
+        call_depth++;
+      }
+    }
+  
+    // Function return: jalr x0, ra, 0
+    if (opcode == 0x67) {
+      int rd  = (inst >> 7) & 0x1f;
+      int rs1 = (inst >> 15) & 0x1f;
+      int imm = (int32_t)inst >> 20;
+  
+      if (rd == 0 && rs1 == 1 && imm == 0) { // ret
+        call_depth--;
+        if (call_depth < 0) call_depth = 0;
+        uint32_t func_addr = 0;
+        const char *func_name = find_func_name_by_addr(pc, &func_addr);
+        if (func_name) {
+          indent = call_depth;
+          if (indent > 20) indent = 20;
+          printf("[depth=%d] ", call_depth);
+          for (int i = 0; i < indent; i++) printf("  ");
+          printf("Return %s@0x%08x\n", func_name, func_addr);
+        }
       }
     }
   }
-}
