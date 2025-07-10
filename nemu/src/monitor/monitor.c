@@ -147,11 +147,13 @@ void init_monitor(int argc, char *argv[]) {
   /* Display welcome message. */
   welcome();
 
-  read_elf_symbols(elf_file);
+  
 
-  // if (elf_file != NULL) {
-  //   printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
-  // }
+  if (elf_file != NULL) {
+    printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
+    read_elf_symbols(elf_file);
+
+  }
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
