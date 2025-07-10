@@ -24,6 +24,7 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm();
+void read_elf_symbols(const char *elf_path);
 
 static void welcome() {
   Log("Watchpoint: %s", MUXDEF(CONFIG_WATCHPOINT, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -146,9 +147,11 @@ void init_monitor(int argc, char *argv[]) {
   /* Display welcome message. */
   welcome();
 
-  if (elf_file != NULL) {
-    printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
-  }
+  read_elf_symbols(elf_file);
+
+  // if (elf_file != NULL) {
+  //   printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
+  // }
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
