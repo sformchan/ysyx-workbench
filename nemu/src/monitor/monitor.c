@@ -106,6 +106,8 @@ static int parse_args(int argc, char *argv[]) {
   return 0;
 }
 
+
+
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
 
@@ -143,6 +145,10 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Display welcome message. */
   welcome();
+
+  if (elf_file != NULL) {
+    printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
+  }
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
