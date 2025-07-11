@@ -2,6 +2,7 @@
 #include <string.h>
 #include "platform.h"
 
+
 #define TIMER_HZ 100
 #define SYSCALL_INSTR_LEN 7
 

@@ -120,6 +120,7 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
+  //printf("==> using klib memcpy\n");
   unsigned char *dest = out;
   const unsigned char *src = in;
   while (n != 0) {
