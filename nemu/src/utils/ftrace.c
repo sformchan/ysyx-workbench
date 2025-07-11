@@ -166,7 +166,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       {
         printf(" ");
       }
-      printf("CALL  %s@0x%08x   [%2d]\n", find_func(target, NULL), target, call_depth);
+      printf("CALL  %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
     }
     if(rd == 0 && rs1 == 1 && imm == 0)
     {
