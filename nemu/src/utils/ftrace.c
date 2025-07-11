@@ -161,6 +161,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
   void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm) {
     if(rd == 1)
     {
+      call_depth++;
       for (int i = 0; i < call_depth; i++)
       {
         printf(" ");
