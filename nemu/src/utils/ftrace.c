@@ -163,7 +163,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
     if(rd == 1)
     {
       call_depth++;
-      printf("[0x%08x]", pc);
+      printf(ANSI_FG_GREEN "[0x%08x]" ANSI_NONE, pc);
       for (int i = 0; i < call_depth; i++)
       {
         printf(" ");
@@ -173,7 +173,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
     if(rd == 0 && rs1 == 1 && imm == 0)
     {
       call_depth--;
-      printf("[0x%08x]", pc);
+      printf(ANSI_FG_GREEN"[0x%08x]" ANSI_NONE, pc);
       for (int i = 0; i < call_depth; i++)
       {
         printf(" ");
