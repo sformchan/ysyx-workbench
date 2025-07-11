@@ -155,7 +155,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
         return func_table[i].name;
       }
     }
-    return NULL;
+    return "???";
   }
   
   void ftrace_exec(uint32_t pc, uint32_t target, uint32_t inst) {
