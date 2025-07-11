@@ -175,7 +175,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       {
         printf(" ");
       }
-      printf("RET   %s@0x%08x   [%2d]\n", find_func(target, NULL), target, call_depth);
+      printf("RET   %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
     }
     //else printf("%u\n", rd);
 //     // Extract instruction fields
