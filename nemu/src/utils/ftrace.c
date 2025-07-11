@@ -168,7 +168,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       {
         printf(" ");
       }
-      printf("CALL  %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
+      printf(ANSI_FG_CYAN "CALL" ANSI_NONE "  %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
     }
     if(rd == 0 && rs1 == 1 && imm == 0)
     {
@@ -178,7 +178,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       {
         printf(" ");
       }
-      printf("RET   %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
+      printf(ANSI_FG_MAGENTA "RET" ANSI_NONE "   %s@0x%08x   [%d]\n", find_func(target, NULL), target, call_depth);
     }
 
 }
