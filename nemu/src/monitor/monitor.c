@@ -148,12 +148,12 @@ void init_monitor(int argc, char *argv[]) {
   welcome();
 
   
-
+#ifdef CONFIG_FTRACE
   if (elf_file != NULL) {
     printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
     read_elf_symbols(elf_file);
-
   }
+#endif
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
