@@ -169,7 +169,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       call_depth--;
       printf("[depth=%d] Return %s@0x%08x\n", call_depth, find_func(pc, NULL), pc);
     }
-    else printf("%u\n", rd);
+    //else printf("%u\n", rd);
 //     // Extract instruction fields
 //     int rd = (inst >> 7) & 0x1f;   // Destination register
 //     int rs1 = (inst >> 15) & 0x1f; // Source register
