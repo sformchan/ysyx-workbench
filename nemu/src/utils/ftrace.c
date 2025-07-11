@@ -164,7 +164,7 @@ const char *find_func(uint32_t addr, uint32_t *start_out) {
       call_depth++;
       printf("[depth=%d] Call %s@0x%08x\n", call_depth, find_func(target, NULL), target);
     }
-    printf("rd=%u, rs1=%u, imm=%d\n", rd, rs1, imm);
+    //printf("rd=%u, rs1=%u, imm=%d\n", rd, rs1, imm);
     if(rd == 0 && rs1 == 1 && imm == 0)
     {
       call_depth--;
