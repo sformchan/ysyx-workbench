@@ -138,7 +138,7 @@ void read_elf_symbols(const char *elf_path) {
     }
   }
 
-  printf(ANSI_FG_YELLOW "Loaded %d functions from ELF file.\n" ANSI_NONE, func_cnt);
+  printf(ANSI_FG_YELLOW "LOADED %d FUNCTIONS FROM ELF FILE.\n" ANSI_NONE, func_cnt);
 
   free(syms);
   free(strtab);
