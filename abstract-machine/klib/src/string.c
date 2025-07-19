@@ -97,42 +97,43 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  unsigned char *dest = dst;
-  const unsigned char *source = src;
-  if (dst < src) {
-    while (n != 0) {
-      --n;
-      *dest = *source;
-      ++dest;
-      ++source;
-    }
-  } else {
-    dest += n;
-    source += n;
-    while (n != 0) {
-      --n;
-      --dest;
-      --source;
-      *dest = *source;
-    }
-  }
-  return dst;
-  //panic("Not implemented");
+  // unsigned char *dest = dst;
+  // const unsigned char *source = src;
+  // if (dst < src) {
+  //   while (n != 0) {
+  //     --n;
+  //     *dest = *source;
+  //     ++dest;
+  //     ++source;
+  //   }
+  // } else {
+  //   dest += n;
+  //   source += n;
+  //   while (n != 0) {
+  //     --n;
+  //     --dest;
+  //     --source;
+  //     *dest = *source;
+  //   }
+  // }
+  // return dst;
+  return 0;
+  // //panic("Not implemented");
 }
 
-// void *memcpy(void *out, const void *in, size_t n) {
-//   //printf("==> using klib memcpy\n");
-//   unsigned char *dest = out;
-//   const unsigned char *src = in;
-//   while (n != 0) {
-//     *dest = *src;
-//     --n;
-//     ++dest;
-//     ++src;
-//   }
-//   return out;
-//   //panic("Not implemented");
-// }
+void *memcpy(void *out, const void *in, size_t n) {
+  //printf("==> using klib memcpy\n");
+  unsigned char *dest = out;
+  const unsigned char *src = in;
+  while (n != 0) {
+    *dest = *src;
+    --n;
+    ++dest; 
+    ++src;
+  }
+  return out;
+  //panic("Not implemented");
+}
 
  int memcmp(const void *s1, const void *s2, size_t n) {
    const unsigned char *src1 = s1;
