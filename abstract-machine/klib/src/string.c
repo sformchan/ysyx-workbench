@@ -2,7 +2,7 @@
 #include <klib-macros.h>
 #include <stdint.h>
 
-#define __NATIVE_USE_KLIB__
+//#define __NATIVE_USE_KLIB__
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
@@ -95,6 +95,7 @@ void *memset(void *s, int c, size_t n) {
   return s;
   //panic("Not implemented");
 }
+
 
 //void *memmove(void *dst, const void *src, size_t n) {
   // unsigned char *dest = dst;
