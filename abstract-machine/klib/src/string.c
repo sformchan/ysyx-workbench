@@ -96,31 +96,29 @@ void *memset(void *s, int c, size_t n) {
   //panic("Not implemented");
 }
 
-
-//void *memmove(void *dst, const void *src, size_t n) {
-  // unsigned char *dest = dst;
-  // const unsigned char *source = src;
-  // if (dst < src) {
-  //   while (n != 0) {
-  //     --n;
-  //     *dest = *source;
-  //     ++dest;
-  //     ++source;
-  //   }
-  // } else {
-  //   dest += n;
-  //   source += n;
-  //   while (n != 0) {
-  //     --n;
-  //     --dest;
-  //     --source;
-  //     *dest = *source;
-  //   }
-  // }
-  // return dst;
-  //return 0;
-  // //panic("Not implemented");
-//}
+void *memmove(void *dst, const void *src, size_t n) {
+  unsigned char *dest = dst;
+  const unsigned char *source = src;
+  if (dst < src) {
+    while (n != 0) {
+      --n;
+      *dest = *source;
+      ++dest;
+      ++source;
+    }
+  } else {
+    dest += n;
+    source += n;
+    while (n != 0) {
+      --n;
+      --dest;
+      --source;
+      *dest = *source;
+    }
+  }
+  return dst;
+  //panic("Not implemented");
+}
 
 void *memcpy(void *out, const void *in, size_t n) {
   //printf("==> using klib memcpy\n");
