@@ -1,7 +1,7 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdint.h>
-
+#define __NATIVE_USE_KLIB__
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
@@ -133,16 +133,16 @@ void *memcpy(void *out, const void *in, size_t n) {
   //panic("Not implemented");
 }
 
-int memcmp(const void *s1, const void *s2, size_t n) {
-  const unsigned char *src1 = s1;
-  const unsigned char *src2 = s2;
-  while (n != 0 && *src1 != '\0' && *src2 != '\0' && *src1 == *src2) {
-    --n;
-    ++src1;
-    ++src2;
-  }
-  return *src1 == *src2 || n == 0 ? 0 : *src1 < *src2 ? -1 : 1;
-  //panic("Not implemented");
+ int memcmp(const void *s1, const void *s2, size_t n) {
+   const unsigned char *src1 = s1;
+   const unsigned char *src2 = s2;
+   while (n != 0 && *src1 != '\0' && *src2 != '\0' && *src1 == *src2) {
+     --n;
+     ++src1;
+     ++src2;
+   }
+   return *src1 == *src2 || n == 0 ? 0 : *src1 < *src2 ? -1 : 1;
+   //panic("Not implemented");
 }
 
 #endif
