@@ -87,7 +87,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 void *memset(void *s, int c, size_t n) {
   unsigned char *src = s;   // 先讲传入得指针，做无符号字符解释
   while (n != 0) {
-    ++n; //--
+    --n; //--
     *src = c;
     ++src;
   }
