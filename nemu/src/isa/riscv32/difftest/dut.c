@@ -16,9 +16,24 @@
 #include <isa.h>
 #include <cpu/difftest.h>
 #include "../local-include/reg.h"
+#include <utils.h>
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  return false;
+  bool flag = true;
+  if(ref_r->pc != pc) {
+    Log("PC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD, cpu.pc, ref_r->pc);
+    flag = false;
+  }
+
+  for(int i = 0; i < 32; i++)
+  {
+    if(cpu.gpr[i] != ref_r->gpr[i])
+    {
+      Log("GPR mismatch: DUT[%d] = " FMT_WORD ", REF[%d] = " FMT_WORD, i, cpu.gpr[i], i, ref_r->gpr[i]);
+      flag = false;
+    } 
+  }
+  return flag;
 }
 
 void isa_difftest_attach() {
