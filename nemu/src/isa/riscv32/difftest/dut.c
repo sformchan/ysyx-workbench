@@ -20,8 +20,9 @@
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool flag = true;
-  if(ref_r->pc != cpu.pc) {
-    Log("PC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD, cpu.pc, ref_r->pc);
+  if(ref_r->pc != cpu.pc) {        //you should compare ref_r->pc with cpu.pc cause both of them are the pc updated
+    //(once an inst is executed, the pc is updated like the reg, you should compare the updated pc)
+    Log("PC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD, cpu.pc, ref_r->pc);  
     flag = false;
   }
 
@@ -33,6 +34,8 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       flag = false;
     } 
   }
+
+  if(!flag) printf("CURRENT PC = " FMT_WORD "\n", pc);
   return flag;
 }
 
