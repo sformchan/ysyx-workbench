@@ -56,17 +56,25 @@ char *strncpy(char *dst, const char *src, size_t n) {
 
 char *strcat(char *dst, const char *src) {
   char *ans = dst;
+
+  // Move dst to the end of the string
   while (*dst != '\0') {
     ++dst;
   }
-  do {
+
+  // Copy src to the end of dst
+  while (*src != '\0') {
     *dst = *src;
     dst++;
     src++;
-  } while(*src != '\0');  // 先做一次，可以保证将结束字符也复制进去
+  }
+
+  // Append null terminator
+  *dst = '\0';
+
   return ans;
-  //panic("Not implemented");
 }
+
 
 int strcmp(const char *s1, const char *s2) {
  
