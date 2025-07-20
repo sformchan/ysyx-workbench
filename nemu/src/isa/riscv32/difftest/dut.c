@@ -20,8 +20,8 @@
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool flag = true;
-  if(ref_r->pc != pc) {
-    Log("PC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD, pc, ref_r->pc);
+  if(ref_r->pc != cpu.pc) {
+    Log("PC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD, cpu.pc, ref_r->pc);
     flag = false;
   }
 
