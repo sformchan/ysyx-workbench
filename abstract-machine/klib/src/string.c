@@ -5,7 +5,7 @@
 //#define __NATIVE_USE_KLIB__
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-size_t strlen(const char *s) {
+size_t strlen(const char *s) {    //tested
 
   size_t len = 0; ///0
   while(*s != '\0')
@@ -17,7 +17,7 @@ size_t strlen(const char *s) {
   //panic("Not implemented");
 }
 
-char *strcpy(char *dst, const char *src) {
+char *strcpy(char *dst, const char *src) {   //tested
 
   // 当成指向字符数组处理，所以即使没有空字符，导致内存访问越界，或修改了其他有用的数据也不管，因为这是函数调用者所需要保证的，下面一些string函数都是这样对带非字符串数组
   // char *res = dst;
@@ -35,7 +35,7 @@ char *strcpy(char *dst, const char *src) {
   //panic("Not implemented");
 }
 
-char *strncpy(char *dst, const char *src, size_t n) {
+char *strncpy(char *dst, const char *src, size_t n) {   //tested
 
   char *ans = dst;
   while (*src != '\0' && n != 0) {
@@ -54,7 +54,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
   //panic("Not implemented");
 }
 
-char *strcat(char *dst, const char *src) {
+char *strcat(char *dst, const char *src) {  //tested
   char *ans = dst;
 
   // Move dst to the end of the string
@@ -76,7 +76,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 
-int strcmp(const char *s1, const char *s2) {
+int strcmp(const char *s1, const char *s2) {    //tested
  
   while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
     s1++;
@@ -86,7 +86,7 @@ int strcmp(const char *s1, const char *s2) {
   //panic("Not implemented");
 }
 
-int strncmp(const char *s1, const char *s2, size_t n) {
+int strncmp(const char *s1, const char *s2, size_t n) {    //tested
 
   while (n != 0 && *s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
     --n;
@@ -133,7 +133,7 @@ void *memmove(void *dst, const void *src, size_t n) {    //tested
   //panic("Not implemented");
 }
 
-void *memcpy(void *out, const void *in, size_t n) {
+void *memcpy(void *out, const void *in, size_t n) {   //tested
   //printf("==> using klib memcpy\n");
   unsigned char *dest = out;
   const unsigned char *src = in;
@@ -147,7 +147,7 @@ void *memcpy(void *out, const void *in, size_t n) {
   //panic("Not implemented");
 }
 
- int memcmp(const void *s1, const void *s2, size_t n) {
+ int memcmp(const void *s1, const void *s2, size_t n) {    //tested
    const unsigned char *src1 = s1;
    const unsigned char *src2 = s2;
    while (n != 0 && *src1 != '\0' && *src2 != '\0' && *src1 == *src2) {

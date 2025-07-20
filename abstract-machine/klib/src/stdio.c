@@ -14,43 +14,60 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   while (*fmt) {
     if (*fmt == '%') {
       fmt++;
+      if (*fmt == '%') {  // literal %
+        *ptr++ = '%';
+        fmt++;
+        continue;
+      }
       switch (*fmt) {
-        case 'd': { // 整数
+        case 'd': {
           int num = va_arg(ap, int);
+          unsigned int unum;
           char buf[32];
           int len = 0;
 
           if (num < 0) {
             *ptr++ = '-';
-            num = -num;
+            // Handle INT_MIN safely
+            unum = (unsigned int)(-(num + 1)) + 1;
+          } else {
+            unum = (unsigned int)num;
           }
+
           do {
-            buf[len++] = '0' + (num % 10);
-            num /= 10;
-          } while (num > 0);
+            buf[len++] = '0' + (unum % 10);
+            unum /= 10;
+          } while (unum > 0);
 
           while (len--) {
             *ptr++ = buf[len];
           }
+          fmt++;
           break;
         }
-        case 's': { // 字符串
+        case 's': {
           const char *str = va_arg(ap, const char *);
           while (*str) {
             *ptr++ = *str++;
           }
+          fmt++;
+          break;
+        }
+        default: {
+          // Unsupported specifier, just print it literally with '%'
+          *ptr++ = '%';
+          if (*fmt) {
+            *ptr++ = *fmt++;
+          }
           break;
         }
       }
+    } else {
+      *ptr++ = *fmt++;
     }
-    else {
-      *ptr++ = *fmt;
-    }
-    fmt++;
   }
   *ptr = '\0';
-  return ptr - out;  
-  //panic("Not implemented");
+  return ptr - out;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
@@ -59,7 +76,6 @@ int sprintf(char *out, const char *fmt, ...) {
   int len = vsprintf(out, fmt, ap);
   va_end(ap);
   return len;
-  //panic("Not implemented");
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
