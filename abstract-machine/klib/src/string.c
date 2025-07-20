@@ -20,13 +20,18 @@ size_t strlen(const char *s) {
 char *strcpy(char *dst, const char *src) {
 
   // 当成指向字符数组处理，所以即使没有空字符，导致内存访问越界，或修改了其他有用的数据也不管，因为这是函数调用者所需要保证的，下面一些string函数都是这样对带非字符串数组
+  // char *res = dst;
+  // do {
+  //   *dst = *src;
+  //   dst++;
+  //   src++;
+  // } while(*src != '\0');
+  // *dst = '\0';  // 最后一个字符是空字符  
+  // return res;
   char *res = dst;
-  do {
-    *dst = *src;
-    dst++;
-    src++;
-  } while(*src != '\0');  
+  while ((*dst++ = *src++) != '\0');
   return res;
+  
   //panic("Not implemented");
 }
 
@@ -85,7 +90,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
   //panic("Not implemented");
 }
 
-void *memset(void *s, int c, size_t n) {
+void *memset(void *s, int c, size_t n) {  //tested
   unsigned char *src = s;   // 先讲传入得指针，做无符号字符解释
   while (n != 0) {
     --n; //--
@@ -96,7 +101,7 @@ void *memset(void *s, int c, size_t n) {
   //panic("Not implemented");
 }
 
-void *memmove(void *dst, const void *src, size_t n) {
+void *memmove(void *dst, const void *src, size_t n) {    //tested
   unsigned char *dest = dst;
   const unsigned char *source = src;
   if (dst < src) {
