@@ -50,7 +50,7 @@ module ysyx_25020047_GPR(
     always @(posedge clk)           
         begin
             gpr[0] <= 32'h00000000;                                    
-            if (wen && waddr != 5'h00000) begin
+            if (wen && waddr != 5'b00000) begin
                 gpr[waddr] <= wdata;
             end
             else gpr[waddr] <= gpr[waddr];                                     
