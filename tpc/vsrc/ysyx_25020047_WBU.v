@@ -24,8 +24,8 @@
 //----------------------------------------------------------------------------------------
 //****************************************************************************************//
 
-module WBU(
-    input [9:0] inst_type,
+module ysyx_25020047_WBU(
+    input [8:0] inst_type,
     input [31:0] result,
     input [31:0] snpc,
     output reg [31:0] wdata,
@@ -42,6 +42,9 @@ module WBU(
                 9'b000000010: begin //jalr
                     wdata = snpc;
                     dnpc = result;
+                end
+                default: begin
+                    dnpc = snpc; 
                 end
             endcase
         end                                          
