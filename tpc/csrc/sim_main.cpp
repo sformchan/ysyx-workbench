@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "rom.h"
 #include "Vtop.h"
 #include "verilated.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
 //#include "verilated_fst_c.h"
+
+int read_inst(int pc);
+int pmem_read(int raddr);
+void pmem_write(int waddr, int wdata, int wmask);
 
 int stop = 0;
 
@@ -13,8 +16,6 @@ void stop_stimulation()
 {
 	stop = 1;
 }
-
-
 
 int main(int argc, char** argv)
 {
