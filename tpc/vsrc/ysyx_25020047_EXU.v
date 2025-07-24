@@ -59,6 +59,7 @@ module ysyx_25020047_EXU(
                 end
                 9'b000010000: begin //lui
                     result = imm;
+                    reg_wen = 1'b1; 
                 end
                 default: result = 32'b0; // default case
             endcase
