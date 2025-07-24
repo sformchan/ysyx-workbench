@@ -1,0 +1,29 @@
+module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
+  input                    clk,
+  input                    rst,
+  input                    wen,
+  input  [ADDR_WIDTH-1:0]  raddr1, //rs1
+  input  [ADDR_WIDTH-1:0]  raddr2, //rs2
+  input  [DATA_WIDTH-1:0]  wdata, 
+  input  [ADDR_WIDTH-1:0]  waddr, //rd
+  output [DATA_WIDTH-1:0]  rdata1,
+  output [DATA_WIDTH-1:0]  rdata2
+);
+  reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
+
+  assign rdata1 = rf[raddr1];  
+  assign rdata2 = rf[raddr2];  
+
+  always @(posedge clk) begin
+    if (rst) begin
+      integer i; //this for loop is actually not a loop,
+      for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin  
+        rf[i] <= {DATA_WIDTH{1'b0}}; //it just initializes all registers to zero at the same time
+      end
+    end
+    else if (wen && waddr != 5'b0) rf[waddr] <= wdata;  
+  end
+endmodule
+
+
+//Reg #(1, 1'b1) i0 (clk, rst, in[0], out[0], 1'b1);  // Example instantiation of Reg module
