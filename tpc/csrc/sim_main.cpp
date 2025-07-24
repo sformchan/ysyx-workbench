@@ -14,7 +14,7 @@ void stop_stimulation()
 	stop = 1;
 }
 
-uint32_t read_inst(uint32_t pc) {
+extern "C" int read_inst(int pc) {
     // 检查地址是否对齐到 4 字节
     if (pc % 4 != 0) {
         printf("Error: PC address 0x%08x is not aligned to 4 bytes.\n", pc);
