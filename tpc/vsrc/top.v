@@ -13,7 +13,7 @@ module top(
 
 
 
-wire [31:0]   imm;
+wire [31:0]  imm;
 wire [8:0]   inst_type;
 ysyx_25020047_IDU u1(
     .clk(clk),
