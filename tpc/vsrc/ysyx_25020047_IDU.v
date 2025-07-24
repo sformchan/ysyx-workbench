@@ -31,9 +31,10 @@ module ysyx_25020047_IDU(
     input  [31:0]      wdata,
     input  [31:0]       dnpc,
     input  [31:0]       inst,
-    output [11:0]       Iimm,
+    output reg [31:0]       imm,
     output reg [8:0]   inst_type,
     output [31:0]     rdata1,
+    output [31:0]     rdata2,
     output [31:0]         pc,
     output [31:0]       snpc,
     output [31:0]  gpr0,
@@ -42,40 +43,67 @@ module ysyx_25020047_IDU(
 );
 
 // break down instruction
-wire [6:0] Ioc;
-wire [2:0] Ifunct3;
+
+wire [6:0] opcode;
+assign opcode = inst[6:0];
+
+// Itype    
 wire [4:0] Irs1;
 wire [4:0] Ird;
-assign Ioc = inst[6:0];
-assign Ifunct3 = inst[14:12];
+wire [11:0] Iimm;
 assign Iimm = inst[31:20];
 assign Irs1 = inst[19:15];
 assign Ird = inst[11:7];
+wire [31:0] sIimm;
+assign sIimm = {{20{Iimm[11]}}, Iimm}; // sign-extend the immediate value
 
+// Rtype
+wire [4:0] Rrs1;
+wire [4:0] Rrs2;
+wire [4:0] Rrd;
+assign Rrd = inst[11:7];
+assign Rrs1 = inst[19:15];
+assign Rrs2 = inst[24:20];
 
-// joint the parts
-wire [9:0] Itype = {Ifunct3, Ioc};
-
-
-
-// judge the instruction type
-// assign inst_type = (Itype == 0000010011) ? 9'b000000001 : 9'b11111111; //addi
-// assign inst_type = (Itype == 0001100111) ? 9'b000000010 : 9'b11111111; //jalr
-// assign inst_type = (inst == 00000000000100000000000001110011) ? 9'b000000100 : 9'b111111111; //ebreak;
-
-always @(*) begin
-  case (Itype)
-    10'b0000010011: inst_type = 9'b000000001; // addi
-    10'b0001100111: inst_type = 9'b000000010; // jalr
-    default: inst_type = (inst == 32'b00000000000100000000000001110011) ? 9'b000000100 : 9'b111111111; // ebreak or default
-  endcase
-end
-
-// add more instruction types as needed
+//Utype
+wire [4:0] Urd;
+wire [19:0] Uimm;
+assign Urd = inst[11:7];
+assign Uimm = inst[31:12];
+wire [31:0] eUimm;
+assign eUimm = {Uimm, 12'b0}; // zero-extend the immediate value
 
 // combine the signals
+wire [4:0] rs1;
+wire [4:0] rs2;
+wire [4:0] rd;
+assign rs1 = Rrs1 | Irs1;
+assign rs2 = Rrs2;
+assign rd = Rrd | Ird | Urd;
 
+// add more instruction types as needed  //judge the type of instruction
+    always @(*)           
+        begin
+            casez(inst)
+                32'b?????????????????000?????0010011: inst_type = 9'b000000001; // addi
+                32'b?????????????????000?????1100111: inst_type = 9'b000000010; // jalr
+                32'b00000000000100000000000001110011: inst_type = 9'b000000100; // ebreak
+                32'b0000000??????????000?????0110011: inst_type = 9'b000001000; // add
+                32'b?????????????????????????0110111: inst_type = 9'b000010000; // lui
+                default:                              inst_type = 9'b000000000; // default case
+            endcase                                     
+        end                                          
 
+// judge the imm
+        always @(*)           
+            begin                                        
+                case(inst_type)
+                    9'b000000001: imm = sIimm; // addi
+                    9'b000000010: imm = sIimm; // jalr
+                    9'b000010000: imm = eUimm; // lui
+                    default:      imm = 32'b0; // default case
+                endcase
+            end                                          
 
 
 GPR #(5, 32) u1
@@ -83,12 +111,12 @@ GPR #(5, 32) u1
     .clk(clk),
     .rst(rst),
     .wen(reg_wen),
-    .raddr1(Irs1),
-    .raddr2(),
+    .raddr1(rs1),
+    .raddr2(rs2),
     .wdata(wdata),
-    .waddr(Ird),
+    .waddr(rd),
     .rdata1(rdata1),
-    .rdata2(),
+    .rdata2(rdata2),
     .gpr0(gpr0),
     .gpr1(gpr1),
     .gpr2(gpr2)

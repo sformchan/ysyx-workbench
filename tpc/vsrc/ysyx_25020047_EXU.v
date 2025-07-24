@@ -29,29 +29,36 @@
 module ysyx_25020047_EXU(
     input [8:0]  inst_type,
     input [31:0] rdata1,
-    input [11:0] imm,
+    input [31:0] rdata2,
+    input [31:0] imm,
     output reg [31:0] result,
     output reg reg_wen
 );
 
-wire [31:0]  simm;
-assign simm = {{20{imm[11]}}, imm}; // sign-extend the immediate value
+
 
     always @(*)           
         begin
             reg_wen = 1'b0;
             case(inst_type)
                 9'b000000001: begin //addi
-                    result = rdata1 + simm;
+                    result = rdata1 + imm;
                     reg_wen = 1'b1;
                 end
                 9'b000000010: begin //jalr
-                    result = (rdata1 + simm) & ~1;
+                    result = (rdata1 + imm) & ~1;
                     reg_wen = 1'b1;
                 end
                 9'b000000100: begin //ebreak
                     reg_wen = 1'b0; // ebreak does not write back
                     stop_stimulation(); // call DPI-C function to stop simulation
+                end
+                9'b000001000: begin //add
+                    result = rdata1 + rdata2; // R-type instruction
+                    reg_wen = 1'b1;
+                end
+                9'b000010000: begin //lui
+                    result = imm;
                 end
                 default: result = 32'b0; // default case
             endcase

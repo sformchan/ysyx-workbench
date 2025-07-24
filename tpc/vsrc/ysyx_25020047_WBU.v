@@ -33,19 +33,20 @@ module ysyx_25020047_WBU(
 );
 
     always @(*)           
-        begin                                        
+        begin
+            dnpc = snpc;                                       
             case(inst_type)
                 9'b000000001: begin //addi
-                    wdata = result; // write back the result of addi
-                    dnpc = snpc;
+                    wdata = result; 
                 end
                 9'b000000010: begin //jalr
                     wdata = snpc;
                     dnpc = result;
                 end
-                default: begin
-                    dnpc = snpc; 
+                9'b000010000: begin //lui
+                    wdata = result; 
                 end
+                default: ;
             endcase
         end                                          
                                                                    
