@@ -35,7 +35,10 @@ module ysyx_25020047_IDU(
     output reg [8:0]   inst_type,
     output [31:0]     rdata1,
     output [31:0]         pc,
-    output [31:0]       snpc
+    output [31:0]       snpc,
+    output [31:0]  gpr0,
+    output [31:0]  gpr1,
+    output [31:0]  gpr2
 );
 
 // break down instruction
@@ -85,7 +88,10 @@ GPR #(5, 32) u1
     .wdata(wdata),
     .waddr(Ird),
     .rdata1(rdata1),
-    .rdata2()
+    .rdata2(),
+    .gpr0(gpr0),
+    .gpr1(gpr1),
+    .gpr2(gpr2)
 );
  
 
