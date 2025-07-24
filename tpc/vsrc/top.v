@@ -1,9 +1,10 @@
 import "DPI-C" function void stop_stimulation();
+import "DPI-C" function int read_inst(input int pc);
 
 module top(
     input clk,
     input rst,
-    input  [31:0] inst,
+    //input  [31:0] inst,
     output [31:0] pc,
     output [31:0] gpr0,
     output [31:0] gpr1,
@@ -21,7 +22,7 @@ ysyx_25020047_IDU u1(
     .reg_wen(reg_wen),
     .wdata(wdata),
     .dnpc(dnpc),
-    .inst(inst),
+    //.inst(inst),
     .imm(imm),
     .inst_type(inst_type),
     .rdata1(rdata1),

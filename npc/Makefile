@@ -24,12 +24,14 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 
-$(BIN): $(VSRCS) $(CSRCS) 
+$(BIN): $(VSRCS) $(CSRCS)
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
+		--top-module $(TOPNAME) \
+		$(VSRCS) \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+		--Mdir $(OBJ_DIR) --exe $(CSRCS) \
+		-o $(abspath $(BIN))
 
 all: default
 		
