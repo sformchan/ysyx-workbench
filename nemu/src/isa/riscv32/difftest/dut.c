@@ -36,6 +36,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
 
   if(!flag) printf("\033[33mCURRENT PC = " FMT_WORD "\033[0m" "\n", pc);
+  else printf("pass difftest\n");
   return flag;
 }
 
