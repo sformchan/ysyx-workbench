@@ -26,6 +26,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
     flag = false;
   }
 
+  //trace
   // Log("\033[31mPC DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.pc, ref_r->pc);
   // for(int i = 0; i < 32; i++)
   // {
@@ -41,7 +42,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
 
   if(!flag) printf("\033[33mCURRENT PC = " FMT_WORD "\033[0m" "\n", pc);
-  else printf("pass difftest\n");
+  //else printf("pass difftest\n");
   return flag;
 }
 
