@@ -38,9 +38,8 @@ int main(int argc, char** argv)
 	{	
 			
 		top->rst = 0;
-		
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
 		inst = read_inst(top->pc);
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
 		top->eval();
 		if(!top->clk)
 		{
