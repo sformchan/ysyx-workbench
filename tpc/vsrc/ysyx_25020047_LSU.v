@@ -12,10 +12,11 @@ reg [31:0] ram_data;
 always @(*) begin
     if(read) ram_data = pmem_read(raddr);
     else ram_data = 0;
-    if(write) pmem_write(waddr, wdata, {32'b1});
-    else ;
 end
 
+always @(*) begin
+    if(write) pmem_write(waddr, wdata, 32'hF);
+end
 
 wire [1:0] offset;
 assign offset = raddr[1:0];
