@@ -3,14 +3,19 @@
 #include <string.h>
 
 //rom
-#define ysyx_25020047_ROM_SIZE 3
+#define ysyx_25020047_ROM_SIZE 12
 #define ysyx_25020047_INITADDR 0x00000000
 
-int rom[ysyx_25020047_ROM_SIZE] = {
-    0b00000000000000000001000010110111, 
-    0b00000000000000001010000100110111,
-    0b00000000000100000000000001110011  // ebreak
-};
+// uint8_t rom[ysyx_25020047_ROM_SIZE] = {
+//     0b00000000000000000001000010110111, 
+//     0b00000000000000001010000100110111,
+//     0b00000000000100000000000001110011  // ebreak
+// };
+uint8_t rom[ysyx_25020047_ROM_SIZE] = {
+    0x37, 0x2B, 0x10, 0x00,   // 0x00102B37
+    0xB7, 0x13, 0xA2, 0x00,   // 0x00A213B7
+    0x73, 0x00, 0x10, 0x00
+  };
 
 extern "C" int read_inst(int pc) {
     // 检查地址是否对齐到 4 字节
@@ -36,7 +41,7 @@ extern "C" int read_inst(int pc) {
 
 //ram
 #define ysyx_25020047_RAM_SIZE 64 * 1024  //64kb
-uint8_t ram[ysyx_25020047_RAM_SIZE] = {0b11111111};
+
 
 extern "C" int pmem_read(int raddr)
 {
@@ -46,7 +51,7 @@ extern "C" int pmem_read(int raddr)
         printf("\033[31mError: address 0x%08x is out of RAM range.\033[0m\n", raddr);
         return 0xFFFFFFFF; // 返回错误码
     }
-    return ram[raddr]| (ram[raddr + 1] << 8) | (ram[raddr + 2] << 16) | (ram[raddr + 3] << 24);
+    return rom[raddr]| (rom[raddr + 1] << 8) | (rom[raddr + 2] << 16) | (rom[raddr + 3] << 24);
 }
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
@@ -58,10 +63,10 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
         return;
     }
     //wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
-    if (wmask & 0x1) ram[waddr + 0] = (wdata >> 0) & 0xFF;  
-    if (wmask & 0x2) ram[waddr + 1] = (wdata >> 8) & 0xFF;
-    if (wmask & 0x4) ram[waddr + 2] = (wdata >> 16) & 0xFF;
-    if (wmask & 0x8) ram[waddr + 3] = (wdata >> 24) & 0xFF;
+    if (wmask & 0x1) rom[waddr + 0] = (wdata >> 0) & 0xFF;  
+    if (wmask & 0x2) rom[waddr + 1] = (wdata >> 8) & 0xFF;
+    if (wmask & 0x4) rom[waddr + 2] = (wdata >> 16) & 0xFF;
+    if (wmask & 0x8) rom[waddr + 3] = (wdata >> 24) & 0xFF;
 }
 
 
