@@ -117,8 +117,8 @@ assign rd = Rrd | Ird | Urd;
                     9'b000000001: imm = sIimm; // addi
                     9'b000000010: imm = sIimm; // jalr
                     9'b000010000: imm = zUimm; // lui
-                    9'b000100000: imm = sSimm; // lw
-                    9'b001000000: imm = sSimm; // lbu
+                    9'b000100000: imm = sIimm; // lw
+                    9'b001000000: imm = sIimm; // lbu
                     default:      imm = 32'b0; // default case
                 endcase
             end                                          
