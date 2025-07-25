@@ -3,7 +3,7 @@
 #include <string.h>
 
 //rom
-#define ysyx_25020047_ROM_SIZE 28
+#define ysyx_25020047_ROM_SIZE 12
 #define ysyx_25020047_INITADDR 0x00000000
 
 
@@ -18,6 +18,7 @@
 //   };
 
 uint8_t rom[ysyx_25020047_ROM_SIZE] = {
+    0xB7, 0x90, 0x03, 0x03,
     0x03, 0x21, 0x40, 0x00,
     0x73, 0x00, 0x10, 0x00
   };
