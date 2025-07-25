@@ -2,7 +2,7 @@ module ysyx_25020047_LSU (
     input [8:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
-    input [31:0] wdata,
+    input reg [31:0] wdata,
     input read,
     input write,
     output reg [31:0] memdata
@@ -16,18 +16,55 @@ always @(*) begin
     else ram_data = 0;
 end
 
+
+//store
+reg [31:0] wdata1;
+wire [1:0] store_offset;
+assign store_offset = waddr[1:0];
+reg [31:0] wmask;
 always @(*) begin
-    if(write) pmem_write(waddr, wdata, 32'hF);
+    case(store_offset)
+        2'b00: begin
+            wdata1 = wdata;
+            wmask = 32'h1;
+        end
+        2'b01: begin
+            wdata1 = {wdata[23:0], 8'b0};
+            wmask = 32'h2;
+        end
+        2'b10: begin
+            wdata1 = {wdata[15:0], 16'b0};
+            wmask = 32'h4;
+        end
+        2'b11: begin
+            wdata1 = {wdata[7:0], 24'b0};
+            wmask = 32'h8;
+        end
+        default: begin
+            wdata1 = wdata;
+            wmask = 32'h0;
+        end
+    endcase
 end
 
-wire [1:0] offset;
-assign offset = raddr[1:0];
+always @(*) begin
+    if(write) begin
+        if(inst_type == 9'b010000000) pmem_write(waddr, wdata, 32'hF);
+        else if(inst_type == 9'b100000000) pmem_write(waddr, wdata1, wmask);
+    end
+end
+
+
+
+//load
+wire [1:0] load_offset;
+assign load_offset = raddr[1:0];
 always @(*) begin
     case(inst_type)
         9'b000100000: memdata = ram_data;
         9'b001000000: begin //lbu
             //memdata = ram_data;
-            case(offset)
+            case(load_offset)
                 2'b00: memdata = {24'b0, ram_data[7:0]};
                 2'b01: memdata = {24'b0, ram_data[15:8]};
                 2'b10: memdata = {24'b0, ram_data[23:16]};
