@@ -52,10 +52,10 @@ int main(int argc, char** argv)
 		inst = pmem_read(top->pc);
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
 		top->eval();
-		if(!top->clk)
-		{
-			printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
-		}
+		// if(!top->clk)
+		// {
+		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
+		// }
 		if(!top->clk)
 		{
 			count++;
