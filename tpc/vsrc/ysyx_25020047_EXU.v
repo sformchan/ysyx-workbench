@@ -66,9 +66,9 @@ module ysyx_25020047_EXU(
                     reg_wen = 1'b1; 
                 end
                 9'b000100000: begin //lw
-                    $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
+                    // $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
                     result = rdata1 + imm;
-                    $display("result 0x%08x", result);
+                    // $display("result 0x%08x", result);
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
