@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	printf("welcome to \033[44;36mTPC\033[0m!\n");
 	
 	//load_memory
-	load_verilog_hex("/home/leonard/Desktop/mem.hex");
+	load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	
 	printf("\033[32mStimulation starting...\033[0m\n");
 
