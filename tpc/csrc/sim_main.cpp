@@ -22,16 +22,11 @@ int main(int argc, char** argv)
 {
 	printf("welcome to \033[44;36mTPC\033[0m!\n");
 	
-
-	//debug
-	// int flag = 0;
-	load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	// char command[100];
-	// scanf("%c", command);
-	// if(strcmp(command, "gogogo") == 0) flag = 1;
-	// else return 1;
-
+	//load_memory
+	load_verilog_hex("/home/leonard/Desktop/mem.hex");
+	
 	printf("\033[32mStimulation starting...\033[0m\n");
+
 
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
@@ -60,7 +55,7 @@ int main(int argc, char** argv)
 		if(!top->clk)
 		{
 			count++;
-			//printf("|0x%08X  |  0x%08X  |   %08d   |\n", top->pc, inst, count);
+			printf("|0x%08X  |  0x%08X  |   %08d   |\n", top->pc, inst, count);
 		}
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
