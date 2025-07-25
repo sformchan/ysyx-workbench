@@ -12,7 +12,7 @@ reg [31:0] ram_data;
 always @(*) begin
     if(read) ram_data = pmem_read(raddr);
     else ram_data = 0;
-    if(write) pmem_write(waddr, wdata, {28'b0, 4'b1111});
+    if(write) pmem_write(waddr, wdata, {32'b1});
     else ;
 end
 
