@@ -26,7 +26,7 @@ uint8_t rom[ysyx_25020047_ROM_SIZE] = {
 extern "C" int pmem_read(int raddr)
 {
     raddr &= ~(0x3u);
-    printf("lw read from addr: 0x%08x\n", raddr);
+    printf("read from addr: 0x%08x\n", raddr);
     if(raddr + 3 > ysyx_25020047_ROM_SIZE)
     {
         printf("\033[31mError: address 0x%08x is out of RAM range.\033[0m\n", raddr);
