@@ -83,7 +83,7 @@ module ysyx_25020047_EXU(
                     reg_wen = 1'b0;
                 end
                 9'b100000000: begin //sb
-                    $display("result 0x%08x", result);
+                    // $display("result 0x%08x", result);
                     result = rdata1 + imm;
                     write = 1'b1;
                     reg_wen = 1'b0;

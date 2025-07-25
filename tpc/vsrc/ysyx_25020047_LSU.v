@@ -51,7 +51,7 @@ always @(*) begin
     if(write) begin
         if(inst_type == 9'b010000000) pmem_write(waddr, wdata, 32'hF);
         else if(inst_type == 9'b100000000) begin
-            $display("waddr 0x%08x wdata1 0x%08x wmask 0x%08x", waddr, wdata1, wmask);
+            // $display("waddr 0x%08x wdata1 0x%08x wmask 0x%08x", waddr, wdata1, wmask);
             pmem_write(waddr, wdata1, wmask);
         end
     end
