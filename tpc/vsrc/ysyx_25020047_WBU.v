@@ -44,7 +44,7 @@ module ysyx_25020047_WBU(
                     wdata = snpc;
                     dnpc = result;
                 end
-                9'b000001000: begin
+                9'b000001000: begin //add
                     //$display("wdata 0x%08x", wdata);
                     wdata = result;
                 end
