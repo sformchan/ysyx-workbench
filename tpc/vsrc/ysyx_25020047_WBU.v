@@ -45,7 +45,7 @@ module ysyx_25020047_WBU(
                     dnpc = result;
                 end
                 9'b000001000: begin
-                    $display("wdata 0x%08x", wdata);
+                    //$display("wdata 0x%08x", wdata);
                     wdata = result;
                 end
                 9'b000010000: begin //lui
