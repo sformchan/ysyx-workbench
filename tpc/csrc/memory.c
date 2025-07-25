@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
-
+#include <string.h>
 
 //rom
 #define ysyx_25020047_ROM_SIZE 3
@@ -36,7 +36,7 @@ extern "C" int read_inst(int pc) {
 
 //ram
 #define ysyx_25020047_RAM_SIZE 64 * 1024  //64kb
-int8_t ram[ysyx_25020047_RAM_SIZE] = {1};
+int8_t ram[ysyx_25020047_RAM_SIZE] = {0};
 
 extern "C" int pmem_read(int raddr)
 {
