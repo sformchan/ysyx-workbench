@@ -32,7 +32,9 @@ module ysyx_25020047_EXU(
     input [31:0] rdata2,
     input [31:0] imm,
     output reg [31:0] result,
-    output reg reg_wen
+    output reg reg_wen,
+    output reg read
+    //output reg write
 );
 
 
@@ -60,6 +62,15 @@ module ysyx_25020047_EXU(
                 9'b000010000: begin //lui
                     result = imm;
                     reg_wen = 1'b1; 
+                end
+                9'b000100000: begin //lw
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
+                9'b001000000: begin //lbu
+                    result = rdata1 + imm;
+                    read = 1'b1;
                 end
                 default: result = 32'b0; // default case
             endcase

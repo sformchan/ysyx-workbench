@@ -7,8 +7,8 @@
 #define ysyx_25020047_INITADDR 0x00000000
 
 int rom[ysyx_25020047_ROM_SIZE] = {
-    0b00000011000000111001000010110111, 
-    0b00000000000000001000000100110011,
+    0b00000000000000000001000010110111, 
+    0b00000000000000001010000100000011,
     0b00000000000100000000000001110011  // ebreak
 };
 
@@ -36,7 +36,7 @@ extern "C" int read_inst(int pc) {
 
 //ram
 #define ysyx_25020047_RAM_SIZE 64 * 1024  //64kb
-int8_t ram[ysyx_25020047_RAM_SIZE] = {0};
+int8_t ram[ysyx_25020047_RAM_SIZE] = {1};
 
 extern "C" int pmem_read(int raddr)
 {

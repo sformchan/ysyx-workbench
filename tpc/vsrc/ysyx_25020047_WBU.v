@@ -27,6 +27,7 @@
 module ysyx_25020047_WBU(
     input [8:0] inst_type,
     input [31:0] result,
+    input [31:0] memdata,
     input [31:0] snpc,
     output reg [31:0] wdata,
     output reg [31:0] dnpc    
@@ -45,6 +46,12 @@ module ysyx_25020047_WBU(
                 end
                 9'b000010000: begin //lui
                     wdata = result; 
+                end
+                9'b000100000: begin //lw
+                    wdata = memdata;
+                end
+                9'b001000000: begin //lbu
+                    wdata = memdata;
                 end
                 default: ;
             endcase

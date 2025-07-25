@@ -19,6 +19,7 @@ ysyx_25020047_IFU u0(
     .inst(inst)
 );
 
+
 wire [31:0]  imm;
 wire [8:0]   inst_type;
 ysyx_25020047_IDU u1(
@@ -44,22 +45,36 @@ wire [31:0] result;
 wire reg_wen;
 wire [31:0] rdata1;
 wire [31:0] rdata2;
+wire read;
 ysyx_25020047_EXU u2(
     .inst_type(inst_type),
     .rdata1(rdata1),
     .rdata2(rdata2),
     .imm(imm),
     .result(result),
-    .reg_wen(reg_wen)
+    .reg_wen(reg_wen),
+    .read(read)
+    //.write(write)
+);
+
+wire [31:0] memdata;
+ysyx_25020047_LSU u3(
+    .inst_type(inst_type),
+    .raddr(result),
+    .waddr(),
+    .read(read),
+    .write(),
+    .memdata(memdata)
 );
 
 
 wire [31:0]  wdata;
 wire [31:0]  dnpc;
 wire [31:0]  snpc;
-ysyx_25020047_WBU u3(
+ysyx_25020047_WBU u4(
     .inst_type (inst_type),
     .result    (result),
+    .memdata (memdata),
     .snpc      (snpc),
     .wdata     (wdata),
     .dnpc      (dnpc)

@@ -72,15 +72,25 @@ wire [4:0] Urd;
 wire [19:0] Uimm;
 assign Urd = inst[11:7];
 assign Uimm = inst[31:12];
-wire [31:0] eUimm;
-assign eUimm = {Uimm, 12'b0}; // zero-extend the immediate value
+wire [31:0] zUimm;
+assign zUimm = {Uimm, 12'b0}; // zero-extend the immediate value
+
+// Stype
+wire [4:0] Srs1;
+wire [4:0] Srs2;
+wire [11:0] Simm;
+assign Srs1 = inst[19:15];
+assign Srs2 = inst[24:20];
+assign Simm = {inst[31:25], inst[11:7]};
+wire [31:0] sSimm;
+assign sSimm = {{20{Simm[11]}}, Simm};
 
 // combine the signals
 wire [4:0] rs1;
 wire [4:0] rs2;
 wire [4:0] rd;
-assign rs1 = Rrs1 | Irs1;
-assign rs2 = Rrs2;
+assign rs1 = Rrs1 | Irs1 | Srs1;
+assign rs2 = Rrs2 | Srs2;
 assign rd = Rrd | Ird | Urd;
 
 // add more instruction types as needed  //judge the type of instruction
@@ -92,6 +102,8 @@ assign rd = Rrd | Ird | Urd;
                 32'b00000000000100000000000001110011: inst_type = 9'b000000100; // ebreak
                 32'b0000000??????????000?????0110011: inst_type = 9'b000001000; // add
                 32'b?????????????????????????0110111: inst_type = 9'b000010000; // lui
+                32'b?????????????????010?????0000011: inst_type = 9'b000100000; // lw
+                32'b?????????????????100?????0000011: inst_type = 9'b001000000; // lbu
                 default:                              inst_type = 9'b000000000; // default case
             endcase                                     
         end                                          
@@ -102,7 +114,9 @@ assign rd = Rrd | Ird | Urd;
                 case(inst_type)
                     9'b000000001: imm = sIimm; // addi
                     9'b000000010: imm = sIimm; // jalr
-                    9'b000010000: imm = eUimm; // lui
+                    9'b000010000: imm = zUimm; // lui
+                    9'b000100000: imm = sSimm; // lw
+                    9'b001000000: imm = sSimm; // lbu
                     default:      imm = 32'b0; // default case
                 endcase
             end                                          
