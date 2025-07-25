@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	top->clk = 0;
 	int inst = 0;
 	uint32_t count = 0;
-    //printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
+    printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(!stop)
 	{	
 			
@@ -68,6 +68,7 @@ int main(int argc, char** argv)
 	inst = pmem_read(top->pc);
 	if(stop)
 	{
+		printf("|0x%08X  |  0x%08X  |   %08d   |\n", top->pc, inst, count);
 		//printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	}
