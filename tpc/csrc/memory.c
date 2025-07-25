@@ -36,7 +36,7 @@ extern "C" int read_inst(int pc) {
 
 //ram
 #define ysyx_25020047_RAM_SIZE 64 * 1024  //64kb
-uint8_t ram[ysyx_25020047_RAM_SIZE] = {0x11};
+int8_t ram[ysyx_25020047_RAM_SIZE] = {0x11};
 
 extern "C" int pmem_read(int raddr)
 {
