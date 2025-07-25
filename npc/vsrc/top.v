@@ -1,65 +1,88 @@
 import "DPI-C" function void stop_stimulation();
+import "DPI-C" function int pmem_read(input int raddr);
+import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 
 module top(
     input clk,
     input rst,
+    //input  [31:0] inst,
     output [31:0] pc,
-    output [31:0] gpr0, gpr1, gpr2,
-    input [31:0] inst
+    output [31:0] gpr0,
+    output [31:0] gpr1,
+    output [31:0] gpr2
 );
 
-//internal variables
-
-  //decoder
-wire [6:0]     Ioc;
-wire [2:0] Ifunct3;
-wire [11:0]   Iimm;
-wire [4:0]    Irs1;   //raddr1
-wire [4:0]     Ird;   //waddr
-  //gpr
-wire [31:0] rdata1;
-wire [31:0]  wdata;
-wire           wen;
-
-
-ysyx_25020047_PC u0(
-    .clk (clk ),
-    .rst (rst ),
-    .pc  (pc  )
+wire [31:0] inst;
+ysyx_25020047_IFU u0(
+    .pc(pc),
+    .inst(inst)
 );
 
+
+wire [31:0]  imm;
+wire [8:0]   inst_type;
 ysyx_25020047_IDU u1(
-    .inst       (inst),
-    .Ioc         (Ioc),
-    .Ifunct3 (Ifunct3),
-    .Iimm       (Iimm),
-    .Irs1       (Irs1),
-    .Ird         (Ird)
+    .clk(clk),
+    .rst(rst),
+    .reg_wen(reg_wen),
+    .wdata(wdata),
+    .dnpc(dnpc),
+    .inst(inst),
+    .imm(imm),
+    .inst_type(inst_type),
+    .rdata1(rdata1),
+    .rdata2(rdata2),
+    .pc(pc),
+    .snpc(snpc),
+    .gpr0(gpr0),
+    .gpr1(gpr1),
+    .gpr2(gpr2)
 );
 
-ysyx_25020047_GPR u2(
-    .clk        (clk),
-    .wen        (wen),
-    .raddr1    (Irs1),
-    .waddr      (Ird),
-    .rdata1  (rdata1),
-    .gpr0      (gpr0),
-    .gpr1      (gpr1),
-    .gpr2      (gpr2),
-    .wdata    (wdata)
+
+wire [31:0] result;
+wire reg_wen;
+wire [31:0] rdata1;
+wire [31:0] rdata2;
+wire read;
+wire write;
+ysyx_25020047_EXU u2(
+    .inst_type(inst_type),
+    .rdata1(rdata1),
+    .rdata2(rdata2),
+    .imm(imm),
+    .result(result),
+    .reg_wen(reg_wen),
+    .read(read),
+    .write(write)
 );
 
-ysyx_25020047_EXU u3(
-    .oc         (Ioc),
-    .funct3 (Ifunct3),
-    .data1   (rdata1),
-    .imm       (Iimm),
-    .result   (wdata),
-    .wen        (wen)
+
+wire [31:0] memdata;
+ysyx_25020047_LSU u3(
+    .inst_type(inst_type),
+    .raddr(result),
+    .waddr(result),
+    .wdata(rdata2),
+    .read(read),
+    .write(write),
+    .memdata(memdata)
 );
+
+
+wire [31:0]  wdata;
+wire [31:0]  dnpc;
+wire [31:0]  snpc;
+ysyx_25020047_WBU u4(
+    .inst_type (inst_type),
+    .result    (result),
+    .memdata (memdata),
+    .snpc      (snpc),
+    .wdata     (wdata),
+    .dnpc      (dnpc)
+);
+
 
 
 
 endmodule
-
-

@@ -27,47 +27,70 @@
 
 
 module ysyx_25020047_EXU(
-    input [6:0] oc,
-    input [2:0] funct3,
-    input [31:0] data1,
-    input [11:0] imm,
+    input [8:0]  inst_type,
+    input [31:0] rdata1,
+    input [31:0] rdata2,
+    input [31:0] imm,
     output reg [31:0] result,
-    output wen
+    output reg reg_wen,
+    output reg read,
+    output reg write
 );
 
-wire [31:0]  simm;
-assign simm = $signed({20'b0, imm});
+
 
     always @(*)           
         begin
-            result = 32'b0;
-            wen = 1'b0;
-            case (oc)
-                7'b0010011: begin
-                    case (funct3)
-                        3'b000: begin
-                            result = data1 + simm;
-                            wen = 1;
-                        end 
-                        default: result = result;
-                    endcase
+            read = 1'b0;
+            write = 1'b0;
+            reg_wen = 1'b0;
+            case(inst_type)
+                9'b000000001: begin //addi
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
                 end
-                7'b1110011: begin
-                    case (funct3)
-                        3'b000: begin
-                            case (imm)
-                                000000000001: begin
-                                    wen = 0;
-                                    stop_stimulation();
-                                end
-                                default: result = result;
-                            endcase
-                        end
-                        default: result = result;
-                    endcase
+                9'b000000010: begin //jalr
+                    result = (rdata1 + imm) & ~1;
+                    reg_wen = 1'b1;
                 end
-                default: result = 32'b0;
-            endcase 
+                9'b000000100: begin //ebreak
+                    reg_wen = 1'b0; // ebreak does not write back
+                    stop_stimulation(); // call DPI-C function to stop simulation
+                end
+                9'b000001000: begin //add
+                    //$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
+                    result = rdata1 + rdata2; // R-type instruction
+                    reg_wen = 1'b1;
+                end
+                9'b000010000: begin //lui
+                    result = imm;
+                    reg_wen = 1'b1; 
+                end
+                9'b000100000: begin //lw
+                    // $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
+                    result = rdata1 + imm;
+                    // $display("result 0x%08x", result);
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
+                9'b001000000: begin //lbu
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
+                9'b010000000: begin //sw
+                    result = rdata1 + imm;
+                    write = 1'b1;
+                    reg_wen = 1'b0;
+                end
+                9'b100000000: begin //sb
+                    // $display("result 0x%08x", result);
+                    result = rdata1 + imm;
+                    write = 1'b1;
+                    reg_wen = 1'b0;
+                end
+                default: result = 32'b0; // default case
+            endcase
         end                                          
                                                                    
                                                                    

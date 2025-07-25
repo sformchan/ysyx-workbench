@@ -1,55 +1,71 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "rom.h"
 #include "Vtop.h"
 #include "verilated.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
 //#include "verilated_fst_c.h"
 
+
+int pmem_read(int raddr);
+void pmem_write(int waddr, int wdata, int wmask);
+void load_verilog_hex(const char *filename);
+
 int stop = 0;
+
 void stop_stimulation()
 {
-	//printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	stop = 1;
 }
 
 int main(int argc, char** argv)
 {
-	printf("welcome to \033[44;36mNPC\033[0m!\n");
+	printf("welcome to \033[44;36mTPC\033[0m!\n");
+	
+	//load_memory
+	load_verilog_hex("/home/leonard/Desktop/sum.hex");
+	
 	printf("\033[32mStimulation starting...\033[0m\n");
+
+
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
 	Vtop* top = new Vtop{contextp};
-
-
 	//VerilatedFstC* tfp = new VerilatedFstC;
 	contextp->traceEverOn(true);
 	//top->trace(tfp,0);
 	//tfp->open("wave.fst");
 	top->rst = 1;
-	top->pc = ysyx_25020047_INITADDR;
 	top->clk = 0;
-
-    printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
+	int inst = 0;
+	uint32_t count = 0;
+    //printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
+	printf("|pc          |  inst        |  cycle      |\n");
 	while(!stop)
 	{	
 			
 		top->rst = 0;
-		
+		inst = pmem_read(top->pc);
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
-        top->inst = read_inst(top->pc);
 		top->eval();
+		// if(!top->clk)
+		// {
+		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
+		// }
 		if(!top->clk)
 		{
-			printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, top->inst, top->gpr0, top->gpr1, top->gpr2);
+			count++;
+			//printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 		}
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 		
 	}
+	inst = pmem_read(top->pc);
 	if(stop)
 	{
+		printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
+		//printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	}
 	delete top;

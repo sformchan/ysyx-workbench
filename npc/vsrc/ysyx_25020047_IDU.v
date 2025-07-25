@@ -13,30 +13,145 @@
 // Last Version:           V1.0
 // Descriptions:           
 //----------------------------------------------------------------------------------------
-// Created by:             Please Write You Name 
+// Created by:             Sform Chan 
 // Created date:           2025/03/11 22:50:48
 // mail      :             Please Write mail 
 // Version:                V1.0
-// TEXT NAME:              npc_dc.v
-// PATH:                   ~/ysyx-workbench/npc/vsrc/npc_dc.v
+// TEXT NAME:              
+// PATH:                   tpc
 // Descriptions:           
 //                         
 //----------------------------------------------------------------------------------------
 //****************************************************************************************//
 
 module ysyx_25020047_IDU(
-    input  [31:0]   inst,
-    output [6:0]     Ioc,
-    output [2:0] Ifunct3,
-    output [11:0]   Iimm,
-    output [4:0]    Irs1,
-    output [4:0]     Ird                         
+    input clk,
+    input rst,
+    input reg_wen,
+    input  [31:0]      wdata,
+    input  [31:0]       dnpc,
+    input  [31:0]       inst,
+    output reg [31:0]       imm,
+    output reg [8:0]   inst_type,
+    output [31:0]     rdata1,
+    output [31:0]     rdata2,
+    output [31:0]         pc,
+    output [31:0]       snpc,
+    output [31:0]  gpr0,
+    output [31:0]  gpr1,
+    output [31:0]  gpr2
 );
 
-assign Ioc = inst[6:0];
-assign Ifunct3 = inst[14:12];
+
+
+// break down instruction
+
+wire [6:0] opcode;
+assign opcode = inst[6:0];
+
+// Itype    
+wire [4:0] Irs1;
+wire [4:0] Ird;
+wire [11:0] Iimm;
 assign Iimm = inst[31:20];
 assign Irs1 = inst[19:15];
 assign Ird = inst[11:7];
-                                                                   
+wire [31:0] sIimm;
+assign sIimm = {{20{Iimm[11]}}, Iimm}; // sign-extend the immediate value
+
+// Rtype
+wire [4:0] Rrs1;
+wire [4:0] Rrs2;
+wire [4:0] Rrd;
+assign Rrd = inst[11:7];
+assign Rrs1 = inst[19:15];
+assign Rrs2 = inst[24:20];
+
+//Utype
+wire [4:0] Urd;
+wire [19:0] Uimm;
+assign Urd = inst[11:7];
+assign Uimm = inst[31:12];
+wire [31:0] zUimm;
+assign zUimm = {Uimm, 12'b0}; // zero-extend the immediate value
+
+// Stype
+wire [4:0] Srs1;
+wire [4:0] Srs2;
+wire [11:0] Simm;
+assign Srs1 = inst[19:15];
+assign Srs2 = inst[24:20];
+assign Simm = {inst[31:25], inst[11:7]};
+wire [31:0] sSimm;
+assign sSimm = {{20{Simm[11]}}, Simm};
+
+// combine the signals
+wire [4:0] rs1;
+wire [4:0] rs2;
+wire [4:0] rd;
+assign rs1 = Rrs1 | Irs1 | Srs1;
+assign rs2 = Rrs2 | Srs2;
+assign rd = Rrd | Ird | Urd;
+
+
+// add more instruction types as needed  //judge the type of instruction
+    always @(*)           
+        begin
+            casez(inst)
+                32'b?????????????????000?????0010011: inst_type = 9'b000000001; // addi
+                32'b?????????????????000?????1100111: inst_type = 9'b000000010; // jalr
+                32'b00000000000100000000000001110011: inst_type = 9'b000000100; // ebreak
+                32'b0000000??????????000?????0110011: inst_type = 9'b000001000; // add
+                32'b?????????????????????????0110111: inst_type = 9'b000010000; // lui
+                32'b?????????????????010?????0000011: inst_type = 9'b000100000; // lw
+                32'b?????????????????100?????0000011: inst_type = 9'b001000000; // lbu
+                32'b?????????????????010?????0100011: inst_type = 9'b010000000; // sw
+                32'b?????????????????000?????0100011: inst_type = 9'b100000000; // sb
+                default:                              inst_type = 9'b000000000; // default case
+            endcase                                     
+        end                                          
+
+// judge the imm
+        always @(*)           
+            begin                                        
+                case(inst_type)
+                    9'b000000001: imm = sIimm; // addi
+                    9'b000000010: imm = sIimm; // jalr
+                    9'b000010000: imm = zUimm; // lui
+                    9'b000100000: imm = sIimm; // lw
+                    9'b001000000: imm = sIimm; // lbu
+                    9'b010000000: imm = sSimm; // sw
+                    9'b100000000: imm = sSimm; // sb
+                    default:      imm = 32'b0; // default case
+                endcase
+            end                                          
+
+
+GPR #(5, 32) u1
+(
+    .clk(clk),
+    .rst(rst),
+    .wen(reg_wen),
+    .raddr1(rs1),
+    .raddr2(rs2),
+    .wdata(wdata),
+    .waddr(rd),
+    .rdata1(rdata1),
+    .rdata2(rdata2),
+    .gpr0(gpr0),
+    .gpr1(gpr1),
+    .gpr2(gpr2)
+);
+ 
+
+ysyx_25020047_PC u2
+(
+    .clk(clk),
+    .rst(rst),
+    .dnpc(dnpc),
+    .pc(pc),
+    .snpc(snpc)
+);
+
 endmodule
+
