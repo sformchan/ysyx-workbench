@@ -70,6 +70,7 @@ module ysyx_25020047_EXU(
                 end
                 9'b001000000: begin //lbu
                     result = rdata1 + imm;
+                    reg_wen = 1'b1;
                     read = 1'b1;
                 end
                 default: result = 32'b0; // default case
