@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	}
 	if(stop)
 	{
-		printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
+		//printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
 	}
 	delete top;
