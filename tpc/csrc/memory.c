@@ -48,10 +48,10 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
         return;
     }
     //wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
-    if (wmask & 0x1) rom[waddr + 0] = (wdata >> 0) & 0xFF, printf("byte0 written from 0x%08x: 0x%02x\n", waddr,rom[waddr + 0]); 
-    if (wmask & 0x2) rom[waddr + 1] = (wdata >> 8) & 0xFF, printf("byte1 written from 0x%08x: 0x%02x\n", waddr + 1, rom[waddr + 1]); 
-    if (wmask & 0x4) rom[waddr + 2] = (wdata >> 16) & 0xFF, printf("byte2 written from 0x%08x: 0x%02x\n", waddr + 2, rom[waddr + 2]); 
-    if (wmask & 0x8) rom[waddr + 3] = (wdata >> 24) & 0xFF, printf("byte3 written from 0x%08x: 0x%02x\n", waddr + 3, rom[waddr + 3]); 
+    if (wmask & 0x1) rom[waddr + 0] = (wdata >> 0) & 0xFF, printf("byte0 written to 0x%08x: 0x%02x\n", waddr,rom[waddr + 0]); 
+    if (wmask & 0x2) rom[waddr + 1] = (wdata >> 8) & 0xFF, printf("byte1 written to 0x%08x: 0x%02x\n", waddr + 1, rom[waddr + 1]); 
+    if (wmask & 0x4) rom[waddr + 2] = (wdata >> 16) & 0xFF, printf("byte2 written to 0x%08x: 0x%02x\n", waddr + 2, rom[waddr + 2]); 
+    if (wmask & 0x8) rom[waddr + 3] = (wdata >> 24) & 0xFF, printf("byte3 written to 0x%08x: 0x%02x\n", waddr + 3, rom[waddr + 3]); 
 }
 
 
