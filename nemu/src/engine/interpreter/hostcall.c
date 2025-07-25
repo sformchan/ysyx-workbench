@@ -46,6 +46,5 @@ void invalid_inst(vaddr_t thispc) {
         "If it is the second case, remember:\n"
         "* The machine is always right!\n"
         "* Every line of untested code is always wrong!\n\n", ANSI_FG_RED), isa_logo);
-
   set_nemu_state(NEMU_ABORT, thispc, -1);
 }

@@ -55,6 +55,7 @@ void expr_cp(FILE *file)
     count++;
   }
   printf("\n"); 
+  printf("pass:%d all:%d\n", count - i - 1, count - 1);
   if(i > 0)
   {
     printf("where it went wrong: ");
@@ -136,6 +137,7 @@ static int cmd_info(char *args)
     sscanf(args, "%c", &letter);
     if(letter == 'r')
     {
+      printf(ANSI_FG_GREEN "PC : 0x%08x\n" ANSI_NONE, cpu.pc);
       isa_reg_display();
     }
     else if(letter == 'w')
@@ -161,12 +163,12 @@ static int cmd_x(char *args)
   {
     sscanf(args, "%d %s", &length, start);
     uint32_t result = expr(start, &success);
-    printf("%x\n", result);
+    //printf("%x\n", result);
     if( length > 0 && (result >= 0x80000000 && result <= 0x87ffffff))
     {
       for(int i = 0; i < length; i++)
       {
-        printf("%d 0x%x 0x%x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
       }
     }
     else
@@ -257,7 +259,7 @@ static struct {
   { "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
   { "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
   { "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
-  { "test", "   Test your expr_function", cmd_t}
+  { "ext", "   Test your expr_function", cmd_t}
 
   /* TODO: Add more commands */
 

@@ -221,4 +221,14 @@ config WATCHPOINT
   bool "Enable watchpoint checking"
   default y
 
+config IRINGBUF
+  bool "Enable instruction ring buffer"
+  default y
 
+config MTRACE
+  bool "Enable memory trace"
+  default n
+
+config FTRACE
+  bool "Enable function trace"
+  default n

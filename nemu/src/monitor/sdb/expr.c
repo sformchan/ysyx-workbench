@@ -206,6 +206,13 @@ static bool make_token(char *e) {
 }
 
 
+
+bool loop = false; //用于eval函数.
+  //让第一个元素为解指针符号和负数符号的情况正确运行 
+  //如果第一个元素是上述两种情况 将会使得这两种符号优先级最低
+  //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
+  //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -219,7 +226,9 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == '(' ))
+                                           tokens[i - 1].type == '(' ||
+                                           tokens[i - 1].type == TK_NEQ ||
+                                           tokens[i - 1].type == TK_DEQ))
     {
       
       tokens[i].type = 7;
@@ -228,7 +237,9 @@ word_t expr(char *e, bool *success) {
                                            tokens[i - 1].type == '-' ||
                                            tokens[i - 1].type == '*' ||
                                            tokens[i - 1].type == '/' ||
-                                           tokens[i - 1].type == '(' ))
+                                           tokens[i - 1].type == '(' ||
+                                           tokens[i - 1].type == TK_NEQ ||
+                                           tokens[i - 1].type == TK_DEQ))
     {
       
       tokens[i].type = 8;
@@ -236,6 +247,9 @@ word_t expr(char *e, bool *success) {
   }
   
   uint32_t result = eval(0, nr_token - 1);
+
+  loop = false; //执行完一次计算后初始化loop
+
   *success = true;
   memset(tokens, 0, sizeof(tokens));   //important!!!!!!!!
   return result;
@@ -270,6 +284,8 @@ bool check_parentheses(int p, int q)
   }
   return false;
 }
+
+
 
 uint32_t eval(int p, int q) {
   
@@ -319,18 +335,19 @@ uint32_t eval(int p, int q) {
      }
      
   }
-  else if(tokens[p].type == 7)  //deref
+  else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 1))  //deref
   {
     word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
     {
+        printf("%x\n", addr);
         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
         return 0;
     }
     word_t data = paddr_read(addr, 4);
     return data;
   }
-  else if(tokens[p].type == 8)  //negetive
+  else if(tokens[p].type == 8 && (check_parentheses(p + 1, q) || q - p == 2))  //negetive
   {
     word_t result = eval(p + 1, q);
     return -1 * result;
@@ -345,6 +362,8 @@ uint32_t eval(int p, int q) {
   else {
     //find major
     
+    //loop = true; //嵌套开始
+
     int op = -1;
     int sign = 0;
     //printf("%d %d %d\n", p, q, op);
@@ -374,32 +393,34 @@ uint32_t eval(int p, int q) {
         }
          
       }
-      if((sign >= 1 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
+      
+      
+      if((sign >= 1 || sign == 0) && tokens[i].type == 6) //or
       {
-        //assert(0);
         sign = 1;
         op = i;
       }
-      if((sign >= 2 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
+      if((sign >= 2 || sign == 0) && tokens[i].type == 5) //and
       {
-        //printf("hello\n");
         sign = 2;
         op = i;
       }
-      if((sign >= 5 || sign == 0) && (tokens[i].type == 1 || tokens[i].type == 3))
+      if((sign >= 3 || sign == 0) && (tokens[i].type == 1 || tokens[i].type == 3)) //eq/neq
       {
         //assert(0);
-        sign = 5;
-        op = i;
-      }
-      if((sign >= 3 || sign == 0) && tokens[i].type == 5)
-      {
         sign = 3;
         op = i;
       }
-      if((sign >= 4 || sign == 0) && tokens[i].type == 6)
+      if((sign >= 4 || sign == 0) && (tokens[i].type == '+' || tokens[i].type == '-'))
       {
+        //assert(0);
         sign = 4;
+        op = i;
+      }
+      if((sign >= 5 || sign == 0) && (tokens[i].type == '*' || tokens[i].type == '/'))
+      {
+        //printf("hello\n");
+        sign = 5;
         op = i;
       }
       //printf("%d %d %d\n", p, q, op);

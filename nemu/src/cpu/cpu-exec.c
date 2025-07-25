@@ -19,6 +19,8 @@
 #include <locale.h>
 //#include "../monitor/sdb/wp.h"
 bool check_wp();
+void ringbuf_push(const char *log);
+void ringbuf_print();
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -46,7 +48,11 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_WATCHPOINT
   if(check_wp())
   {
-    nemu_state.state = NEMU_STOP;
+    if(nemu_state.state != NEMU_END)
+    {
+      nemu_state.state = NEMU_STOP;
+    }
+    
   }
 #endif 
 }
@@ -75,10 +81,40 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
+#endif
+
+#ifdef CONFIG_IRINGBUF
+  char destbuf[128];
+  char *r = destbuf;
+  r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
+  r += snprintf(r, 8, "  ");
+  int rlen = s->snpc - s->pc;
+  int j;
+  uint8_t *inst_r = (uint8_t *)&s->isa.inst;
+  #ifdef CONFIG_ISA_x86
+  for (j = 0; j < ilen; j ++) {
+#else
+  for (j = rlen - 1; j >= 0; j --) {
+#endif
+    r += snprintf(r, 4, "%02x ", inst_r[j]);
+  }
+  r += snprintf(r, 8, "  ");
+
+#ifdef CONFIG_ITRACE
+  disassemble(r, destbuf + sizeof(destbuf) / 2 + 20 - r,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, rlen);
+#endif
+
+  char *dest = strdup(destbuf);
+  //printf("%s\n", destbuf);
+  ringbuf_push(dest);
+  if(nemu_state.state == NEMU_ABORT)
+  {
+    ringbuf_print();
+  }
 #endif
 }
 
@@ -105,6 +141,9 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+#ifdef CONFIG_IRINGBUF
+  ringbuf_print();
+#endif
 }
 
 /* Simulate how the CPU works. */
@@ -133,6 +172,7 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
+      //printf("%d %d %d\n", nemu_state.state, NEMU_END, nemu_state.halt_ret);
       // fall through
     case NEMU_QUIT: statistic();
   }
