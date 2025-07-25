@@ -47,7 +47,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
         return;
     }
     //wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
-    if (wmask & 0x1) rom[waddr + 0] = (wdata >> 0) & 0xFF, printf("byte0 written"); 
+    if (wmask & 0x1) rom[waddr + 0] = (wdata >> 0) & 0xFF, printf("byte0 written\n"); 
     if (wmask & 0x2) rom[waddr + 1] = (wdata >> 8) & 0xFF;
     if (wmask & 0x4) rom[waddr + 2] = (wdata >> 16) & 0xFF;
     if (wmask & 0x8) rom[waddr + 3] = (wdata >> 24) & 0xFF;
