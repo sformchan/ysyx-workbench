@@ -53,7 +53,7 @@ module ysyx_25020047_WBU(
                 9'b001000000: begin //lbu
                     wdata = memdata;
                 end
-                default: ;
+                default: wdata = 32'b0;
             endcase
         end                                          
                                                                    
