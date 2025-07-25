@@ -13,12 +13,12 @@
 // Last Version:           V1.0
 // Descriptions:           
 //----------------------------------------------------------------------------------------
-// Created by:             Please Write You Name 
+// Created by:             Sform Chan 
 // Created date:           2025/03/11 22:50:48
 // mail      :             Please Write mail 
 // Version:                V1.0
-// TEXT NAME:              npc_dc.v
-// PATH:                   ~/ysyx-workbench/npc/vsrc/npc_dc.v
+// TEXT NAME:              
+// PATH:                   tpc
 // Descriptions:           
 //                         
 //----------------------------------------------------------------------------------------
@@ -92,6 +92,7 @@ wire [4:0] rd;
 assign rs1 = Rrs1 | Irs1 | Srs1;
 assign rs2 = Rrs2 | Srs2;
 assign rd = Rrd | Ird | Urd;
+
 
 // add more instruction types as needed  //judge the type of instruction
     always @(*)           
