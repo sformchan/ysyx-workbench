@@ -8,7 +8,6 @@
 #define ysyx_25020047_INITADDR 0x00000000
 
 
-
 // uint8_t rom[ysyx_25020047_ROM_SIZE] = {
 //     0xb7, 0x00, 0x24, 0x1e,
 //     0x03, 0x21, 0x30, 0x00,
@@ -113,5 +112,5 @@ void load_verilog_hex(const char *filename) {
     }
 
     fclose(fp);
-    printf("ROM loaded successfully.\n");
+    printf("MEM loaded successfully.\n");
 }
