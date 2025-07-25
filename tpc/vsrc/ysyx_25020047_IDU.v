@@ -30,7 +30,7 @@ module ysyx_25020047_IDU(
     input reg_wen,
     input  [31:0]      wdata,
     input  [31:0]       dnpc,
-    //input  [31:0]       inst,
+    input  [31:0]       inst,
     output reg [31:0]       imm,
     output reg [8:0]   inst_type,
     output [31:0]     rdata1,
@@ -42,8 +42,7 @@ module ysyx_25020047_IDU(
     output [31:0]  gpr2
 );
 
-wire [31:0] inst;
-assign inst = read_inst(pc); 
+
 
 // break down instruction
 
