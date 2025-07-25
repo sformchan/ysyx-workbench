@@ -1,5 +1,4 @@
 import "DPI-C" function void stop_stimulation();
-import "DPI-C" function int read_inst(input int pc);
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 
@@ -46,6 +45,7 @@ wire reg_wen;
 wire [31:0] rdata1;
 wire [31:0] rdata2;
 wire read;
+wire write;
 ysyx_25020047_EXU u2(
     .inst_type(inst_type),
     .rdata1(rdata1),
@@ -53,17 +53,19 @@ ysyx_25020047_EXU u2(
     .imm(imm),
     .result(result),
     .reg_wen(reg_wen),
-    .read(read)
-    //.write(write)
+    .read(read),
+    .write(write)
 );
+
 
 wire [31:0] memdata;
 ysyx_25020047_LSU u3(
     .inst_type(inst_type),
     .raddr(result),
-    .waddr(),
+    .waddr(result),
+    .wdata(rdata2),
     .read(read),
-    .write(),
+    .write(write),
     .memdata(memdata)
 );
 

@@ -6,11 +6,7 @@
 #define ysyx_25020047_ROM_SIZE 20
 #define ysyx_25020047_INITADDR 0x00000000
 
-// uint8_t rom[ysyx_25020047_ROM_SIZE] = {
-//     0b00000000000000000001000010110111, 
-//     0b00000000000000001010000100110111,
-//     0b00000000000100000000000001110011  // ebreak
-// };
+
 uint8_t rom[ysyx_25020047_ROM_SIZE] = {
     0xB7, 0x10, 0x00, 0x00,   
     0x37, 0xA1, 0x00, 0x00,
@@ -19,29 +15,6 @@ uint8_t rom[ysyx_25020047_ROM_SIZE] = {
     0x73, 0x00, 0x10, 0x00
   };
 
-extern "C" int read_inst(int pc) {
-    // 检查地址是否对齐到 4 字节
-    if (pc % 4 != 0) {
-        printf("\033[31mError: PC address 0x%08x is not aligned to 4 bytes.\033[0m\n", pc);
-        return 0xFFFFFFFF; // 返回错误码
-    }
-
-    // 检查地址是否在合法范围内
-    if (pc < ysyx_25020047_INITADDR || pc >= ysyx_25020047_INITADDR + ysyx_25020047_ROM_SIZE * 4) {
-        printf("\033[31mError: PC address 0x%08x is out of ROM range.\033[0m\n", pc);
-        return 0xFFFFFFFF; // 返回错误码
-    }
-
-    // 计算数组索引
-    uint32_t real_addr = (pc - ysyx_25020047_INITADDR) / 4;
-
-    // 返回指令
-    return rom[real_addr];
-}
-
-
-
-//ram
 #define ysyx_25020047_RAM_SIZE 64 * 1024  //64kb
 
 

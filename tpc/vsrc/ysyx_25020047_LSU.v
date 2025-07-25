@@ -2,6 +2,7 @@ module ysyx_25020047_LSU (
     input [8:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
+    input [31:0] wdata,
     input read,
     input write,
     output reg [31:0] memdata
@@ -11,6 +12,8 @@ reg [31:0] ram_data;
 always @(*) begin
     if(read) ram_data = pmem_read(raddr);
     else ram_data = 0;
+    if(write) pmem_write(waddr, wdata, {28'b0, 4'b1111});
+    else ;
 end
 
 
