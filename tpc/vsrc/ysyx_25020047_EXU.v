@@ -41,6 +41,8 @@ module ysyx_25020047_EXU(
 
     always @(*)           
         begin
+            read = 1'b0;
+            write = 1'b0;
             reg_wen = 1'b0;
             case(inst_type)
                 9'b000000001: begin //addi
