@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 
 	//debug
 	// int flag = 0;
-	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
+	load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	// char command[100];
 	// scanf("%c", command);
 	// if(strcmp(command, "gogogo") == 0) flag = 1;
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	top->clk = 0;
 	int inst = 0;
 	uint32_t count = 0;
-    printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
+    //printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
 	while(!stop)
 	{	
 			
@@ -56,11 +56,11 @@ int main(int argc, char** argv)
 		{
 			printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		}
-		// if(!top->clk)
-		// {
-		// 	count++;
-		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, count);
-		// }
+		if(!top->clk)
+		{
+			count++;
+			printf("|0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, count);
+		}
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 		
