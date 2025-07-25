@@ -33,7 +33,10 @@ extern "C" int pmem_read(int raddr)
         printf("\033[31mError: address 0x%08x is out of RAM range.\033[0m\n", raddr);
         return 0xFFFFFFFF; // 返回错误码
     }
-    return rom[raddr]| (rom[raddr + 1] << 8) | (rom[raddr + 2] << 16) | (rom[raddr + 3] << 24);
+    return ((uint32_t)rom[raddr]) |
+           ((uint32_t)rom[raddr + 1] << 8) |
+           ((uint32_t)rom[raddr + 2] << 16) |
+           ((uint32_t)rom[raddr + 3] << 24);
 }
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
