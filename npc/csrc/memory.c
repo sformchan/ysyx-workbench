@@ -126,7 +126,7 @@ void load_verilog_hex(const char *filename) {
 #define ysyx_25020047_RESET_VECTOR 0x80000000
 
 char *img_file = NULL;
-extern "C" long load_img() {
+ long load_img() {
 	if (img_file == NULL) {
 	  printf("No image is given.");
 	  return 4096; 
@@ -153,7 +153,7 @@ extern "C" long load_img() {
   }
 
 
-extern "C" int parse_args(int argc, char *argv[]) {
+ int parse_args(int argc, char *argv[]) {
 	const struct option table[] = {
 	  {0          , 0                , NULL,  0 },
 	};
