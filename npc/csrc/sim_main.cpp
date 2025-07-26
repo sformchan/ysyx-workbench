@@ -4,6 +4,7 @@
 #include "verilated.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
+#include "utils.h"
 //#include "verilated_fst_c.h"
 
 
@@ -75,12 +76,15 @@ int main(int argc, char** argv)
 		
 	}
 	inst = pmem_read(top->pc);
+	printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 	if(stop)
 	{
-		printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
+		//printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 		//printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
-		printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
+		//printf("\033[33mSimulation stopped successfully due to ebreak!\033[0m\n");
+		printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN" HIT GOOD TRAP at pc 0x%08x\n" ANSI_NONE, top->pc);
 	}
+	else printf("\033[44;36mNPC\033[0m" ANSI_FG_RED" HIT GOOD TRAP at pc 0x%08x\n" ANSI_NONE, top->pc);
 	delete top;
 	//tfp->close();
 	delete contextp;
