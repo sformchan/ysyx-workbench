@@ -8,7 +8,7 @@
 
 
 //rom
-#define ysyx_25020047_ROM_SIZE 1024 * 1024 * 128
+#define ysyx_25020047_ROM_SIZE 0x7ffffff
 #define ysyx_25020047_INITADDR 0x80000000
 
 

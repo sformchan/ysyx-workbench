@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 		inst = pmem_read(top->pc);
 		if(inst == 0xFFFFFFFF)
 		{
-			perror("ERROR READING\n");
+			perror(ANSI_FG_RED"ERROR READING\n" ANSI_NONE);
 			exit(1);
 		}
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
