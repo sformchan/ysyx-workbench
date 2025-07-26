@@ -22,8 +22,8 @@ int main(int argc, char** argv)
 {
 	printf("welcome to \033[44;36mTPC\033[0m!\n");
 	
-	//load_memory
-	load_verilog_hex("/home/leonard/Desktop/sum.hex");
+	//load_sum/mem
+	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	
 	printf("\033[32mStimulation starting...\033[0m\n");
 
@@ -55,8 +55,9 @@ int main(int argc, char** argv)
 		if(!top->clk)
 		{
 			count++;
-			//printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
+			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 		}
+		if(count==100) break;
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 		

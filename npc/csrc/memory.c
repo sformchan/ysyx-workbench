@@ -32,7 +32,7 @@ extern "C" int pmem_read(int raddr)
     raddr &= ~(0x3u);
     if(raddr + 3 > ysyx_25020047_ROM_SIZE)
     {
-        printf("\033[31mError: address 0x%08x is out of RAM range.\033[0m\n", raddr);
+       // printf("\033[31mError: read_address 0x%08x is out of MEM range.\033[0m\n", raddr);
         return 0xFFFFFFFF; // 返回错误码
     }
     return ((uint32_t)rom[raddr]) |
@@ -47,7 +47,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
     waddr &= ~(0x3u);
     if(waddr + 3 > ysyx_25020047_ROM_SIZE)
     {
-        printf("\033[31mError: address 0x%08x is out of RAM range.\033[0m\n", waddr);
+        //printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
         return;
     }
     //wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
