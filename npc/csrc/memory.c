@@ -2,9 +2,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
+#include <getopt.h>
+#include <unistd.h>
+
 
 //rom
-#define ysyx_25020047_ROM_SIZE 1024 * 1024
+#define ysyx_25020047_ROM_SIZE 1024 * 1024 * 128
 #define ysyx_25020047_INITADDR 0x80000000
 
 
@@ -114,3 +118,54 @@ void load_verilog_hex(const char *filename) {
     fclose(fp);
     printf("MEM loaded successfully.\n");
 }
+
+
+//load bin file
+
+
+#define ysyx_25020047_RESET_VECTOR 0x80000000
+
+static char *img_file = NULL;
+static long load_img() {
+	if (img_file == NULL) {
+	  printf("No image is given.");
+	  return 4096; 
+	}
+  
+	FILE *fp = fopen(img_file, "rb");
+	if (!fp) {
+        perror("Error opening bin file");
+        exit(1);
+    }
+  
+	fseek(fp, 0, SEEK_END);
+	long size = ftell(fp);
+  
+	printf("The image is %s, size = %ld", img_file, size);
+  
+	fseek(fp, 0, SEEK_SET);
+	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
+	int ret = fread(&rom[offset], size, 1, fp);
+	assert(ret == 1);
+  
+	fclose(fp);
+	return size;
+  }
+
+
+static int parse_args(int argc, char *argv[]) {
+	const struct option table[] = {
+	  {0          , 0                , NULL,  0 },
+	};
+	int o;
+	while ( (o = getopt_long(argc, argv, "-", table, NULL)) != -1) {
+	  switch (o) {
+		case 1: img_file = optarg; return 0;
+		default:
+		  printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+		  printf("\n");
+		  exit(0);
+	  }
+	}
+	return 0;
+  }
