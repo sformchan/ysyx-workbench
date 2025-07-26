@@ -4,7 +4,6 @@
 #include "verilated.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
-#include "memory.h"
 //#include "verilated_fst_c.h"
 
 
@@ -44,6 +43,7 @@ int main(int argc, char** argv)
 	//tfp->open("wave.fst");
 	top->rst = 1;
 	top->clk = 0;
+	top->pc = 0x80000000;
 	int inst = 0;
 	uint32_t count = 0;
     //printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
