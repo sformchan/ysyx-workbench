@@ -4,12 +4,16 @@
 #include "verilated.h"
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
+#include "memory.h"
 //#include "verilated_fst_c.h"
 
 
 int pmem_read(int raddr);
 void pmem_write(int waddr, int wdata, int wmask);
 void load_verilog_hex(const char *filename);
+long load_img();
+int parse_args(int argc, char *argv[]);
+
 
 int stop = 0;
 
@@ -24,7 +28,9 @@ int main(int argc, char** argv)
 	
 	//load_sum/mem
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	
+	load_img();
+	parse_args(argc, argv);
+
 	printf("\033[32mStimulation starting...\033[0m\n");
 
 
