@@ -9,7 +9,7 @@ module ysyx_25020047_PC(
 assign snpc = pc + 32'h4; 
 
 always @(posedge clk) begin
-    if(rst) pc <= 32'h00000000;
+    if(rst) pc <= 32'h80000000;
     else pc <= dnpc;
 end
 
