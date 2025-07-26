@@ -5,15 +5,16 @@
 #include "svdpi.h"
 #include "Vtop__Dpi.h"
 #include "utils.h"
+#include "memory.h"
 //#include "verilated_fst_c.h"
 
 
-int pmem_read(int raddr);
-void pmem_write(int waddr, int wdata, int wmask);
-void load_verilog_hex(const char *filename);
-long load_img();
-int parse_args(int argc, char *argv[]);
-extern char *img_file;
+// int pmem_read(int raddr);
+// void pmem_write(int waddr, int wdata, int wmask);
+// void load_verilog_hex(const char *filename);
+// long load_img();
+// int parse_args(int argc, char *argv[]);
+// extern char *img_file;
 
 int stop = 0;
 

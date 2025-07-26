@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <getopt.h>
 #include <unistd.h>
 
 
+
 //rom
-#define ysyx_25020047_ROM_SIZE 0x7ffffff
+#define ysyx_25020047_MEM_SIZE 0x7ffffff
 #define ysyx_25020047_INITADDR 0x80000000
 
 
@@ -28,14 +28,14 @@
 // addi x1 x1 2000
 // add x2 x1 x0  
 
-uint8_t rom[ysyx_25020047_ROM_SIZE];
+uint8_t rom[ysyx_25020047_MEM_SIZE];
 
 
 extern "C" int pmem_read(int raddr)
 {
     raddr &= ~(0x3u);
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
-    if(offset + 3 >= ysyx_25020047_ROM_SIZE)
+    if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
         printf("\033[31mError: read_address 0x%08x is out of MEM range.\033[0m\n", raddr);
         return 0xFFFFFFFF;
@@ -51,7 +51,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
     waddr &= ~(0x3u);
     uint32_t offset = waddr - ysyx_25020047_INITADDR;
-    if(offset + 3 >= ysyx_25020047_ROM_SIZE)
+    if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
         printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
         return;
@@ -98,7 +98,7 @@ void load_verilog_hex(const char *filename) {
             if (sscanf(p, "%x%n", &word, &chars_read) == 1) {
                 // Calculate byte address
                 unsigned int byte_addr = word_addr * 4;
-                if (byte_addr + 3 >= ysyx_25020047_ROM_SIZE) {
+                if (byte_addr + 3 >= ysyx_25020047_MEM_SIZE) {
                     fprintf(stderr, "Out of ROM bounds at addr 0x%x\n", byte_addr);
                     break;
                 }
