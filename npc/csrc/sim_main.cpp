@@ -13,7 +13,7 @@ void pmem_write(int waddr, int wdata, int wmask);
 void load_verilog_hex(const char *filename);
 long load_img();
 int parse_args(int argc, char *argv[]);
-
+extern char *img_file;
 
 int stop = 0;
 
@@ -24,12 +24,13 @@ void stop_stimulation()
 
 int main(int argc, char** argv)
 {
-	printf("welcome to \033[44;36mTPC\033[0m!\n");
+	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	
 	//load_sum/mem
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	load_img();
 	parse_args(argc, argv);
+	load_img();
+	
 
 	printf("\033[32mStimulation starting...\033[0m\n");
 
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
 			count++;
 			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 		}
-		if(count==100) break;
+		//if(count==100) break;
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 		

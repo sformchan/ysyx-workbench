@@ -34,12 +34,15 @@ $(BIN): $(VSRCS) $(CSRCS)
 
 all: default
 		
-
+IMG ?=
 run: $(BIN)
-	@$^
+	@$(BIN) $(IMG)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	
-	
+gdb: $(BIN)
+	@$(call git_commit, "sim RTL")
+	@gdb --args $(BIN) $(IMG)
+
 
 
 clean:

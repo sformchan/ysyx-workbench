@@ -128,8 +128,8 @@ void load_verilog_hex(const char *filename) {
 char *img_file = NULL;
  long load_img() {
 	if (img_file == NULL) {
-	  printf("No image is given.");
-	  return 4096; 
+	  perror("No image is given.\n");
+	  exit(1); 
 	}
   
 	FILE *fp = fopen(img_file, "rb");
@@ -141,7 +141,7 @@ char *img_file = NULL;
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
   
-	printf("The image is %s, size = %ld", img_file, size);
+	printf("The image is %s, size = %ld\n", img_file, size);
   
 	fseek(fp, 0, SEEK_SET);
 	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
@@ -153,19 +153,29 @@ char *img_file = NULL;
   }
 
 
- int parse_args(int argc, char *argv[]) {
-	const struct option table[] = {
-	  {0          , 0                , NULL,  0 },
-	};
-	int o;
-	while ( (o = getopt_long(argc, argv, "-", table, NULL)) != -1) {
-	  switch (o) {
-		case 1: img_file = optarg; return 0;
-		default:
-		  printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
-		  printf("\n");
-		  exit(0);
-	  }
+//  int parse_args(int argc, char *argv[]) {
+// 	const struct option table[] = {
+// 	  {0          , 0                , NULL,  0 },
+// 	};
+// 	int o;
+// 	while ( (o = getopt_long(argc, argv, "-", table, NULL)) != -1) {
+// 	  switch (o) {
+// 		case 1: img_file = optarg; return 0;
+// 		default:
+// 		  printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+// 		  printf("\n");
+// 		  exit(0);
+// 	  }
+// 	}
+// 	return 0;
+//   }
+
+
+int parse_args(int argc, char *argv[]) {
+	if (argc < 2) {
+	  printf("Usage: %s IMAGE\n", argv[1]);
+	  exit(1);
 	}
+	img_file = argv[1];
 	return 0;
   }
