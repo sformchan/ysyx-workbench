@@ -36,7 +36,7 @@ $(BIN): $(VSRCS) $(CSRCS)
 all: default
 		
 
-sim: $(BIN)
+run: $(BIN)
 	@$^
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	
