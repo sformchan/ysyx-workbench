@@ -60,7 +60,16 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
   #ifdef CONFIG_DTRACE
-  printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
+  if(strcmp(map->name, "keyboard") == 0)
+  {
+	int lastkey = 0;
+	if(ret != lastkey)
+	{
+		printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
+		lastkey = ret;
+	}
+  }
+	else printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
   #endif
   return ret;
 }
