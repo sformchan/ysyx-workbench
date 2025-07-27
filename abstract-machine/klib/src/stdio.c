@@ -145,6 +145,24 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           fmt++;
           break;
         }
+		case 'c': {
+			char ch = (char)va_arg(ap, int);  // promoted to int in variadic args
+			int width_padding = width > 1 ? width - 1 : 0;
+		  
+			if (!left_align) {
+			  for (int i = 0; i < width_padding; i++) *ptr++ = ' ';
+			}
+		  
+			*ptr++ = ch;
+		  
+			if (left_align) {
+			  for (int i = 0; i < width_padding; i++) *ptr++ = ' ';
+			}
+		  
+			fmt++;
+			break;
+		  }
+		  
         default: {
           // Unsupported specifier: print literally
           *ptr++ = '%';
