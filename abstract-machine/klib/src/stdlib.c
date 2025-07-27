@@ -35,13 +35,17 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
-#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
+// #if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
+// 	static uintptr_t addr = (uintptr_t)&_heap_start;
+// 	uintptr_t aligned_addr = (addr + 7) & ~0x7;
+// 	void *ret = (void *)aligned_addr;
+// 	addr = aligned_addr + size;
+//   //panic("Not implemented");
+// #endif
 	static uintptr_t addr = (uintptr_t)&_heap_start;
 	uintptr_t aligned_addr = (addr + 7) & ~0x7;
 	void *ret = (void *)aligned_addr;
 	addr = aligned_addr + size;
-  //panic("Not implemented");
-#endif
   return ret;
 }
 
