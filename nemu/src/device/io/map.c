@@ -69,7 +69,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 		lastkey = ret;
 	}
   }
-	printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
+	else printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
   #endif
   return ret;
 }
