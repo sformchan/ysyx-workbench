@@ -6,11 +6,15 @@ void __am_timer_init() {
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   uptime->us = 0;
-  uint32_t high = inl(RTC_ADDR + 4);
-  uint32_t low = inl(RTC_ADDR);
-  high = inl(RTC_ADDR + 4);
-  uint64_t result = (uint64_t)high << 32 | low;
-  uptime->us += result;
+  uint32_t high1, low, high2;
+  do {
+    high1 = inl(RTC_ADDR + 4);
+    low   = inl(RTC_ADDR);
+    high2 = inl(RTC_ADDR + 4);
+  } while (high1 != high2);  // 保证低位溢出时高位读到的是同一值
+
+  uint64_t result = ((uint64_t)high1 << 32) | low;
+  uptime->us = result;
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
