@@ -59,7 +59,9 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
+  #ifdef CONFIG_DTRACE
   printf("[DTRACE]" ANSI_FG_CYAN" READ FROM (%s)"ANSI_NONE" : %u\n" , map->name, ret);
+  #endif
   return ret;
 }
 
@@ -67,7 +69,9 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
+  #ifdef CONFIG_DTRACE
   printf("[DTRACE]" ANSI_FG_MAGENTA" WRITE  TO" ANSI_NONE " (%s) : %u\n" , map->name, data);
+  #endif
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
 }
