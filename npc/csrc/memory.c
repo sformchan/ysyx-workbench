@@ -44,7 +44,7 @@ extern "C" int pmem_read(int raddr)
            ((uint32_t)rom[offset + 3] << 24);
 }
 
-#define SERIAL_ADDR 0xa0003f8
+#define SERIAL_ADDR 0xa00003f8
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
