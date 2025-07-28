@@ -27,6 +27,16 @@ int printf(const char *fmt, ...) {
 	return len;
 }
 
+static int utoa(unsigned int num, char *buf, int base, int uppercase) {
+	const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
+	int len = 0;
+	do {
+	  buf[len++] = digits[num % base];
+	  num /= base;
+	} while (num > 0);
+	return len;
+  }
+  
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *ptr = out;
   while (*fmt) {
@@ -117,6 +127,104 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           fmt++;
           break;
         }
+		case 'u': {
+			unsigned int num = va_arg(ap, unsigned int);
+			char buf[32];
+			int len = utoa(num, buf, 10, 0);
+		  
+			int zeros_to_pad = (precision > len) ? precision - len : 0;
+			int width_padding = width - zeros_to_pad - len;
+			if (width_padding < 0) width_padding = 0;
+		  
+			if (precision >= 0) zero_pad = 0;
+		  
+			if (!left_align) {
+			  char pad_char = zero_pad ? '0' : ' ';
+			  for (int i = 0; i < width_padding; i++) *ptr++ = pad_char;
+			}
+		  
+			for (int i = 0; i < zeros_to_pad; i++) *ptr++ = '0';
+		  
+			while (len--) *ptr++ = buf[len];
+		  
+			if (left_align) {
+			  for (int i = 0; i < width_padding; i++) *ptr++ = ' ';
+			}
+		  
+			fmt++;
+			break;
+		  }
+		  case 'x':
+		  case 'X': {
+			unsigned int num = va_arg(ap, unsigned int);
+			char buf[32];
+			int uppercase = (*fmt == 'X');
+			int len = utoa(num, buf, 16, uppercase);
+		  
+			int zeros_to_pad = (precision > len) ? precision - len : 0;
+			int width_padding = width - zeros_to_pad - len;
+			if (width_padding < 0) width_padding = 0;
+		  
+			if (precision >= 0) zero_pad = 0;
+		  
+			if (!left_align) {
+			  char pad_char = zero_pad ? '0' : ' ';
+			  for (int i = 0; i < width_padding; i++) *ptr++ = pad_char;
+			}
+		  
+			for (int i = 0; i < zeros_to_pad; i++) *ptr++ = '0';
+		  
+			while (len--) *ptr++ = buf[len];
+		  
+			if (left_align) {
+			  for (int i = 0; i < width_padding; i++) *ptr++ = ' ';
+			}
+		  
+			fmt++;
+			break;
+		  }
+		  case 'o': {
+			unsigned int num = va_arg(ap, unsigned int);
+			char buf[32];
+			int len = utoa(num,  buf, 8, 0);
+		  
+			int zeros_to_pad = (precision > len) ? precision - len : 0;
+			int width_padding = width - zeros_to_pad - len;
+			if (width_padding < 0) width_padding = 0;
+		  
+			if (precision >= 0) zero_pad = 0;
+		  
+			if (!left_align) {
+			  char pad_char = zero_pad ? '0' : ' ';
+			  for (int i = 0; i < width_padding; i++) *ptr++ = pad_char;
+			}
+		  
+			for (int i = 0; i < zeros_to_pad; i++) *ptr++ = '0';
+		  
+			while (len--) *ptr++ = buf[len];
+		  
+			if (left_align) {
+			  for (int i = 0; i < width_padding; i++) *ptr++ = ' ';
+			}
+		  
+			fmt++;
+			break;
+		  }
+		  case 'p': {
+			uintptr_t ptrval = (uintptr_t)va_arg(ap, void *);
+			char buf[32];
+			int len = utoa(ptrval, buf, 16, 0);
+		  
+			// "0x" prefix
+			*ptr++ = '0';
+			*ptr++ = 'x';
+		  
+			while (len--) *ptr++ = buf[len];
+		  
+			fmt++;
+			break;
+		  }
+				
         case 's': {
           const char *str = va_arg(ap, const char *);
           int len = 0;
