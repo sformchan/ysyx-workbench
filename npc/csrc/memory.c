@@ -9,7 +9,7 @@
 
 //rom
 #define ysyx_25020047_MEM_SIZE 0x7ffffff
-#define ysyx_25020047_INITADDR 0x80000000
+#define ysyx_25020047_INITADDR 0x00000000
 
 
 // uint8_t rom[ysyx_25020047_ROM_SIZE] = {

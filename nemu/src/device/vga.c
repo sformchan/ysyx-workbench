@@ -72,9 +72,9 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
+#ifdef CONFIG_VGA_SHOW_SCREEN
 #ifdef CONFIG_TARGET_AM
-	update_screen();
-#endif
+
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
 }
