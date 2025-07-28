@@ -1,8 +1,9 @@
 #include <am.h>
 #include <klib-macros.h>
+#include "../riscv.h"
 
 # define npc_trap(code) asm volatile("mv a0, %0; ebreak" : :"r"(code))
-static inline void outb(uintptr_t addr, uint8_t  data) { *(volatile uint8_t  *)addr = data; }
+//static inline void outb(uintptr_t addr, uint8_t  data) { *(volatile uint8_t  *)addr = data; }
 
 extern char _heap_start;
 int main(const char *args);
