@@ -48,7 +48,7 @@ extern "C" int pmem_read(int raddr)
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
-	if(waddr >= SERIAL_ADDR && waddr < SERIAL_ADDR + 8) putc((char)wdata, stderr);
+	//if(waddr >= SERIAL_ADDR && waddr < SERIAL_ADDR + 8) putc((char)wdata, stderr);
     waddr &= ~(0x3u);
     uint32_t offset = waddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
