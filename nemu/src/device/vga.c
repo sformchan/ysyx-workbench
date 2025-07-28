@@ -72,8 +72,15 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-#ifdef CONFIG_VGA_SHOW_SCREEN
-#ifdef CONFIG_TARGET_AM
+	#ifdef CONFIG_VGA_SHOW_SCREEN
+	#ifndef CONFIG_TARGET_AM
+	  if (vgactl_port_base[1]) {
+		update_screen();             // 刷新 SDL 屏幕
+		vgactl_port_base[1] = 0;     // 清除 sync 标志位
+	  }
+	#endif
+	#endif
+
 
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
