@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	
 	//load_sum/mem
-	load_verilog_hex("/home/leonard/Desktop/sum.hex");
+	load_verilog_hex("/home/leonard/Desktop/mem.hex");
 	// parse_args(argc, argv);
 	// load_img();
 	
