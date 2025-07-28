@@ -1,3 +1,4 @@
+#include "memory.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -5,12 +6,9 @@
 #include <assert.h>
 #include <unistd.h>
 
-
-
 //rom
-#define ysyx_25020047_MEM_SIZE 0x7ffffff
-#define ysyx_25020047_INITADDR 0x00000000
 
+uint8_t rom[ysyx_25020047_MEM_SIZE];
 
 // uint8_t rom[ysyx_25020047_ROM_SIZE] = {
 //     0xb7, 0x00, 0x24, 0x1e,
@@ -28,7 +26,7 @@
 // addi x1 x1 2000
 // add x2 x1 x0  
 
-uint8_t rom[ysyx_25020047_MEM_SIZE];
+
 
 
 extern "C" int pmem_read(int raddr)
