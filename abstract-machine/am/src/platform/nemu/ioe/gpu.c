@@ -15,14 +15,22 @@ void __am_gpu_init() {
 }
 
 
+// void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
+// 	uint32_t rawdata = inl(RTC_ADDR);
+// 	uint32_t width = rawdata >> 16;
+// 	uint32_t height = rawdata & 0xffff;
+//   *cfg = (AM_GPU_CONFIG_T) {
+//     .present = true, .has_accel = false,
+//     .width = width, .height = height,
+//     .vmemsz = width * height * sizeof(uint32_t)
+//   };
+// }
+
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-	uint32_t rawdata = inl(RTC_ADDR);
-	uint32_t width = rawdata >> 16;
-	uint32_t height = rawdata & 0xffff;
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = width, .height = height,
-    .vmemsz = width * height * sizeof(uint32_t)
+    .width = 400, .height = 300,
+    .vmemsz = 400 * 300 * sizeof(uint32_t)
   };
 }
 
