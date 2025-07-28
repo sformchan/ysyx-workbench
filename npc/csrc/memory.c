@@ -35,9 +35,14 @@ extern "C" int pmem_read(int raddr)
 {
 	if(raddr == RTC_ADDR) 
 	{
-		uint32_t uptime = get_uptime_32bit();
+		uint64_t uptime = get_uptime_64bit();
 		//printf("%lu\n", uptime);
-		return uptime; 
+		return (uint32_t)(uptime & 0xFFFFFFFF); 
+	}
+	if(raddr == RTC_ADDR + 4)
+	{
+		uint64_t uptime = get_uptime_64bit();
+		return (uint32_t)(uptime >> 32);
 	}
 	
     raddr &= ~(0x3u);

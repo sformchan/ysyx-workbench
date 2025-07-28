@@ -10,7 +10,7 @@
 static struct timeval boot_time;
 static int initialized = 0;
 
-uint32_t get_uptime_32bit() {
+uint64_t get_uptime_64bit() {
   struct timeval now;
   gettimeofday(&now, NULL);
 
@@ -23,7 +23,7 @@ uint32_t get_uptime_32bit() {
   uint64_t boot_us = boot_time.tv_sec * 1000000ull + boot_time.tv_usec;
   uint64_t uptime_us = now_us - boot_us;
 
-  return (uint32_t)uptime_us;  // 低 32 位
+  return (uint64_t)uptime_us;  // 低 32 位
 }
 
 #endif
