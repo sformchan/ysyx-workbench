@@ -6,8 +6,10 @@
 #include <assert.h>
 #include <unistd.h>
 #include "device.h"
-//rom
 
+
+
+/////////MEM//////////
 uint8_t rom[ysyx_25020047_MEM_SIZE];
 
 // uint8_t rom[ysyx_25020047_ROM_SIZE] = {
@@ -28,9 +30,16 @@ uint8_t rom[ysyx_25020047_MEM_SIZE];
 
 
 
-
+/////////MEM_VISIT/////////
 extern "C" int pmem_read(int raddr)
 {
+	if(raddr == RTC_ADDR) 
+	{
+		uint32_t uptime = get_uptime_32bit();
+		//printf("%lu\n", uptime);
+		return uptime; 
+	}
+	
     raddr &= ~(0x3u);
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)

@@ -16,9 +16,9 @@ Area heap = RANGE(&_heap_start, PMEM_END);
 __attribute__((used)) static const char mainargs[MAINARGS_MAX_LEN] = TOSTRING(MAINARGS_PLACEHOLDER); // defined in CFLAGS
 
 
-
+#define SERIAL_ADDR 0xa00003f8
 void putch(char ch) {
-	outb(0xa00003f8, ch);
+	outb(SERIAL_ADDR, ch);
 }
 
 void halt(int code) {
