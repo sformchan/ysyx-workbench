@@ -2,6 +2,7 @@
 #include <klib-macros.h>
 
 # define npc_trap(code) asm volatile("mv a0, %0; ebreak" : :"r"(code))
+static inline void outb(uintptr_t addr, uint8_t  data) { *(volatile uint8_t  *)addr = data; }
 
 extern char _heap_start;
 int main(const char *args);
@@ -16,7 +17,7 @@ __attribute__((used)) static const char mainargs[MAINARGS_MAX_LEN] = TOSTRING(MA
 
 
 void putch(char ch) {
-	
+	outb(0xa00003f8, ch);
 }
 
 void halt(int code) {
