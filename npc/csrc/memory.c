@@ -5,7 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
-
+#include "device.h"
 //rom
 
 uint8_t rom[ysyx_25020047_MEM_SIZE];
@@ -44,7 +44,7 @@ extern "C" int pmem_read(int raddr)
            ((uint32_t)rom[offset + 3] << 24);
 }
 
-#define SERIAL_ADDR 0xa00003f8
+
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
