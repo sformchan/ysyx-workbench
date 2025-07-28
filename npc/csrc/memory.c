@@ -44,12 +44,16 @@ extern "C" int pmem_read(int raddr)
            ((uint32_t)rom[offset + 3] << 24);
 }
 
-#define SERIAL_ADDR 0xa00003f8
+#define SERIAL_ADDR 0xa0003f8
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
-	//if(waddr >= SERIAL_ADDR && waddr < SERIAL_ADDR + 8) 
-	printf("%08x\n", waddr);
+	if(waddr >= SERIAL_ADDR && waddr < SERIAL_ADDR + 8)
+	{
+		putc(wdata, stderr);
+		return;
+	}
+	//printf("%08x\n", waddr);
     waddr &= ~(0x3u);
     uint32_t offset = waddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
