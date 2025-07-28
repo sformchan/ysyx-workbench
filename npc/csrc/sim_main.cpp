@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	
 	//load_sum/mem
-	load_verilog_hex("/home/leonard/Desktop/mem.hex");
+	load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	// parse_args(argc, argv);
 	// load_img();
 	
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	//tfp->open("wave.fst");
 	top->rst = 1;
 	top->clk = 0;
-	top->pc = 0x00000000;
+	top->pc = ysyx_25020047_INITADDR;
 	int inst = 0;
 	uint32_t count = 0;
     //printf("|pc          |  inst        |  gpr0        |  gpr1        |  gpr2        |\n");
