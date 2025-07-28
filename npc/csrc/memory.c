@@ -62,10 +62,14 @@ extern "C" int pmem_read(int raddr)
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
+	// if (waddr == SERIAL_ADDR) {
+	// 	char ch = (char)(wdata & 0xFF);
+	// 	if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
+	// 	fputc(ch, stderr);
+	// 	return;
+	// }
 	if (waddr == SERIAL_ADDR) {
-		char ch = (char)(wdata & 0xFF);
-		if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
-		fputc(ch, stderr);
+		putchar(wdata & 0xFF);  // 或 putc(wdata & 0xFF, stderr);
 		return;
 	}
 	//printf("%08x\n", waddr);
