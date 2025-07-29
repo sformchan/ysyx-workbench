@@ -12,6 +12,8 @@ long load_img();
 int parse_args(int argc, char *argv[]);
 extern char *img_file;
 
+
+//#define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_INITADDR 0x80000000
 

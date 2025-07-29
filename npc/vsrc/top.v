@@ -60,6 +60,7 @@ ysyx_25020047_EXU u2(
 
 wire [31:0] memdata;
 ysyx_25020047_LSU u3(
+	.inst(inst),
     .inst_type(inst_type),
     .raddr(result),
     .waddr(result),

@@ -1,4 +1,5 @@
 module ysyx_25020047_LSU (
+	input [31:0] inst,
     input [8:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
@@ -11,7 +12,7 @@ module ysyx_25020047_LSU (
 reg [31:0] ram_data;
 always @(*) begin
     if(read) begin
-		$display("raddr: 0x%08x", raddr);
+		//$display("raddr: 0x%08x", raddr);
         ram_data = pmem_read(raddr);
     end
     else ram_data = 0;
@@ -76,9 +77,12 @@ end
 
 always @(*) begin
     if(write) begin
-        if(inst_type == 9'b010000000) pmem_write(waddr, wdata, 32'hF);
+        if(inst_type == 9'b010000000) begin
+			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
+			pmem_write(waddr, wdata, 32'hF);
+		end
         else if(inst_type == 9'b100000000) begin
-             $display("waddr 0x%08x wdata1 0x%08x wmask 0x%08x", waddr, wdata1, wmask);
+            //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
             pmem_write(waddr, wdata1, wmask);
         end
     end

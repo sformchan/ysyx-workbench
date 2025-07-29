@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <unistd.h>
 #include "device.h"
-
+#include "utils.h"
 
 
 /////////MEM//////////
@@ -27,6 +27,7 @@ uint8_t rom[ysyx_25020047_MEM_SIZE];
 // lw x2 0(x0)
 // addi x1 x1 2000
 // add x2 x1 x0  
+
 
 
 
@@ -62,22 +63,25 @@ extern "C" int pmem_read(int raddr)
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
-	if (waddr == SERIAL_ADDR) {
+
+	
+	if ((uint32_t)waddr == SERIAL_ADDR) {
 		char ch = (char)(wdata & 0xFF);
 		if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
 		fputc(ch, stderr);
 		return;
 	}
-	//printf("%08x\n", waddr);
-	//uint32_t waddr1 = waddr & ~(0x3u);
-    waddr &= ~(0x3u);
-    uint32_t offset = waddr - ysyx_25020047_INITADDR;
+	//printf(ANSI_FG_BLUE "%08x\n" ANSI_NONE, waddr);
+	uint32_t waddr1 = (uint32_t)waddr & ~(0x3u);
+    //waddr &= ~(0x3u);
+    uint32_t offset = waddr1 - ysyx_25020047_INITADDR;
 	//printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
         printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
 		printf("\033[31mError: origin address: 0x%08x.\033[0m\n", waddr);
 		printf("\033[31mError: offset: 0x%08x\033[0m\n", offset);
+		exit(1);
         return;
     }
 	//wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
