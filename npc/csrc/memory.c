@@ -9,13 +9,6 @@
 
 
 
-#include <execinfo.h>
-void print_backtrace() {
-    void *buffer[10];
-    int nptrs = backtrace(buffer, 10);
-    backtrace_symbols_fd(buffer, nptrs, 2);  // 2 是 stderr
-}
-
 /////////MEM//////////
 uint8_t rom[ysyx_25020047_MEM_SIZE];
 
@@ -69,29 +62,24 @@ extern "C" int pmem_read(int raddr)
 
 extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
-	// if (waddr == SERIAL_ADDR) {
-	// 	char ch = (char)(wdata & 0xFF);
-	// 	if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
-	// 	fputc(ch, stderr);
-	// 	return;
-	// }
 	if (waddr == SERIAL_ADDR) {
-		putchar(wdata & 0xFF);  // 或 putc(wdata & 0xFF, stderr);
+		char ch = (char)(wdata & 0xFF);
+		if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
+		fputc(ch, stderr);
 		return;
 	}
 	//printf("%08x\n", waddr);
-	uint32_t waddr1 = waddr & ~(0x3u);
-    //waddr &= ~(0x3u);
-    uint32_t offset = waddr1 - ysyx_25020047_INITADDR;
-	printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
-    // if(offset + 3 >= ysyx_25020047_MEM_SIZE)
-    // {
-    //     printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
-	// 	printf("\033[31mError: origin address: 0x%08x.\033[0m\n", waddr);
-	// 	printf("\033[31mError: offset: 0x%08x\033[0m\n", offset);
-	// 	print_backtrace();
-    //     return;
-    // }
+	//uint32_t waddr1 = waddr & ~(0x3u);
+    waddr &= ~(0x3u);
+    uint32_t offset = waddr - ysyx_25020047_INITADDR;
+	//printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
+    if(offset + 3 >= ysyx_25020047_MEM_SIZE)
+    {
+        printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
+		printf("\033[31mError: origin address: 0x%08x.\033[0m\n", waddr);
+		printf("\033[31mError: offset: 0x%08x\033[0m\n", offset);
+        return;
+    }
 	//wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
     if (wmask & 0x1) rom[offset + 0] = (wdata >> 0) & 0xFF;
     if (wmask & 0x2) rom[offset + 1] = (wdata >> 8) & 0xFF;
