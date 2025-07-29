@@ -4,7 +4,7 @@ TOPNAME = top
 
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -g -MMD --build -cc \
+VERILATOR_CFLAGS += -MMD --build -cc \
 				-O2 --x-assign fast --x-initial fast --noassert
 
 BUILD_DIR = ./build
@@ -23,7 +23,7 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 
 
 # rules for verilator
-CXXFLAGS += -g -DTOP_NAME="\"V$(TOPNAME)\""
+CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 
 $(BIN): $(VSRCS) $(CSRCS)
 	@rm -rf $(OBJ_DIR)
