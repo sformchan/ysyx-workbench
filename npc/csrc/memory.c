@@ -46,7 +46,7 @@ extern "C" int pmem_read(int raddr)
 	}
 	
     raddr &= ~(0x3u);
-    int32_t offset = raddr - ysyx_25020047_INITADDR;
+    uint32_t offset = raddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
         printf("\033[31mError: read_address 0x%08x is out of MEM range.\033[0m\n", raddr);
@@ -71,7 +71,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 	//printf("%08x\n", waddr);
 	//uint32_t waddr1 = waddr & ~(0x3u);
     waddr &= ~(0x3u);
-    int32_t offset = waddr - ysyx_25020047_INITADDR;
+    uint32_t offset = waddr - ysyx_25020047_INITADDR;
 	//printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
