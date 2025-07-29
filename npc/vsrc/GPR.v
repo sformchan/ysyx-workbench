@@ -20,7 +20,7 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   //test 
   assign gpr0 = rf[5'b00000]; // x0
   assign gpr1 = rf[5'b00001]; // x1
-  assign gpr2 = rf[5'b00010]; // x2
+  assign gpr2 = rf[5'b01111]; // x2
 
   
   always @(posedge clk) begin
