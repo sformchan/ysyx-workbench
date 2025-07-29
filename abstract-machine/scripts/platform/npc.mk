@@ -29,6 +29,9 @@ image: image-dep
 run: insert-arg
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=$(IMAGE).bin
 
+# run: insert-arg
+# 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=/home/leonard/ysyx-workbench/am-kernels/kernels/demo/build/demo-riscv32-nemu.bin
+
 gdb: insert-arg
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) gdb IMG=$(IMAGE).bin
 
