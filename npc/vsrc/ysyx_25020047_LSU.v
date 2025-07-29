@@ -22,18 +22,43 @@ reg [31:0] wdata1;
 wire [1:0] store_offset;
 assign store_offset = waddr[1:0];
 reg [31:0] wmask;
+// always @(*) begin
+//     case(store_offset)
+//         2'b00: begin
+//             wdata1 = wdata;
+//             wmask = 32'h1;
+//         end
+//         2'b01: begin
+//             wdata1 = {wdata[23:0], 8'b0};
+//             wmask = 32'h2;
+//         end
+//         2'b10: begin
+//             wdata1 = {wdata[15:0], 16'b0};
+//             wmask = 32'h4;
+//         end
+//         2'b11: begin
+//             wdata1 = {wdata[7:0], 24'b0};
+//             wmask = 32'h8;
+//         end
+//         default: begin
+//             wdata1 = wdata;
+//             wmask = 32'h0;
+//         end
+//     endcase
+// end
+
 always @(*) begin
     case(store_offset)
         2'b00: begin
-            wdata1 = wdata;
+            wdata1 = {24'b0, wdata[7:0]};
             wmask = 32'h1;
         end
         2'b01: begin
-            wdata1 = {wdata[23:0], 8'b0};
+            wdata1 = {16'b0, wdata[7:0], 8'b0};
             wmask = 32'h2;
         end
         2'b10: begin
-            wdata1 = {wdata[15:0], 16'b0};
+            wdata1 = {8'b0, wdata[7:0], 16'b0};
             wmask = 32'h4;
         end
         2'b11: begin
@@ -41,11 +66,12 @@ always @(*) begin
             wmask = 32'h8;
         end
         default: begin
-            wdata1 = wdata;
+            wdata1 = 32'b0;
             wmask = 32'h0;
         end
     endcase
 end
+
 
 always @(*) begin
     if(write) begin
