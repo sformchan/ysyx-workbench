@@ -53,7 +53,7 @@ extern "C" void run_npc(uint64_t step)
 			break;
 		case NPC_END: 
 			printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_END.\n" ANSI_NONE);
-			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN" HIT GOOD TRAP at pc 0x%08x"ANSI_NONE "\n" , top->pc);
+			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN" HIT GOOD TRAP "ANSI_NONE"at pc 0x%08x\n" , top->pc);
 			break;
 		
 	// else
