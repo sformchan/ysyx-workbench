@@ -8,8 +8,6 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 #include "memory.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <assert.h>
 #include "utils.h"
 
