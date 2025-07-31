@@ -17,7 +17,7 @@ extern "C" void execute()
 		if(!top->clk)
 		{
 			count++;
-			//printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
+			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
 		}
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
@@ -40,9 +40,11 @@ extern "C" void run_npc(uint64_t step)
 		default: npc_state = NPC_RUNNING;
 	  }
 
+	printf("|pc          |  inst        |  cycle      |\n");
+	
 	for(; step > 0; step --)
 	{
-		//printf("|pc          |  inst        |  cycle      |\n");
+		
 		execute();
 		if(npc_state != NPC_RUNNING) break;
 	}
