@@ -25,7 +25,14 @@ image: image-dep
 	@echo + OBJCOPY "->" $(IMAGE_REL).bin
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
+#@echo "TODO: add command here to run simulation"
 run: insert-arg
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run  IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=$(IMAGE).bin
+
+# run: insert-arg
+# 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=/home/leonard/ysyx-workbench/am-kernels/kernels/demo/build/demo-riscv32-nemu.bin
+
+gdb: insert-arg
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) gdb IMG=$(IMAGE).bin
 
 .PHONY: insert-arg
