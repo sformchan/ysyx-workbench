@@ -27,22 +27,22 @@ char *readline_(const char *prompt) {
     char ch;
 
     if (prompt)
-        write(STDOUT_FILENO, prompt, strlen(prompt));
+		(void)write(STDOUT_FILENO, prompt, strlen(prompt));
 
     set_noncanonical_mode(STDIN_FILENO, &oldt);
 
     while (read(STDIN_FILENO, &ch, 1) == 1) {
         if (ch == '\n' || ch == '\r') {
-            write(STDOUT_FILENO, "\n", 1);
+            (void)write(STDOUT_FILENO, "\n", 1);
             break;
         } else if (ch == 127 || ch == '\b') { // 退格处理
             if (pos > 0) {
                 pos--;
-                write(STDOUT_FILENO, "\b \b", 3);
+                (void)write(STDOUT_FILENO, "\b \b", 3);
             }
         } else if (pos < MAX_LINE_LEN - 1 && ch >= 32 && ch <= 126) {
             buf[pos++] = ch;
-            write(STDOUT_FILENO, &ch, 1);
+            (void)write(STDOUT_FILENO, &ch, 1);
         }
     }
 
