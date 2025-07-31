@@ -34,6 +34,21 @@ $(BIN): $(VSRCS) $(CSRCS)
 		--Mdir $(OBJ_DIR) --exe $(CSRCS) \
 		-o $(abspath $(BIN))
 
+
+# LDFLAGS = -lreadline
+
+# $(BIN): $(VSRCS) $(CSRCS)
+# 	@rm -rf $(OBJ_DIR)
+# 	$(VERILATOR) $(VERILATOR_CFLAGS) \
+# 		--top-module $(TOPNAME) \
+# 		$(VSRCS) \
+# 		$(addprefix -CFLAGS , $(CXXFLAGS)) \
+# 		--exe $(CSRCS) \
+# 		-CFLAGS "$(LDFLAGS)" \
+# 		--Mdir $(OBJ_DIR) \
+# 		-o $(abspath $(BIN))
+
+
 all: default
 		
 IMG ?=

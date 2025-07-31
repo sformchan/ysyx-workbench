@@ -48,7 +48,7 @@ extern "C" void run_npc(uint64_t step)
 	}
 
 	switch (npc_state) {
-		case NPC_RUNNING: npc_state = NPC_STOP; printf("NPC_STOP\n");
+		case NPC_RUNNING: npc_state = NPC_STOP; //printf("NPC_STOP\n");
 		case NPC_END: 
 		{
 			printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_END.\n" ANSI_NONE);

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "vinit.h"
 
+
 char *readline(const char *prompt);
 
 static char* rl_gets() {
