@@ -3,7 +3,7 @@
 
 
 
-
+#include <stdint.h>
 
 extern "C" int pmem_read(int raddr);
 extern "C" void pmem_write(int waddr, int wdata, int wmask);
@@ -17,6 +17,6 @@ extern char *img_file;
 #define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_INITADDR 0x80000000
 
-
+extern uint8_t rom[];
 
 #endif

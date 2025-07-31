@@ -154,10 +154,6 @@ void load_verilog_hex(const char *filename) {
     printf("MEM loaded successfully.\n");
 }
 
-
-//load bin file
-
-
 #define ysyx_25020047_RESET_VECTOR 0x80000000
 
 char *img_file = NULL;
@@ -176,7 +172,7 @@ char *img_file = NULL;
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
   
-	printf("The image is %s, size = %ld\n", img_file, size);
+	printf(ANSI_FG_BLUE "The image is %s, size = %ld\n" ANSI_NONE, img_file, size);
   
 	fseek(fp, 0, SEEK_SET);
 	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
@@ -206,7 +202,8 @@ char *img_file = NULL;
 //   }
 
 
-int parse_args(int argc, char *argv[]) {
+int parse_args(int argc, char *argv[]) 
+{
 	if (argc < 2) {
 	  printf("Usage: %s IMAGE\n", argv[1]);
 	  exit(1);

@@ -12,14 +12,8 @@
 
 int main(int argc, char** argv)
 {
-	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	
-	//load_sum/mem
-	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	parse_args(argc, argv);
-	load_img();
-
-	printf("\033[32mStimulation starting...\033[0m\n");
+	init_monitor(argc, argv);
 
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);
