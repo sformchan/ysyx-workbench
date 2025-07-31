@@ -13,7 +13,7 @@
 int main(int argc, char** argv)
 {
 	
-	init_monitor(argc, argv);
+	init_npc(argc, argv);
 
 	VerilatedContext* contextp = new VerilatedContext;
 	contextp->commandArgs(argc, argv);

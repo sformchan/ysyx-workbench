@@ -18,7 +18,7 @@ extern int npc_state = NPC_STOP;
 // void end_stimulation();
 
 // void init_monitor(int argc, char *argv[]);
-void init_monitor(int argc, char *argv[])
+void init_npc(int argc, char *argv[])
 {
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	
@@ -31,7 +31,7 @@ void init_monitor(int argc, char *argv[])
 }
 
 
-void end_stimulation()
+void end_npc()
 {
 	npc_state = NPC_END;
 }
