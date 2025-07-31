@@ -30,8 +30,6 @@ void init_monitor(int argc, char *argv[])
 	load_img();
 
 	printf("\033[32mStimulation starting...\033[0m\n");
-	
-	npc_state = NPC_STOP;
 }
 
 
