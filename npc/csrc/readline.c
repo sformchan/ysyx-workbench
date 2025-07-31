@@ -20,7 +20,7 @@ static void restore_terminal(int fd, struct termios *old_tios) {
     tcsetattr(fd, TCSANOW, old_tios);
 }
 
-char *readline(const char *prompt) {
+char *readline_(const char *prompt) {
     struct termios oldt;
     char buf[MAX_LINE_LEN];
     int pos = 0;

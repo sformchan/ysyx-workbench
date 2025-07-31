@@ -5,7 +5,7 @@
 #include "vinit.h"
 
 
-char *readline(const char *prompt);
+char *readline_(const char *prompt);
 
 static char* rl_gets() {
 	static char *line_read = NULL;
@@ -15,7 +15,7 @@ static char* rl_gets() {
 	  line_read = NULL;
 	}
   
-	line_read = readline("(npc) ");
+	line_read = readline_("(npc) ");
   
 	// if (line_read && *line_read) {
 	//   add_history(line_read);
