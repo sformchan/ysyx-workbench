@@ -210,6 +210,32 @@ def_logic(or)
 def_logic(xor)
 
 
+//csf added
+// .macro auipc rd, imm
+//   SET_DEBUG_LABEL(auipc)
+
+//   .if \rd == tp || \rd == sp || \rd == gp
+//     .abort
+//   .endif
+
+//   # 用 la + jalr 获取 PC 到 tp
+//   la tp, auipc_\@_getpc
+//   jalr tp, 0(tp)       # 跳转到自己，tp = PC+4
+
+// auipc_\@_getpc:
+
+//   lui \rd, \imm
+//   add \rd, \rd, tp
+// .endm
+
+//csf added
+
+
+
+
+
+
+
 .macro check_8bit_same table, rd, boffset  # rd == 0 if same
   lbu \rd, SP_VAR_BYTE(VAR_A, \boffset)
   add tp, \table, \rd

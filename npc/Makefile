@@ -1,9 +1,11 @@
 TOPNAME = top
 
 
+
+
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc \
-				-O3 --x-assign fast --x-initial fast --noassert
+				-O2 --x-assign fast --x-initial fast --noassert
 
 BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
@@ -21,7 +23,6 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 
 
 # rules for verilator
-
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 
 $(BIN): $(VSRCS) $(CSRCS)
@@ -35,12 +36,15 @@ $(BIN): $(VSRCS) $(CSRCS)
 
 all: default
 		
-
-sim: $(BIN)
-	@$^
+IMG ?=
+run: $(BIN)
+	@$(BIN) $(IMG)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	
-	
+gdb: $(BIN)
+	@$(call git_commit, "sim RTL")
+	@gdb --args $(BIN) $(IMG)
+
 
 
 clean:

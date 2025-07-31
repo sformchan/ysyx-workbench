@@ -6,6 +6,14 @@ CC = minirv-gcc
 AS = minirv-gcc
 CXX = minirv-g++
 
+# # 改用riscv64-linux-gnu-工具链
+# CROSS := riscv64-linux-gnu-
+
+# CC  := $(CROSS)gcc
+# AS  := $(CROSS)gcc
+# CXX := $(CROSS)g++
+
+
 COMMON_CFLAGS += -march=rv32e_zicsr -mabi=ilp32e  # overwrite
 LDFLAGS       += -melf32lriscv                    # overwrite
 
