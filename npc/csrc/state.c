@@ -8,6 +8,7 @@ extern "C" void execute()
 {
 	for(int i = 0; i < 2; i++)
 	{
+		inst = pmem_read(top->pc);
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
 		top->eval();
 		// if(!top->clk)
@@ -26,7 +27,7 @@ extern "C" void execute()
 
 extern "C" void run_npc(uint64_t step)
 {
-	inst = pmem_read(top->pc);
+	
 		if(inst == 0xFFFFFFFF)
 		{
 			perror(ANSI_FG_RED"ERROR READING\n" ANSI_NONE);
@@ -41,7 +42,7 @@ extern "C" void run_npc(uint64_t step)
 	  }
 
 	printf("|pc          |  inst        |  cycle      |\n");
-	
+
 	for(; step > 0; step --)
 	{
 		
