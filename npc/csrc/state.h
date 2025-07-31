@@ -11,5 +11,4 @@ void end_stimulation()
 	npc_state = NPC_END;
 }
 
-
 #endif

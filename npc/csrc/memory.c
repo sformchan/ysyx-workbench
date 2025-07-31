@@ -213,4 +213,4 @@ int parse_args(int argc, char *argv[]) {
 	}
 	img_file = argv[1];
 	return 0;
-  }
+}
