@@ -12,15 +12,15 @@
 /////////MEM//////////
 uint8_t rom[ysyx_25020047_MEM_SIZE];
 
-// uint8_t rom[ysyx_25020047_ROM_SIZE] = {
-//     0xb7, 0x00, 0x24, 0x1e,
-//     0x03, 0x21, 0x30, 0x00,
-//     0x23, 0x00, 0x10, 0x00,
-//     0x03, 0x21, 0x00, 0x00,
-//     0x93, 0x80, 0x00, 0x7d,
-//     0x33, 0x81, 0x00, 0x00,
-//     0x73, 0x00, 0x10, 0x00 //ebreak
-// };
+uint8_t img[24] = {
+    0xb7, 0x00, 0xf4, 0x01,
+    0x93, 0x80, 0x00, 0x7d,
+    0x33, 0x81, 0x00, 0x00,
+    0xb3, 0x06, 0xf7, 0x00,
+    0x33, 0x81, 0x00, 0x00,
+    0x73, 0x00, 0x10, 0x00 //ebreak
+};
+
 // lui x1 123456
 // lw x2 3(x0)
 // sb x1 0(x0)
@@ -158,9 +158,11 @@ void load_verilog_hex(const char *filename) {
 
 char *img_file = NULL;
  long load_img() {
+	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
 	if (img_file == NULL) {
-	  perror("No image is given.\n");
-	  exit(1); 
+	  printf(ANSI_FG_BLUE "No image is given. Use the built-in image.\n" ANSI_NONE);
+	  memcpy(&rom[offset], img, 24);
+	  return 24; 
 	}
   
 	FILE *fp = fopen(img_file, "rb");
@@ -173,9 +175,7 @@ char *img_file = NULL;
 	long size = ftell(fp);
   
 	printf(ANSI_FG_BLUE "The image is %s, size = %ld\n" ANSI_NONE, img_file, size);
-  
 	fseek(fp, 0, SEEK_SET);
-	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
 	int ret = fread(&rom[offset], size, 1, fp);
 	assert(ret == 1);
   
@@ -204,10 +204,10 @@ char *img_file = NULL;
 
 int parse_args(int argc, char *argv[]) 
 {
-	if (argc < 2) {
-	  printf("Usage: %s IMAGE\n", argv[1]);
-	  exit(1);
-	}
+	// if (argc < 2) {
+	//   printf("Usage: %s IMAGE\n", argv[1]);
+	//   exit(1);
+	// }
 	img_file = argv[1];
 	return 0;
 }
