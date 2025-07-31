@@ -34,16 +34,18 @@ uint8_t rom[ysyx_25020047_MEM_SIZE];
 /////////MEM_VISIT/////////
 extern "C" int pmem_read(int raddr)
 {
+	uint32_t low = 0;
 	if(raddr == RTC_ADDR) 
 	{
 		uint64_t uptime = get_uptime_64bit();
 		//printf("%lu\n", uptime);
+		low = uptime >> 32;
 		return (uint32_t)(uptime & 0xFFFFFFFF); 
 	}
 	if(raddr == RTC_ADDR + 4)
 	{
-		uint64_t uptime = get_uptime_64bit();
-		return (uint32_t)(uptime >> 32);
+		uint32_t uptime = low;
+		return uptime;
 	}
 	
     raddr &= ~(0x3u);
@@ -61,7 +63,7 @@ extern "C" int pmem_read(int raddr)
 
 
 
-extern "C" void pmem_write(int waddr, int wdata, int wmask, int inst, int pc)
+extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
 
 	
@@ -79,9 +81,9 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask, int inst, int pc)
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
 		printf("\n");
-		printf("\033[31mPC: 0x%08x\033[0m\n", pc);
-		printf("\033[31mINST: 0x%08x\033[0m\n", inst);
-        printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
+		//printf("\033[31mPC: 0x%08x\033[0m\n", pc);
+		//printf("\033[31mINST: 0x%08x\033[0m\n", inst);
+        printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
 		printf("\033[31mError: origin address: 0x%08x.\033[0m\n", waddr);
 		printf("\033[31mError: offset: 0x%08x\033[0m\n", offset);
 		exit(1);
