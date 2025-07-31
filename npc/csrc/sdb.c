@@ -2,10 +2,7 @@
 #include "utils.h"
 #include "state.h"
 #include <string.h>
-#include "Vtop.h"
-#include "verilated.h"
-#include "svdpi.h"
-#include "Vtop__Dpi.h"
+#include "vinit.h"
 
 char *readline(const char *prompt);
 
