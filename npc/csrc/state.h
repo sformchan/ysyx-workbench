@@ -3,7 +3,7 @@
 
 enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 
-extern int npc_state;
+extern int npc_state = NPC_STOP;
 
 
 void end_stimulation()
