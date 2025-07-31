@@ -47,7 +47,7 @@ extern "C" int pmem_read(int raddr)
 		uint32_t uptime = high;
 		return uptime;
 	}
-	
+	//printf("raddr: %08x\n", raddr);
     raddr &= ~(0x3u);
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
