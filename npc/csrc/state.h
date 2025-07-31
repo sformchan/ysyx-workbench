@@ -12,28 +12,20 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 #include "utils.h"
 
 
+extern int npc_state;
 
-int npc_state = NPC_STOP;
-
+extern int inst;
+extern uint32_t count;
 // void end_stimulation();
 
 // void init_monitor(int argc, char *argv[]);
-void init_npc(int argc, char *argv[])
-{
-	printf("welcome to \033[44;36mNPC\033[0m!\n");
-	
-	//load_sum/mem
-	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	parse_args(argc, argv);
-	load_img();
-
-	printf("\033[32mStimulation starting...\033[0m\n");
-}
 
 
-void end_npc()
-{
-	npc_state = NPC_END;
-}
+extern "C" void init_npc(int argc, char *argv[]);
+extern "C" void execute();
+extern "C" void run_npc(uint64_t step);
+extern "C" void end_npc();
+void init_verilator(int argc, char **argv);
+
 
 #endif

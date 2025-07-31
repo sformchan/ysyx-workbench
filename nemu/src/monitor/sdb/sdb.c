@@ -71,7 +71,153 @@ void expr_cp(FILE *file)
   }
 }
 
+static std::string readline(int fd)
+{
+  struct termios tios;
+  // try to make sure the terminal is noncanonical and nonecho
+  if (tcgetattr(fd, &tios) == 0)
+  {
+    tios.c_lflag &= (~ICANON);
+    tios.c_lflag &= (~ECHO);
+    tcsetattr(fd, TCSANOW, &tios);
+  }
+  bool noncanonical = tcgetattr(fd, &tios) == 0 && (tios.c_lflag & ICANON) == 0;
 
+  std::string s_head = std::string("(spike) ");
+  std::string s = s_head;
+  keybuffer_t key_buffer = 0;
+  // index for up/down arrow
+  size_t history_index = 0;
+  // position for left/right arrow
+  size_t cursor_pos = s.size();
+  const size_t initial_s_len = cursor_pos;
+  std::cerr << s << std::flush;
+  for (char ch; read(fd, &ch, 1) == 1; )
+  {
+    uint32_t keycode = key_buffer << BITS_PER_CHAR | ch;
+    switch (keycode)
+    {
+      // the partial keycode, add to the key_buffer
+      case KEYCODE_HEADER0:
+      case KEYCODE_HEADER1:
+      case KEYCODE_HOME1_0:
+      case KEYCODE_END1_0:
+      case KEYCODE_BACKSPACE1_0:
+        key_buffer = keycode;
+        break;
+      // for backspace key
+      case KEYCODE_BACKSPACE0:
+      case KEYCODE_BACKSPACE1_1:
+      case KEYCODE_BACKSPACE2:
+        if (cursor_pos <= initial_s_len)
+          continue;
+        clear_str(noncanonical, fd, s);
+        cursor_pos--;
+        s.erase(cursor_pos, 1);
+        if (noncanonical && write(fd, s.c_str(), s.size() + 1) != 1)
+          ; // shut up gcc
+        // move cursor by left arrow key
+        for (unsigned i = 0; i < s.size() - cursor_pos; i++) {
+          send_key(noncanonical, fd, KEYCODE_LEFT, 3);
+        }
+        key_buffer = 0;
+        break;
+      case KEYCODE_HOME0:
+      case KEYCODE_HOME1_1:
+        // move cursor by left arrow key
+        for (unsigned i = 0; i < cursor_pos - initial_s_len; i++) {
+          send_key(noncanonical, fd, KEYCODE_LEFT, 3);
+        }
+        cursor_pos = initial_s_len;
+        key_buffer = 0;
+        break;
+      case KEYCODE_END0:
+      case KEYCODE_END1_1:
+        // move cursor by right arrow key
+        for (unsigned i = 0; i < s.size() - cursor_pos; i++) {
+          send_key(noncanonical, fd, KEYCODE_RIGHT, 3);
+        }
+        cursor_pos = s.size();
+        key_buffer = 0;
+        break;
+      case KEYCODE_UP:
+        // up arrow
+        if (history_commands.size() > 0) {
+          clear_str(noncanonical, fd, s);
+          history_index = std::min(history_commands.size(), history_index + 1);
+          s = history_commands[history_commands.size() - history_index];
+          if (noncanonical && write(fd, s.c_str(), s.size() + 1))
+            ; // shut up gcc
+          cursor_pos = s.size();
+        }
+        key_buffer = 0;
+        break;
+      case KEYCODE_DOWN:
+        // down arrow
+        if (history_commands.size() > 0) {
+          clear_str(noncanonical, fd, s);
+          history_index = std::max(0, (int)history_index - 1);
+          if (history_index == 0) {
+            s = s_head;
+          } else {
+            s = history_commands[history_commands.size() - history_index];
+          }
+          if (noncanonical && write(fd, s.c_str(), s.size() + 1))
+            ; // shut up gcc
+          cursor_pos = s.size();
+        }
+        key_buffer = 0;
+        break;
+      case KEYCODE_LEFT:
+        if (s.size() > initial_s_len) {
+          cursor_pos = cursor_pos - 1;
+          if ((int)cursor_pos < (int)initial_s_len) {
+            cursor_pos = initial_s_len;
+          } else {
+            send_key(noncanonical, fd, KEYCODE_LEFT, 3);
+          }
+        }
+        key_buffer = 0;
+        break;
+      case KEYCODE_RIGHT:
+        if (s.size() > initial_s_len) {
+          cursor_pos = cursor_pos + 1;
+          if (cursor_pos > s.size()) {
+            cursor_pos = s.size();
+          } else {
+            send_key(noncanonical, fd, KEYCODE_RIGHT, 3);
+          }
+        }
+        key_buffer = 0;
+        break;
+      case KEYCODE_ENTER:
+        if (noncanonical && write(fd, &ch, 1) != 1)
+          ; // shut up gcc
+        if (s.size() > initial_s_len && (history_commands.size() == 0 || s != history_commands[history_commands.size() - 1])) {
+          history_commands.push_back(s);
+        }
+        return s.substr(initial_s_len);
+      default:
+      DEFAULT_KEY:
+        // unknown buffered key, do nothing
+        if (key_buffer != 0) {
+          key_buffer = 0;
+          break;
+        }
+        clear_str(noncanonical, fd, s);
+        s.insert(cursor_pos, 1, ch);
+        cursor_pos++;
+        if (noncanonical && write(fd, s.c_str(), s.size() + 1) != 1)
+          ; // shut up gcc
+        // send left arrow key to move cursor
+        for (unsigned i = 0; i < s.size() - cursor_pos; i++) {
+          send_key(noncanonical, fd, KEYCODE_LEFT, 3);
+        }
+        break;
+    }
+  }
+  return s.substr(initial_s_len);
+}
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
