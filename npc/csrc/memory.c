@@ -34,17 +34,17 @@ uint8_t rom[ysyx_25020047_MEM_SIZE];
 /////////MEM_VISIT/////////
 extern "C" int pmem_read(int raddr)
 {
-	uint32_t low = 0;
+	uint32_t high = 0;
 	if(raddr == RTC_ADDR) 
 	{
 		uint64_t uptime = get_uptime_64bit();
 		//printf("%lu\n", uptime);
-		low = uptime >> 32;
+		high = uptime >> 32;
 		return (uint32_t)(uptime & 0xFFFFFFFF); 
 	}
 	if(raddr == RTC_ADDR + 4)
 	{
-		uint32_t uptime = low;
+		uint32_t uptime = high;
 		return uptime;
 	}
 	
