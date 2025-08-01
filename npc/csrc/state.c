@@ -11,12 +11,13 @@ extern "C" void execute()
 	{
 		inst = pmem_read(top->pc);
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
+		printf("%d\n", top->clk);
 		top->eval();
 		// if(!top->clk)
 		// {
 		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		// }
-		if(top->clk)
+		if(!top->clk)
 		{
 			count++;
 			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
