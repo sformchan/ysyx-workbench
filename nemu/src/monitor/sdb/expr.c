@@ -311,7 +311,8 @@ uint32_t eval(int p, int q) {
        }
        else
        {
-         word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
+		char *reg_name = tokens[p].str + 1;
+         word_t reg_value = isa_reg_str2val(reg_name, &success);
          if(!success)
          {
            printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
