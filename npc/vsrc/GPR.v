@@ -34,12 +34,13 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
       end
     end
     else if (wen && waddr != 5'b0) begin
-		integer i;
-		for(i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin
-			set_gpr(i, rf[i]);
-		end
 		rf[waddr] <= wdata; 
 	end 
+  end
+
+  always @(*) begin
+	integer i;
+	for(i = 0; i < 16; i++) set_gpr(i, rf[i]);
   end
 endmodule
 
