@@ -23,7 +23,7 @@ extern uint32_t count;
 
 
 extern "C" void init_npc(int argc, char *argv[]);
-extern "C" void execute();
+extern "C" void execute(int first);
 extern "C" void run_npc(uint64_t step);
 extern "C" void end_npc();
 void init_verilator(int argc, char **argv);

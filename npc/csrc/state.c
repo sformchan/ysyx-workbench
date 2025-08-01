@@ -5,7 +5,7 @@ void init_sdb();
 bool check_wp();
 int npc_state = NPC_STOP;
 
-extern "C" void execute()
+extern "C" void execute(int first)
 {
 	if(!first)
 	{
@@ -35,7 +35,7 @@ extern "C" void execute()
 extern "C" void run_npc(uint64_t step)
 {
 	int first = 1;
-	execute();
+	execute(first);
 	first = 0;
 	switch (npc_state) {
 		case NPC_END: case NPC_QUIT:
@@ -49,7 +49,7 @@ extern "C" void run_npc(uint64_t step)
 	for(; step > 0; step --)
 	{
 		
-		execute();
+		execute(first);
 		if(check_wp()) npc_state = NPC_STOP;
 		if(npc_state != NPC_RUNNING) break;
 	}
