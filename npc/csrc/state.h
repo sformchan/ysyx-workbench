@@ -28,6 +28,7 @@ extern "C" void run_npc(uint64_t step);
 extern "C" void end_npc();
 void init_verilator(int argc, char **argv);
 extern "C" void print_gpr();
+extern "C" uint32_t reg_str2val(const char *s, bool *success);
 
 
 #endif

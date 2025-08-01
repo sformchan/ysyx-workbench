@@ -117,3 +117,20 @@ extern "C" void print_gpr()
 		else printf("|%s   |0x%08x |\n", gpr_name[i] , gpr_val[i]);
 	}
 }
+
+extern "C" uint32_t reg_str2val(const char *s, bool *success) {
+	int num = -1;
+	int i = 0;
+	while(i < 32)
+	{
+	  if(strcmp(s, gpr_name[i]) == 0)
+	  {
+		num = i;
+		*success = true;
+		return gpr_val[num];
+	  }
+	  i++;
+	}
+	
+	return num;
+  }

@@ -5,7 +5,7 @@
 #include "vinit.h"
 #include "memory.h"
 
-
+uint32_t expr(char *e, bool *success);
 char *readline_(const char *prompt);
 
 static char* rl_gets() {
@@ -121,6 +121,22 @@ static int cmd_x(char *args)
 	}
 	return 0;
 }
+
+
+static int cmd_p(char *args)
+{
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  bool sign = false;
+ 
+  printf(ANSI_FG_WHITE "result" ANSI_NONE "  0x%x\n", expr(args, &sign));
+
+  return 0;
+}
+
   
 
 static struct {
@@ -134,7 +150,7 @@ static struct {
 	{"si"   , "  Execute for steps, you can enter a number after 'si', like si 1"  ,   cmd_si },
 	{"info" , "Print info of reg or wp"                                            , cmd_info },
 	{"x"    , "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
-	//{ "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
+	{"p"    , "   Calculate the result of the given expression"                    ,     cmd_p},
 	//{ "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
 	//{ "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
 	//{ "ext", "   Test your expr_function", cmd_t}
