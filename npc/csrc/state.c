@@ -95,7 +95,7 @@ void init_verilator(int argc, char **argv) {
 }
 
 
-uint32_t gpr_val[32] = {0};
+uint32_t gpr_val[32];
 char *gpr_name[32];
 
 void set_gpr(int32_t i, int32_t val)
@@ -105,7 +105,7 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("PC 0x%08x\n", top->pc);
+	printf(ANSI_FG_GREEN "PC 0x%08x\n" ANSI_NONE, top->pc);
 	for(int i = 0; i < 16; i++)
 	{
 		printf("%d 0x%08x\n", i, gpr_val[i]);
