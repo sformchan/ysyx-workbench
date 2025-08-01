@@ -18,7 +18,6 @@ VerilatedContext* contextp = NULL;
 Vtop* top = NULL;
 
 
-
 void sdb_mainloop();
 
 int main(int argc, char** argv)
@@ -29,7 +28,6 @@ int main(int argc, char** argv)
 	top->rst = 1;
 	top->clk = 0;
 	top->pc = ysyx_25020047_INITADDR;
-	
 	top->rst = 0;
 	
 ////////execution////////
