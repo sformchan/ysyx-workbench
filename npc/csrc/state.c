@@ -95,7 +95,7 @@ extern "C" void init_npc(int argc, char *argv[])
 
 extern "C" void end_npc()
 {
-	if(top->clk) npc_state = NPC_END;
+	npc_state = NPC_END;
 }
 
 void init_verilator(int argc, char **argv) {
