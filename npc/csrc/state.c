@@ -7,42 +7,36 @@ int npc_state = NPC_STOP;
 
 extern "C" void execute()
 {
-	count++;
-	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+	if(!first)
+	{
+		count++;
+		printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+	}
 	for(int i = 0; i < 2; i++)
 	{
-		
-		
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
-		
-		
 		top->eval();
-		// if(!top->clk)
-		// {
-		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
-		// }
 		printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
-		// if(!top->clk)
-		// {
-		// 	count++;
-		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-		// }
-		//tfp->dump(contextp->time());
-		contextp->timeInc(1);
-	}
-	 	
-}
-
-extern "C" void run_npc(uint64_t step)
-{
-	
 		if(inst == 0xFFFFFFFF)
 		{
 			perror(ANSI_FG_RED"ERROR READING\n" ANSI_NONE);
 			exit(1);
 		}
+		// if(!top->clk)
+		// {
+		// 	count++;
+		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+		// }
+		contextp->timeInc(1);
+	} 	
+}
 
+extern "C" void run_npc(uint64_t step)
+{
+	int first = 1;
+	execute();
+	first = 0;
 	switch (npc_state) {
 		case NPC_END: case NPC_QUIT:
 		  printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
