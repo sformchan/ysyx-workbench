@@ -21,14 +21,16 @@ extern "C" void execute()
 		// }
 		//printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
-		if(!top->clk)
-		{
-			count++;
-			printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-		}
+		// if(!top->clk)
+		// {
+		// 	count++;
+		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+		// }
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
 	}
+	 	count++;
+	 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
 }
 
 extern "C" void run_npc(uint64_t step)
