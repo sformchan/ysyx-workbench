@@ -19,7 +19,7 @@ extern "C" void execute()
 		// {
 		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
 		// }
-		printf("%d\n", top->clk);
+		//printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
 		if(!top->clk)
 		{
