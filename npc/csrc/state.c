@@ -7,11 +7,7 @@ int npc_state = NPC_STOP;
 
 extern "C" void execute(int first)
 {
-	if(!first)
-	{
-		count++;
-		printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-	}
+	
 	for(int i = 0; i < 2; i++)
 	{
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
@@ -29,14 +25,19 @@ extern "C" void execute(int first)
 		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
 		// }
 		contextp->timeInc(1);
-	} 	
+	} 
+	if(first)
+	{
+		count++;
+		printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+	}
 }
 
 extern "C" void run_npc(uint64_t step)
 {
 	int first = 1;
-	execute(first);
-	first = 0;
+	// execute(first);
+	// first = 0;
 	switch (npc_state) {
 		case NPC_END: case NPC_QUIT:
 		  printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
