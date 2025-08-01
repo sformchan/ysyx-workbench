@@ -3,6 +3,7 @@
 #include "state.h"
 #include <string.h>
 #include "vinit.h"
+#include "memory.h"
 
 
 char *readline_(const char *prompt);
@@ -78,6 +79,48 @@ static int cmd_info(char *args)
   }
   return 0;
 }
+
+
+static int cmd_x(char *args)
+{
+//   int length;
+//   char start[256];
+//   bool success = false;
+//   if(args == NULL)
+//   {
+//     printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+//   }
+//   else
+//   {
+//     sscanf(args, "%d %s", &length, start);
+//     uint32_t result = expr(start, &success);
+//     //printf("%x\n", result);
+//     if( length > 0 && (result >= 0x80000000 && result <= 0x87ffffff))
+//     {
+//       for(int i = 0; i < length; i++)
+//       {
+//         printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+//       }
+//     }
+//     else
+//     {
+//       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+//     }  
+//   }
+//   return 0;
+	int length;
+	uint32_t start;
+	if(args == NULL) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NO ARGUMENT.\n");
+	else
+	{
+		int flag = 1;
+		sscanf(args, "%d 0x%x", &length, &start);
+		if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
+		if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
+		if(flag) for(int i = 0; i < length; i++) printf("%d 0x%08x 0x%08x\n", i, start + (i * 4), pmem_read(start + (i * 4)));	
+	}
+	return 0;
+}
   
 
 static struct {
@@ -90,7 +133,7 @@ static struct {
 	{"q"    , "   Exit NPC"                                                        ,    cmd_q },
 	{"si"   , "  Execute for steps, you can enter a number after 'si', like si 1"  ,   cmd_si },
 	{"info" , "Print info of reg or wp"                                            , cmd_info },
-	//{ "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
+	{"x"    , "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
 	//{ "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
 	//{ "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
 	//{ "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
