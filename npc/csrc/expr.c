@@ -30,7 +30,6 @@
 
 bool check_parentheses(int p, int q);    //check parentheses
 uint32_t eval(int p, int q);   
-uint32_t isa_reg_str2val(const char *s, bool *success);    //reg_name to reg_value
 
 
 

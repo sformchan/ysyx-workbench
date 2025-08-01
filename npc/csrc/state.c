@@ -1,7 +1,7 @@
 #include "state.h"
 #include "vinit.h"
 
-
+void init_sdb();
 int npc_state = NPC_STOP;
 
 extern "C" void execute()
@@ -78,6 +78,7 @@ extern "C" void init_npc(int argc, char *argv[])
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
+	init_sdb();
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 
