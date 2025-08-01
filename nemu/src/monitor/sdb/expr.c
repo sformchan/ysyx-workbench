@@ -24,11 +24,13 @@
 #include "isa.h"
 
 
-bool check_parentheses(int p, int q);
-uint32_t eval(int p, int q);
-word_t isa_reg_str2val(const char *s, bool *success);
+bool check_parentheses(int p, int q);    //check parentheses
+uint32_t eval(int p, int q);   
+word_t isa_reg_str2val(const char *s, bool *success);    //reg_name to reg_value
 
 
+
+/////define as number////
 enum {
   TK_DEQ = 1,
   TK_NUM = 2,
@@ -45,8 +47,11 @@ enum {
 
   /* TODO: Add more token types */
 
-};
+};   
 
+
+
+//////rules of regular expression//////
 static struct rule {
   const char *regex;
   int token_type;
@@ -56,32 +61,31 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"u", TK_U},
-  {"\\+", '+'},         // plus
-  {"\\=\\=", TK_DEQ},        // equal
-  {"0x[0-9a-fA-F]+", TK_HEX}, //heximal
-  {"[0-9]+", TK_NUM}, //decimal
-  {"\\-", '-'}, //minus
-  {"\\*", '*'}, //mutilply
-  {"\\/", '/'}, //divide
-  {"\\(", '('}, //left
-  {"\\)", ')'}, //right
-  {"\\!\\=", TK_NEQ},
-  {"\\$\\w+", TK_REG},
-  {"\\&\\&", TK_AND},
-  {"\\|\\|", TK_OR}
+  {" +", TK_NOTYPE},            // spaces
+  {"u", TK_U},                  // unsigned
+  {"\\+", '+'},                 // plus
+  {"\\=\\=", TK_DEQ},           // equal
+  {"0x[0-9a-fA-F]+", TK_HEX},   // heximal
+  {"[0-9]+", TK_NUM},           // decimal
+  {"\\-", '-'},                 // minus
+  {"\\*", '*'},                 // mutilply
+  {"\\/", '/'},                 // divide
+  {"\\(", '('},                 // left
+  {"\\)", ')'},                 // right
+  {"\\!\\=", TK_NEQ},           // not equal
+  {"\\$\\w+", TK_REG},          // regs
+  {"\\&\\&", TK_AND},           // logic AND
+  {"\\|\\|", TK_OR}             // logic OR
   
   
-};
+};  
 
-#define NR_REGEX ARRLEN(rules)  //calculate the length of array
+#define NR_REGEX ARRLEN(rules)  //calculate the length of array, for the follow-up iteration
 
-static regex_t re[NR_REGEX] = {};
+static regex_t re[NR_REGEX] = {};   
 
-/* Rules are used for many times.
- * Therefore we compile them only once before any usage.
- */
+///Rules are used for many times.
+///Therefore we compile them only once before any usage.
 void init_regex() {
   int i;
   char error_msg[128];
@@ -96,12 +100,15 @@ void init_regex() {
   }
 }
 
+
+
+
 typedef struct token {
   int type;
   char str[32];
 } Token;
 
-static Token tokens[65536] __attribute__((used)) = {};
+static Token tokens[65536] __attribute__((used)) = {};  ///////store the identified token//////
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {

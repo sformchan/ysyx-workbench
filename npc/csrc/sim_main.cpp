@@ -16,6 +16,7 @@ void sdb_mainloop();
 
 int main(int argc, char** argv)
 {
+	
 ////////initialization///////
 	init_npc(argc, argv);
 	//init_verilator(argc, argv);
