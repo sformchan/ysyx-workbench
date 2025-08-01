@@ -14,7 +14,7 @@ extern "C" void execute(int first)
 	}
 	for(int i = 0; i < 2; i++)
 	{
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
 		top->eval();
 		printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
