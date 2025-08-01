@@ -11,7 +11,7 @@ extern "C" void execute()
 	{
 		
 		
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
+		top->clk = (contextp->time() % 2 == 0) ? 0 : 1;   //驱动系统时钟
 		
 		
 		top->eval();
