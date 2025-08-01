@@ -10,7 +10,7 @@ extern "C" void execute()
 	for(int i = 0; i < 2; i++)
 	{
 		inst = pmem_read(top->pc);
-		if(top->clk)
+		if(!top->clk)
 		{
 			count++;
 			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
