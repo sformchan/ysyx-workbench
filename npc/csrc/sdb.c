@@ -65,7 +65,7 @@ static struct {
 	{"help" , "Display information about all supported commands" , cmd_help },
 	{"c", "   Continue the execution of the program", cmd_c },
 	{"q",  "   Exit NPC" , cmd_q },
-	{"si", "  Let the program step, you can enter a number after 'si'", cmd_si },
+	{"si", "  Execute for steps, you can enter a number after 'si', like si 1", cmd_si },
 	//{ "info", ANSI_FG_CYAN "Print info of reg or wp" ANSI_NONE, cmd_info },
 	//{ "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
 	//{ "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
