@@ -63,8 +63,8 @@ static struct {
 	int (*handler) (char *);
   } cmd_table [] = {
 	{"help" , ANSI_FG_CYAN "Display information about all supported commands" ANSI_NONE , cmd_help },
-	{"c", "  Continue the execution of the program", cmd_c },
-	{"q", ANSI_FG_CYAN "  Exit NPC" ANSI_NONE , cmd_q },
+	{"c", "   Continue the execution of the program", cmd_c },
+	{"q", ANSI_FG_CYAN "   Exit NPC" ANSI_NONE , cmd_q },
 	{"si", "  Let the program step, you can enter a number after 'si'", cmd_si },
 	//{ "info", ANSI_FG_CYAN "Print info of reg or wp" ANSI_NONE, cmd_info },
 	//{ "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
