@@ -8,7 +8,10 @@
 uint32_t expr(char *e, bool *success);
 char *readline_(const char *prompt);
 void init_regex();
-
+void init_wp_pool();
+void delete_wp(int num);
+void display_wp();
+void set_wp(char *expr_str);
 
 
 static char* rl_gets() {
@@ -77,7 +80,7 @@ static int cmd_info(char *args)
     }
     else if(letter == 'w')
     {
-      //display_wp();
+      display_wp();
     }
   }
   return 0;
@@ -136,6 +139,32 @@ static int cmd_p(char *args)
   return 0;
 }
 
+
+static int cmd_w(char *args)
+{
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  set_wp(args);
+  return 0;
+}
+
+
+
+static int cmd_d(char *args)
+{
+  
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
+    return 0;
+  }
+  int num = atoi(args);
+  delete_wp(num);
+  return 0;
+}
   
 
 static struct {
@@ -150,8 +179,8 @@ static struct {
 	{"info" , "Print info of reg or wp"                                            , cmd_info },
 	{"x"    , "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
 	{"p"    , "   Calculate the result of the given expression"                    ,     cmd_p},
-	//{ "w", "   Set a new watchpoint to monitor the given expression", cmd_w},
-	//{ "d", ANSI_FG_CYAN "   Delete the watchpoint with sequence number 'n'" ANSI_NONE, cmd_d},
+	{"w"    , "   Set a new watchpoint to monitor the given expression"            ,     cmd_w},
+	{"d"    , "   Delete the watchpoint with sequence number 'n'"                  ,     cmd_d},
 	//{ "ext", "   Test your expr_function", cmd_t}
   
 	/* TODO: Add more commands */
@@ -218,5 +247,5 @@ void sdb_mainloop() {
 	init_regex();
   
 	/* Initialize the watchpoint pool. */
-	//init_wp_pool();
+	init_wp_pool();
   }

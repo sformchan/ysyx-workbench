@@ -2,6 +2,7 @@
 #include "vinit.h"
 
 void init_sdb();
+bool check_wp();
 int npc_state = NPC_STOP;
 
 extern "C" void execute()
@@ -47,6 +48,7 @@ extern "C" void run_npc(uint64_t step)
 	{
 		
 		execute();
+		if(check_wp()) npc_state = NPC_STOP;
 		if(npc_state != NPC_RUNNING) break;
 	}
 
