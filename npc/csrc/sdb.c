@@ -86,43 +86,39 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
-//   int length;
-//   char start[256];
-//   bool success = false;
-//   if(args == NULL)
-//   {
-//     printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
-//   }
-//   else
-//   {
-//     sscanf(args, "%d %s", &length, start);
-//     uint32_t result = expr(start, &success);
-//     //printf("%x\n", result);
-//     if( length > 0 && (result >= 0x80000000 && result <= 0x87ffffff))
-//     {
-//       for(int i = 0; i < length; i++)
-//       {
-//         printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
-//       }
-//     }
-//     else
-//     {
-//       printf(ANSI_FG_RED "ERROR" ANSI_NONE ": nothing output cause of INVALID INPUT.\n");
-//     }  
-//   }
-//   return 0;
-	int length;
-	uint32_t start;
-	if(args == NULL) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NO ARGUMENT.\n");
-	else
-	{
-		int flag = 1;
-		sscanf(args, "%d 0x%x", &length, &start);
-		if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
-		if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
-		if(flag) for(int i = 0; i < length; i++) printf("%d 0x%08x 0x%08x\n", i, start + (i * 4), pmem_read(start + (i * 4)));	
-	}
-	return 0;
+  int length;
+  char start[256];
+  bool success = false;
+  if(args == NULL) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NO ARGUMENT.\n");
+  else
+  {
+	int flag = 1;
+    sscanf(args, "%d %s", &length, start);
+    uint32_t result = expr(start, &success);
+    //printf("%x\n", result);
+	if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
+	if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
+    if(flag)
+    {
+      for(int i = 0; i < length; i++)
+      {
+        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+      }
+    }
+  }
+  return 0;
+	// int length;
+	// uint32_t start;
+	// if(args == NULL) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NO ARGUMENT.\n");
+	// else
+	// {
+	// 	int flag = 1;
+	// 	sscanf(args, "%d 0x%x", &length, &start);
+	// 	if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
+	// 	if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
+	// 	if(flag) for(int i = 0; i < length; i++) printf("%d 0x%08x 0x%08x\n", i, start + (i * 4), pmem_read(start + (i * 4)));	
+	// }
+	// return 0;
 }
 
 
