@@ -9,8 +9,8 @@ extern "C" void execute()
 {
 	for(int i = 0; i < 2; i++)
 	{
-		inst = pmem_read(top->pc);
 		top->clk = (contextp->time() % 2 == 0) ? 0 : 1;   //驱动系统时钟
+		inst = pmem_read(top->pc);
 		printf("%d\n", top->clk);
 		top->eval();
 		// if(!top->clk)
