@@ -11,7 +11,7 @@ extern "C" void execute()
 	{
 		printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
-		if(top->clk)
+		if(!top->clk)
 		{
 			count++;
 			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
