@@ -24,6 +24,9 @@ static char* rl_gets() {
 	return line_read;
 }
 
+
+static int cmd_help(char *args);
+
 static int cmd_c(char *args) {
 	run_npc(-1);
 	return 0;
@@ -77,6 +80,29 @@ static struct {
 
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 #define NR_CMD ARRLEN(cmd_table)
+
+static int cmd_help(char *args) {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
+  
+	if (arg == NULL) {
+	  /* no argument given */
+	  for (i = 0; i < NR_CMD; i ++) {
+		printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+	  }
+	}
+	else {
+	  for (i = 0; i < NR_CMD; i ++) {
+		if (strcmp(arg, cmd_table[i].name) == 0) {
+		  printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+		  return 0;
+		}
+	  }
+	  printf("Unknown command '%s'\n", arg);
+	}
+	return 0;
+  }
 
 void sdb_mainloop() {  
 	for (char *str; (str = rl_gets()) != NULL; ) {
