@@ -27,6 +27,7 @@ extern "C" void execute();
 extern "C" void run_npc(uint64_t step);
 extern "C" void end_npc();
 void init_verilator(int argc, char **argv);
+extern "C" void print_gpr();
 
 
 #endif

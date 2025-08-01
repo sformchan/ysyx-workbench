@@ -57,16 +57,39 @@ static int cmd_q(char *args) {
 	return -1;
 }
 
+static int cmd_info(char *args)
+{
+  char letter;
+  if(args == NULL)
+  {
+    printf(ANSI_FG_RED "ERROR" ANSI_NONE ": try entering 'w' or 'r'.\n");
+  }
+  else
+  {
+    sscanf(args, "%c", &letter);
+    if(letter == 'r')
+    {
+      print_gpr();
+    }
+    else if(letter == 'w')
+    {
+      //display_wp();
+    }
+  }
+  return 0;
+}
+  
+
 static struct {
 	const char *name;
 	const char *description;
 	int (*handler) (char *);
   } cmd_table [] = {
-	{"help" , "Display information about all supported commands" , cmd_help },
-	{"c", "   Continue the execution of the program", cmd_c },
-	{"q",  "   Exit NPC" , cmd_q },
-	{"si", "  Execute for steps, you can enter a number after 'si', like si 1", cmd_si },
-	//{ "info", ANSI_FG_CYAN "Print info of reg or wp" ANSI_NONE, cmd_info },
+	{"help" , "Display information about all supported commands"                   , cmd_help },
+	{"c"    , "   Continue the execution of the program"                           ,    cmd_c },
+	{"q"    , "   Exit NPC"                                                        ,    cmd_q },
+	{"si"   , "  Execute for steps, you can enter a number after 'si', like si 1"  ,   cmd_si },
+	{"info" , "Print info of reg or wp"                                            , cmd_info },
 	//{ "x", "   Visit the target memory and print it, you are expected to enter an expression", cmd_x},
 	//{ "p", ANSI_FG_CYAN "   Calculate the result of the given expression" ANSI_NONE, cmd_p},
 	//{ "w", "   Set a new watchpoint to monitor the given expression", cmd_w},

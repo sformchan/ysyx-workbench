@@ -90,25 +90,24 @@ extern "C" void end_npc()
 void init_verilator(int argc, char **argv) {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
-
     top = new Vtop{contextp};
-
     contextp->traceEverOn(true);
 }
 
 
-uint32_t gpr_val[32];
+uint32_t gpr_val[32] = {0};
 char *gpr_name[32];
 
 void set_gpr(int32_t i, int32_t val)
 {
-	gpr[i] = val;
+	gpr_val[i] = val;
 }
 
-void print_gpr()
+extern "C" void print_gpr()
 {
+	printf("PC 0x%08x\n", top->pc);
 	for(int i = 0; i < 16; i++)
 	{
-		printf("")
+		printf("%d 0x%08x\n", i, gpr_val[i]);
 	}
 }
