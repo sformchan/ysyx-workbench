@@ -26,6 +26,28 @@ int main(int argc, char** argv)
 	top->rst = 0;
 	
 ////////execution////////
+	for(int i = 0; i < 2; i++)
+	{
+		
+		
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
+		
+		
+		top->eval();
+		// if(!top->clk)
+		// {
+		// 	printf("|0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |  0x%08X  |\n", top->pc, inst, top->gpr0, top->gpr1, top->gpr2);
+		// }
+		//printf("%d\n", top->clk);
+		inst = pmem_read(top->pc);
+		// if(!top->clk)
+		// {
+		// 	count++;
+		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+		// }
+		//tfp->dump(contextp->time());
+		contextp->timeInc(1);
+	}
 	sdb_mainloop();
 
 
