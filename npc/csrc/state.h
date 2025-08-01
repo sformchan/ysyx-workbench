@@ -12,7 +12,7 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 #include "utils.h"
 
 extern uint32_t gpr_val[];
-extern char *gpr_name[];
+extern const char *gpr_name[];
 extern int npc_state;
 
 extern int inst;
