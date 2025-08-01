@@ -47,7 +47,7 @@ extern "C" void run_npc(uint64_t step)
 		default: npc_state = NPC_RUNNING;
 	  }
 
-	printf("|pc          |inst        |cycle      |\n");
+	printf("|pc          |inst        |cycle     |\n");
 
 	for(; step > 0; step --)
 	{
