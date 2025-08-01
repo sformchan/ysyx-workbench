@@ -13,21 +13,21 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 #include <ctype.h>
-#include <memory/paddr.h>
-#include "isa.h"
-#include "utils.h"
+#include "memory.h"
+#include <stdbool.h>
+#include <string.h>
+
 
 
 bool check_parentheses(int p, int q);    //check parentheses
 uint32_t eval(int p, int q);   
-uint32_t isa_reg_str2val(const char *s, bool *success);    //reg_name to reg_value
+word_t isa_reg_str2val(const char *s, bool *success);    //reg_name to reg_value
 
 
 
@@ -221,7 +221,7 @@ bool loop = false; //用于eval函数.
   //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
   //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
 
-uint32_t expr(char *e, bool *success) {
+word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
@@ -307,12 +307,12 @@ uint32_t eval(int p, int q) {
      {
        if(strcmp(tokens[p].str, "$pc") == 0)
        {
-         uint32_t reg_value = cpu.pc;
+         word_t reg_value = cpu.pc;
          return reg_value;
        }
        else
        {
-         uint32_t reg_value = isa_reg_str2val(tokens[p].str, &success);
+         word_t reg_value = isa_reg_str2val(tokens[p].str, &success);
          if(!success)
          {
            printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
@@ -325,7 +325,7 @@ uint32_t eval(int p, int q) {
      }
      else if(tokens[p].type == 16)
      {
-       uint32_t hex_value = (uint32_t)strtol(tokens[p].str, NULL, 16); 
+       word_t hex_value = (word_t)strtol(tokens[p].str, NULL, 16); 
        return hex_value;
      }
      else if(tokens[p].type == 2)
@@ -345,19 +345,19 @@ uint32_t eval(int p, int q) {
   }
   else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 1))  //deref
   {
-    uint32_t addr = eval(p + 1, q);
+    word_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
     {
         printf("%x\n", addr);
         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
         return 0;
     }
-    uint32_t data = paddr_read(addr, 4);
+    word_t data = paddr_read(addr, 4);
     return data;
   }
   else if(tokens[p].type == 8 && (check_parentheses(p + 1, q) || q - p == 2))  //negetive
   {
-    uint32_t result = eval(p + 1, q);
+    word_t result = eval(p + 1, q);
     return -1 * result;
   }
   else if (check_parentheses(p, q) == true) {
