@@ -24,7 +24,7 @@ extern "C" void execute()
 		if(!top->clk)
 		{
 			count++;
-			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
+			printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
 		}
 		//tfp->dump(contextp->time());
 		contextp->timeInc(1);
