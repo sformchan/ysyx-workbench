@@ -68,6 +68,7 @@ extern "C" void run_npc(uint64_t step)
 }
 
 
+///
 extern "C" void init_npc(int argc, char *argv[])
 {
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
@@ -76,7 +77,7 @@ extern "C" void init_npc(int argc, char *argv[])
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
 	load_img();
-
+	init_verilator(argc, argv);
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 
@@ -93,4 +94,21 @@ void init_verilator(int argc, char **argv) {
     top = new Vtop{contextp};
 
     contextp->traceEverOn(true);
+}
+
+
+uint32_t gpr_val[32];
+char *gpr_name[32];
+
+void set_gpr(int32_t i, int32_t val)
+{
+	gpr[i] = val;
+}
+
+void print_gpr()
+{
+	for(int i = 0; i < 16; i++)
+	{
+		printf("")
+	}
 }

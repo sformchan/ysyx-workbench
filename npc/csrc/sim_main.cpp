@@ -5,13 +5,7 @@
 #include "memory.h"
 #include "state.h"
 
-// VerilatedContext* contextp = new VerilatedContext;
-// contextp->commandArgs(argc, argv);
-// Vtop* top = new Vtop{contextp};
-// //VerilatedFstC* tfp = new VerilatedFstC;
-// contextp->traceEverOn(true);
-// //top->trace(tfp,0);
-// //tfp->open("wave.fst");
+
 int inst = 0;
 uint32_t count = 0;
 VerilatedContext* contextp = NULL;
@@ -24,7 +18,7 @@ int main(int argc, char** argv)
 {
 ////////initialization///////
 	init_npc(argc, argv);
-	init_verilator(argc, argv);
+	//init_verilator(argc, argv);
 	top->rst = 1;
 	top->clk = 0;
 	top->pc = ysyx_25020047_INITADDR;
