@@ -9,8 +9,9 @@ extern "C" void execute()
 {
 	for(int i = 0; i < 2; i++)
 	{
+		printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
-		if(!top->clk)
+		if(top->clk)
 		{
 			count++;
 			printf("|0x%08X  |  0x%08X  |  %08d   |\n", top->pc, inst, count);
@@ -18,7 +19,7 @@ extern "C" void execute()
 		
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //驱动系统时钟
 		
-		printf("%d\n", top->clk);
+		
 		top->eval();
 		// if(!top->clk)
 		// {
