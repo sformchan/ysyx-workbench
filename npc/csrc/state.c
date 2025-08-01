@@ -5,6 +5,8 @@ void init_sdb();
 bool check_wp();
 int npc_state = NPC_STOP;
 
+
+
 extern "C" void execute()
 {
 	
@@ -12,11 +14,11 @@ extern "C" void execute()
 	{
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
 		top->eval();
-		printf("%d\n", top->clk);
+		//printf("%d\n", top->clk);
 		inst = pmem_read(top->pc);
 		if(inst == 0xFFFFFFFF)
 		{
-			perror(ANSI_FG_RED"ERROR READING\n" ANSI_NONE);
+			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
 			exit(1);
 		}
 		contextp->timeInc(1);
@@ -50,7 +52,7 @@ extern "C" void run_npc(uint64_t step)
 			break;
 		case NPC_END: 
 			printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_END.\n" ANSI_NONE);
-			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN" HIT GOOD TRAP "ANSI_NONE"at pc 0x%08x\n" , top->pc);
+			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN " HIT GOOD TRAP " ANSI_NONE "at pc 0x%08x\n" , top->pc);
 			break;
 		
 	// else
@@ -105,7 +107,7 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("|"ANSI_FG_GREEN "PC   "ANSI_NONE "|" ANSI_FG_GREEN"0x%08x" ANSI_NONE " |\n" , top->pc);
+	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , top->pc);
 	for(int i = 0; i < 16; i++)
 	{
 		if(i == 0) printf("|%s |0x%08x |\n", gpr_name[i], gpr_val[i]);

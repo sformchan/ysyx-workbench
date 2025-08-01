@@ -6,12 +6,12 @@
 #include "state.h"
 
 
-int inst = 0;
-uint32_t count = 0;
+
 VerilatedContext* contextp = NULL;
 Vtop* top = NULL;
-
-
+uint32_t count = 0;
+uint32_t inst = 0;
+	
 void sdb_mainloop();
 
 int main(int argc, char** argv)

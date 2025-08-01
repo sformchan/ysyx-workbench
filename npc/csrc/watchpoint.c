@@ -170,7 +170,7 @@ bool check_wp()
     uint32_t new_value = expr(wp->expr, &success);
     if(success && new_value != wp->value)
     {
-      printf("Wp %d triggered at 0x%08x: "ANSI_FG_GREEN"0x%08x"ANSI_NONE" <-- 0x%08x (%s)\n",wp->NO, top->pc, new_value, wp->value, wp->expr);
+      printf("Wp %d triggered at 0x%08x: " ANSI_FG_GREEN "0x%08x" ANSI_NONE " <-- 0x%08x (%s)\n",wp->NO, top->pc, new_value, wp->value, wp->expr);
       wp->value = new_value;
       return true;
     }

@@ -14,8 +14,7 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 extern uint32_t gpr_val[];
 extern const char *gpr_name[];
 extern int npc_state;
-
-extern int inst;
+extern uint32_t inst;
 extern uint32_t count;
 // void end_stimulation();
 
