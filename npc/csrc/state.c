@@ -5,7 +5,7 @@ void init_sdb();
 bool check_wp();
 int npc_state = NPC_STOP;
 
-extern "C" void execute(int first)
+extern "C" void execute()
 {
 	
 	for(int i = 0; i < 2; i++)
@@ -19,25 +19,14 @@ extern "C" void execute(int first)
 			perror(ANSI_FG_RED"ERROR READING\n" ANSI_NONE);
 			exit(1);
 		}
-		// if(!top->clk)
-		// {
-		// 	count++;
-		// 	printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-		// }
 		contextp->timeInc(1);
 	} 
-	if(first)
-	{
 		count++;
 		printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-	}
 }
 
 extern "C" void run_npc(uint64_t step)
 {
-	int first = 1;
-	// execute(first);
-	// first = 0;
 	switch (npc_state) {
 		case NPC_END: case NPC_QUIT:
 		  printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
@@ -50,7 +39,7 @@ extern "C" void run_npc(uint64_t step)
 	for(; step > 0; step --)
 	{
 		
-		execute(first);
+		execute();
 		if(check_wp()) npc_state = NPC_STOP;
 		if(npc_state != NPC_RUNNING) break;
 	}
