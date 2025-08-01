@@ -96,13 +96,13 @@ static int cmd_x(char *args)
     sscanf(args, "%d %s", &length, start);
     uint32_t result = expr(start, &success);
     //printf("%x\n", result);
-	if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
-	if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
+	if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH: %d\n", length), flag = 0;
+	if(result < 0x80000000 || result > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY: 0x%08x\n", result), flag = 0;
     if(flag)
     {
       for(int i = 0; i < length; i++)
       {
-        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), vaddr_read(result + (i * 4), 4));
+        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), pmem_read(result + (i * 4)));
       }
     }
   }
