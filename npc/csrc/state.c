@@ -110,10 +110,10 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("|"ANSI_FG_GREEN "PC   "ANSI_NONE "|" ANSI_FG_GREEN" 0x%08x\n" ANSI_NONE, top->pc);
+	printf("|"ANSI_FG_GREEN "PC   "ANSI_NONE "|" ANSI_FG_GREEN"0x%08x\n" ANSI_NONE, top->pc);
 	for(int i = 0; i < 16; i++)
 	{
-		if(i == 0) printf("|%s | 0x%08x\n", gpr_name[i], gpr_val[i]);
-		else printf("|%s   | 0x%08x\n", gpr_name[i] , gpr_val[i]);
+		if(i == 0) printf("|%s |0x%08x\n", gpr_name[i], gpr_val[i]);
+		else printf("|%s   |0x%08x\n", gpr_name[i] , gpr_val[i]);
 	}
 }
