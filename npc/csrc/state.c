@@ -5,8 +5,8 @@
 bool check_wp();
 int npc_state = NPC_STOP;
 void init_monitor();
-
-
+void init_disasm();
+void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 extern "C" void execute()
 {
 	
@@ -23,8 +23,28 @@ extern "C" void execute()
 		}
 		contextp->timeInc(1);
 	} 
-		count++;
-		printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+		// count++;
+		// printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
+		#ifdef CONFIG_ITRACE
+		char logbuf[128];
+		char *p = logbuf;
+		p += snprintf(p, sizeof(logbuf), "0x%08x" ":", top->pc);
+		int ilen = 4;
+		int i;
+		uint8_t *inst_ = (uint8_t *)&inst;
+		for (i = ilen - 1; i >= 0; i --) {
+		  p += snprintf(p, 4, " %02x", inst_[i]);
+		}
+		int ilen_max = 4;
+		int space_len = ilen_max - ilen;
+		if (space_len < 0) space_len = 0;
+		space_len = space_len * 3 + 1;
+		memset(p, ' ', space_len);
+		p += space_len;
+		
+		disassemble(p, logbuf + sizeof(logbuf) - p,
+			top->pc, (uint8_t *)&inst, ilen);
+	  	#endif
 }
 
 extern "C" void run_npc(uint64_t step)
@@ -77,6 +97,7 @@ extern "C" void init_npc(int argc, char *argv[])
 	load_img();
 	init_verilator(argc, argv);
 	init_monitor();
+	init_disasm();
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 

@@ -33,7 +33,7 @@ endif
 
 # rules for verilator
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
-CXXFLAGS += $(CFLAGS)
+CXXFLAGS += -I $(NPC_HOME)/tools/capstone/repo/include
 # 添加配置头文件
 
 
@@ -42,7 +42,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) \
 		$(VSRCS) \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) \
+		$(addprefix -CFLAGS , $(CFLAGS) $(CXXFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe $(CSRCS) \
 		-o $(abspath $(BIN))
 
