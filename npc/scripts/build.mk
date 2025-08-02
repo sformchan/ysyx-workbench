@@ -8,7 +8,7 @@ VERILATOR_CFLAGS += -MMD --build -cc \
 				-O2 --x-assign fast --x-initial fast --noassert
 
 WORK_DIR  = $(shell pwd)
-BUILD_DIR = $(WORK_DIR)/build
+BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(BUILD_DIR)/$(TOPNAME)
 
@@ -52,7 +52,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 all: default
 		
 IMG ?=
-ARGS += --log=$(BUILD_DIR)/npc-log.txt
+ARGS += --log=$(WORK_DIR)/build/npc-log.txt
 run: $(BIN)
 	@$(BIN) $(IMG) $(ARGS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
