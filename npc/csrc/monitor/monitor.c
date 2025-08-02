@@ -2,7 +2,7 @@
 #include "state.h"
 #include <getopt.h>
 
-#define ysyx_25020047_RESET_VECTOR 0x80000000
+
 void init_sdb();
 void init_log(const char *log_file);
 void init_ringbuf();
