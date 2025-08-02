@@ -10,7 +10,7 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 #include <stdlib.h>
 #include <assert.h>
 #include "utils.h"
-#include <../include/generated/autoconf.h>
+#include </home/leonard/ysyx-workbench/npc/include/generated/autoconf.h>
 
 extern uint32_t gpr_val[];
 extern const char *gpr_name[];
