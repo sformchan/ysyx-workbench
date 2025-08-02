@@ -58,7 +58,7 @@ $(info WORK_DIR = $(WORK_DIR))
 $(info ARGS = $(ARGS))
 
 run: $(BIN)
-	@$(BIN) $(IMG) $(ARGS)
+	@$(BIN) $(ARGS) $(IMG) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	
 gdb: $(BIN)
