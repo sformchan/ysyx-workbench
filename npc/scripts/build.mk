@@ -23,7 +23,6 @@ VSRCS = $(shell find vsrc -type f \( -name "*.v" -o -name "*.sv" \))
 CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cc" -o -name "*.cpp" \))
 
 
-
 LIBCAPSTONE = $(NPC_HOME)/tools/capstone/repo/libcapstone.so.5
 CFLAGS += -I $(NPC_HOME)/tools/capstone/repo/include
 ifdef CONFIG_ITRACE
@@ -50,8 +49,9 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 all: default
 		
 IMG ?=
+ARGS += --log=$(BUILD_DIR)/npc-log.txt
 run: $(BIN)
-	@$(BIN) $(IMG)
+	@$(BIN) $(IMG) $(ARGS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	
 gdb: $(BIN)

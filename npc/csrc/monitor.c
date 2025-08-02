@@ -4,6 +4,8 @@
 #include <getopt.h>
 
 #define ysyx_25020047_RESET_VECTOR 0x80000000
+void init_sdb();
+void init_log(const char *log_file);
 
 char *img_file = NULL;
  long load_img() {
@@ -78,3 +80,10 @@ int parse_args(int argc, char *argv[]) {
 // 	img_file = argv[1];
 // 	return 0;
 // }
+
+void init_monitor()
+{
+	init_sdb();
+	init_disasm();
+	init_log(log_file);
+}
