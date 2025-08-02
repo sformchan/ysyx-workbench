@@ -16,6 +16,7 @@ extern char *log_file;
 //#define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_INITADDR 0x80000000
+#define ysyx_25020047_IMG_SIZE 28
 
 extern uint8_t rom[];
 extern uint8_t img[];
