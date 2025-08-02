@@ -214,8 +214,6 @@ config RT_CHECK
   bool "Enable runtime checking"
   default y
 
-endmenu
-
 
 config WATCHPOINT
   bool "Enable watchpoint checking"
@@ -236,3 +234,6 @@ config FTRACE
 config DTRACE
 	bool "Enable device trace"
 	default n
+
+
+endmenu
