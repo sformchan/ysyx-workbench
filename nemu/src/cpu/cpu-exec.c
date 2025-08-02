@@ -90,7 +90,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char destbuf[128];
   char *r = destbuf;
   r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
-  r += snprintf(r, 8, " ");
+  //r += snprintf(r, 8, " ");
   int rlen = s->snpc - s->pc;
   int j;
   uint8_t *inst_r = (uint8_t *)&s->isa.inst;
