@@ -28,7 +28,7 @@ image: image-dep
 
 #@echo "TODO: add command here to run simulation"
 run: insert-arg
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) ARGS=$(NPC_FLAGS) run IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) ARGS="$(NPC_FLAGS)" run IMG=$(IMAGE).bin
 
 # run: insert-arg
 # 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=/home/leonard/ysyx-workbench/am-kernels/kernels/demo/build/demo-riscv32-nemu.bin
