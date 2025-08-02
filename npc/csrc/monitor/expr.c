@@ -357,7 +357,7 @@ uint32_t eval(int p, int q) {
         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
         return 0;
     }
-    uint32_t data = (uint32_t)pmem_read(addr);
+    uint32_t data = (uint32_t)pmem_read(addr, 1);
     return data;
   }
   else if(tokens[p].type == 8 && (check_parentheses(p + 1, q) || q - p == 2))  //negetive

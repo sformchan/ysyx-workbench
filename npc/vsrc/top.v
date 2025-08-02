@@ -1,5 +1,5 @@
 import "DPI-C" function void set_npc_state(input int state);
-import "DPI-C" function int pmem_read(input int raddr);
+import "DPI-C" function int pmem_read(input int raddr, input int flag);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 import "DPI-C" function void set_gpr(input int i, input int val);
 

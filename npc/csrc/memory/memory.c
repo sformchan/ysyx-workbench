@@ -1,12 +1,9 @@
 #include "memory.h"
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
+#include <common.h>
 #include <unistd.h>
 #include "device.h"
 #include "utils.h"
+#include "state.h"
 
 
 /////////MEM//////////
@@ -22,18 +19,12 @@ uint8_t img[28] = {
     0x73, 0x00, 0x10, 0x00 //ebreak
 };
 
-// lui x1 123456
-// lw x2 3(x0)
-// sb x1 0(x0)
-// lw x2 0(x0)
-// addi x1 x1 2000
-// add x2 x1 x0  
 
 
 
 
 /////////MEM_VISIT/////////
-extern "C" int pmem_read(int raddr)
+extern "C" int pmem_read(int raddr, int flag)
 {
 	uint32_t high = 0;
 	if(raddr == RTC_ADDR) 
@@ -50,6 +41,12 @@ extern "C" int pmem_read(int raddr)
 	}
 	//printf("raddr: %08x\n", raddr);
     raddr &= ~(0x3u);
+	if(flag)
+	{
+		#ifdef CONFIG_MTRACE
+		printf("[MTARCE] " ANSI_FG_CYAN "READ  " ANSI_NONE "addr=" FMT_PADDR "  len=4\n", raddr);
+		#endif
+	}
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
@@ -90,11 +87,15 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 		exit(1);
         return;
     }
+	int len = 0;
 	//wmask & 0x1 means to check if the lowest bit of wmask is set, if not, DO NOT write.
-    if (wmask & 0x1) rom[offset + 0] = (wdata >> 0) & 0xFF;
-    if (wmask & 0x2) rom[offset + 1] = (wdata >> 8) & 0xFF;
-    if (wmask & 0x4) rom[offset + 2] = (wdata >> 16) & 0xFF;
-    if (wmask & 0x8) rom[offset + 3] = (wdata >> 24) & 0xFF;
+    if (wmask & 0x1) rom[offset + 0] = (wdata >> 0) & 0xFF, len++;
+    if (wmask & 0x2) rom[offset + 1] = (wdata >> 8) & 0xFF, len++;
+    if (wmask & 0x4) rom[offset + 2] = (wdata >> 16) & 0xFF, len++;
+    if (wmask & 0x8) rom[offset + 3] = (wdata >> 24) & 0xFF, len++;
+	#ifdef CONFIG_MTRACE
+  	printf("[MTARCE] " ANSI_FG_MAGENTA "WRITE " ANSI_NONE "addr=" FMT_PADDR "  len=%d\n", waddr1, len);
+  	#endif
 }
 
 

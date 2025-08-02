@@ -105,23 +105,11 @@ static int cmd_x(char *args)
     {
       for(int i = 0; i < length; i++)
       {
-        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), pmem_read(result + (i * 4)));
+        printf("%d 0x%08x 0x%08x\n", i, result + (i * 4), pmem_read(result + (i * 4), 1));
       }
     }
   }
   return 0;
-	// int length;
-	// uint32_t start;
-	// if(args == NULL) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NO ARGUMENT.\n");
-	// else
-	// {
-	// 	int flag = 1;
-	// 	sscanf(args, "%d 0x%x", &length, &start);
-	// 	if(length < 1) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID LENGTH.\n"), flag = 0;
-	// 	if(start < 0x80000000 || start > 0x87ffffff) printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVALID MEMORY.\n"), flag = 0;
-	// 	if(flag) for(int i = 0; i < length; i++) printf("%d 0x%08x 0x%08x\n", i, start + (i * 4), pmem_read(start + (i * 4)));	
-	// }
-	// return 0;
 }
 
 

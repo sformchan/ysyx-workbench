@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-extern "C" int pmem_read(int raddr);
+extern "C" int pmem_read(int raddr, int flag);
 extern "C" void pmem_write(int waddr, int wdata, int wmask);
 void load_verilog_hex(const char *filename);
 long load_img();

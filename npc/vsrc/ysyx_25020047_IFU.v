@@ -29,6 +29,6 @@ module ysyx_25020047_IFU(
     output [31:0] inst                  
 );
 
-assign inst = pmem_read(pc); 
+assign inst = pmem_read(pc, 0); 
                                                                    
 endmodule

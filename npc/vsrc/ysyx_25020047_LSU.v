@@ -12,7 +12,7 @@ reg [31:0] ram_data;
 always @(*) begin
     if(read) begin
 		//$display("raddr: 0x%08x", raddr);
-        ram_data = pmem_read(raddr);
+        ram_data = pmem_read(raddr, 1);
     end
     else ram_data = 0;
 end

@@ -40,7 +40,7 @@ extern "C" void execute()
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
 		top->eval();
 		//printf("%d\n", top->clk);
-		inst = pmem_read(top->pc);
+		inst = pmem_read(top->pc, 0);
 		if(inst == 0xFFFFFFFF)
 		{
 			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
