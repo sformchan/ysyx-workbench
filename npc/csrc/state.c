@@ -5,9 +5,9 @@
 bool check_wp();
 int npc_state = NPC_STOP;
 void init_monitor();
-void init_disasm();
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-
+void ringbuf_push(char *log);
+void ringbuf_print();
 
 static bool g_print_step = false;
 
@@ -45,7 +45,7 @@ extern "C" void execute()
 		}
 		contextp->timeInc(1);
 	} 
-		// count++;
+		count++;
 		// printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
 		char logbuf[128];
 		#ifdef CONFIG_ITRACE
@@ -66,6 +66,32 @@ extern "C" void execute()
 		disassemble(p, logbuf + sizeof(logbuf) - p,
 			top->pc, (uint8_t *)&inst, ilen);
 	  	#endif
+		#ifdef CONFIG_IRINGBUF
+		  char destbuf[128];
+		  char *r = destbuf;
+		  r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
+		  //r += snprintf(r, 8, " ");
+		  int rlen = 4;
+		  int j;
+		  uint8_t *inst_r = (uint8_t *)&inst;
+		  for (j = rlen - 1; j >= 0; j --) {
+			r += snprintf(r, 4, "%02x ", inst_r[j]);
+		  }
+		  r += snprintf(r, 8, "  ");
+		
+		#ifdef CONFIG_ITRACE
+		  disassemble(r, destbuf + sizeof(destbuf) / 2 + 20 - r,
+			  top->pc, (uint8_t *)&inst, rlen);
+		#endif
+		
+		  char *dest = strdup(destbuf);
+		  //printf("%s\n", destbuf);   ///test///
+		  ringbuf_push(dest);
+		  if(nemu_state.state == NEMU_ABORT)
+		  {
+			ringbuf_print();
+		  }
+		#endif
 		trace_and_difftest(logbuf);
 }
 
@@ -79,7 +105,6 @@ extern "C" void run_npc(uint64_t step)
 		default: npc_state = NPC_RUNNING;
 	  }
 
-	//printf("|pc          |inst        |cycle      |\n");
 
 	for(; step > 0; step --)
 	{
@@ -93,7 +118,7 @@ extern "C" void run_npc(uint64_t step)
 			break;
 		case NPC_END: 
 			printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_END.\n" ANSI_NONE);
-			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN " HIT GOOD TRAP " ANSI_NONE "at pc 0x%08x\n" , top->pc);
+			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN " HIT GOOD TRAP " ANSI_NONE "at pc 0x%08x (%d cycle)\n" , top->pc, count);
 			break;
 		
 	// else
@@ -109,14 +134,11 @@ extern "C" void run_npc(uint64_t step)
 extern "C" void init_npc(int argc, char *argv[])
 {
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
-	
-	//load_sum/mem
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
 	init_monitor();
-	init_disasm();
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 

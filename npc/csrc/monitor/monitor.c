@@ -6,6 +6,8 @@
 void init_sdb();
 void init_log(const char *log_file);
 void init_ringbuf();
+void init_disasm();
+
 char *img_file = NULL;
  long load_img() {
 	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
@@ -74,7 +76,6 @@ void init_monitor()
 {
 	init_sdb();
 	init_disasm();
-	#ifdef CONFIG_ITRACE
+	init_ringbuf();
 	init_log(log_file);
-	#endif
 }
