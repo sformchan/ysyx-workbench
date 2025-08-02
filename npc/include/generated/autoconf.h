@@ -5,4 +5,3 @@
  *
  */
 #define CONFIG_WATCHPOINT 1
-#define CONFIG_ITRACE 1
