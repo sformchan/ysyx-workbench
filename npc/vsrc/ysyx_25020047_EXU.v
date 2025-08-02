@@ -55,7 +55,7 @@ module ysyx_25020047_EXU(
                 end
                 9'b000000100: begin //ebreak
                     reg_wen = 1'b0; // ebreak does not write back
-					end_npc(); // call DPI-C function to end simulation
+					set_npc_state(32'h2); // call DPI-C function to end simulation
                 end
                 9'b000001000: begin //add
                     //$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
@@ -89,7 +89,10 @@ module ysyx_25020047_EXU(
                     write = 1'b1;
                     reg_wen = 1'b0;
                 end
-                default: result = 32'b0; // default case
+                default: begin
+					set_npc_state(32'h4);
+					result = 32'b0; // default case
+				end
             endcase
         end                                          
                                                                    

@@ -2,7 +2,7 @@
 #define __STATE_H__
 
 
-enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
+enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT, NPC_ABORT};
 
 #include <stdio.h>
 #include "memory.h"
@@ -20,7 +20,7 @@ extern uint32_t count;
 extern "C" void init_npc(int argc, char *argv[]);
 extern "C" void execute();
 extern "C" void run_npc(uint64_t step);
-extern "C" void end_npc();
+extern "C" void set_npc_state(int i);
 extern "C" void print_gpr();
 extern "C" uint32_t reg_str2val(const char *s, bool *success);
 

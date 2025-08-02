@@ -86,11 +86,10 @@ extern "C" void execute()
 		  disassemble(r, destbuf + sizeof(destbuf) / 2 + 20 - r,
 			  top->pc, (uint8_t *)&inst, rlen);
 		#endif
-		
 		  char *dest = strdup(destbuf);
 		  //printf("%s\n", destbuf);   ///test///
 		  ringbuf_push(dest);
-		  if(npc_state == NPC_END)
+		  if(npc_state == NPC_ABORT)    //yet to improve
 		  {
 			ringbuf_print();
 		  }
@@ -123,6 +122,8 @@ extern "C" void run_npc(uint64_t step)
 			printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_END.\n" ANSI_NONE);
 			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN " HIT GOOD TRAP " ANSI_NONE "at pc 0x%08x (%d cycle(s))\n" , top->pc, count);
 			break;
+		case NPC_ABORT:
+			break;
 		
 	// else
 	// {
@@ -146,9 +147,9 @@ extern "C" void init_npc(int argc, char *argv[])
 }
 
 
-extern "C" void end_npc()
+extern "C" void set_npc_state(int state)
 {
-	npc_state = NPC_END;
+	npc_state = state;
 }
 
 void init_verilator(int argc, char **argv) {
