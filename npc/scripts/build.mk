@@ -17,15 +17,16 @@ $(shell mkdir -p $(BUILD_DIR))
 
 
 # project source
-VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
-CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+# VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
+# CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+VSRCS = $(shell find vsrc -type f \( -name "*.v" -o -name "*.sv" \))
+CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cc" -o -name "*.cpp" \))
 
 
 
 # rules for verilator
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 # 添加配置头文件
-CXXFLAGS += -include $(NPC_HOME)/include/generated/autoconf.h
 
 
 $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
