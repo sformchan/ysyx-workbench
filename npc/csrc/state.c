@@ -7,6 +7,28 @@ int npc_state = NPC_STOP;
 void init_monitor();
 void init_disasm();
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+
+
+static bool g_print_step = false;
+
+static void trace_and_difftest(char *logbuf) {
+	#ifdef CONFIG_ITRACE
+	  log_write("%s\n", logbuf); 
+	  if (g_print_step) puts(logbuf);
+	  //IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+	#endif
+	#ifdef CONFIG_WATCHPOINT
+	  if(check_wp())
+	  {
+		if(npc_state != NPC_END)
+		{
+		  npc_state = NPC_STOP;
+		}	
+	  }
+	#endif 
+}
+
+
 extern "C" void execute()
 {
 	
@@ -25,8 +47,8 @@ extern "C" void execute()
 	} 
 		// count++;
 		// printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
-		#ifdef CONFIG_ITRACE
 		char logbuf[128];
+		#ifdef CONFIG_ITRACE
 		char *p = logbuf;
 		p += snprintf(p, sizeof(logbuf), "0x%08x" ":", top->pc);
 		int ilen = 4;
@@ -45,10 +67,12 @@ extern "C" void execute()
 		disassemble(p, logbuf + sizeof(logbuf) - p,
 			top->pc, (uint8_t *)&inst, ilen);
 	  	#endif
+		trace_and_difftest(logbuf);
 }
 
 extern "C" void run_npc(uint64_t step)
 {
+	g_print_step = (step < 10);
 	switch (npc_state) {
 		case NPC_END: case NPC_QUIT:
 		  printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
@@ -56,15 +80,11 @@ extern "C" void run_npc(uint64_t step)
 		default: npc_state = NPC_RUNNING;
 	  }
 
-	printf("|pc          |inst        |cycle      |\n");
+	//printf("|pc          |inst        |cycle      |\n");
 
 	for(; step > 0; step --)
 	{
-		
-		execute();
-		#ifdef CONFIG_WATCHPOINT
-		if(check_wp()) if(npc_state != NPC_END) npc_state = NPC_STOP;
-		#endif
+		execute();	
 		if(npc_state != NPC_RUNNING) break;
 	}
 
