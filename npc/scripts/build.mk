@@ -24,6 +24,9 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 
 # rules for verilator
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
+# 添加配置头文件
+CXXFLAGS += -include $(NPC_HOME)/include/config/autoconf.h
+
 
 $(BIN): $(VSRCS) $(CSRCS)
 	@rm -rf $(OBJ_DIR)
