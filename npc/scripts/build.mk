@@ -52,7 +52,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 all: default
 		
 IMG ?=
-ARGS += --log=$(WORK_DIR)/build/npc-log.txt
+ARGS += --log=$(BUILD_DIR)/npc-log.txt
 
 $(info WORK_DIR = $(WORK_DIR))
 $(info ARGS = $(ARGS))
@@ -63,7 +63,7 @@ run: $(BIN)
 	
 gdb: $(BIN)
 	@$(call git_commit, "sim RTL")
-	@gdb --args $(BIN) $(IMG)
+	@gdb --args $(BIN) $(IMG) $(ARGS)
 
 
 
