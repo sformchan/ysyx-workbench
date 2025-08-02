@@ -63,7 +63,6 @@ extern "C" void execute()
 		space_len = space_len * 3 + 1;
 		memset(p, ' ', space_len);
 		p += space_len;
-		
 		disassemble(p, logbuf + sizeof(logbuf) - p,
 			top->pc, (uint8_t *)&inst, ilen);
 	  	#endif

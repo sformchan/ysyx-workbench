@@ -85,5 +85,7 @@ void init_monitor()
 {
 	init_sdb();
 	init_disasm();
+	#ifdef CONFIG_ITRACE
 	init_log(log_file);
+	#endif
 }
