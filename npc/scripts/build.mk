@@ -28,7 +28,7 @@ CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 CXXFLAGS += -include $(NPC_HOME)/include/generated/autoconf.h
 
 
-$(BIN): $(VSRCS) $(CSRCS) 
+$(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) \
