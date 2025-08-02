@@ -25,6 +25,7 @@ CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cc" -o -name "*.cpp
 
 LIBCAPSTONE = $(NPC_HOME)/tools/capstone/repo/libcapstone.so.5
 CFLAGS += -I $(NPC_HOME)/tools/capstone/repo/include
+CFLAGS += -I $(NPC_HOME)/include
 ifdef CONFIG_ITRACE
 src/utils/disasm.c: $(LIBCAPSTONE)
 $(LIBCAPSTONE):
@@ -34,6 +35,7 @@ endif
 # rules for verilator
 CXXFLAGS += -DTOP_NAME="\"V$(TOPNAME)\""
 CXXFLAGS += -I $(NPC_HOME)/tools/capstone/repo/include
+CFLAGS += -I $(NPC_HOME)/include
 # 添加配置头文件
 
 

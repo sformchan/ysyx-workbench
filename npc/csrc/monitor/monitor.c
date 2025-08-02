@@ -1,6 +1,5 @@
 #include "memory.h"
 #include "state.h"
-#include <string.h>
 #include <getopt.h>
 
 #define ysyx_25020047_RESET_VECTOR 0x80000000
@@ -70,16 +69,6 @@ int parse_args(int argc, char *argv[]) {
 	return 0;
   }
 
-
-// int parse_args(int argc, char *argv[]) 
-// {
-// 	// if (argc < 2) {
-// 	//   printf("Usage: %s IMAGE\n", argv[1]);
-// 	//   exit(1);
-// 	// }
-// 	img_file = argv[1];
-// 	return 0;
-// }
 
 void init_monitor()
 {

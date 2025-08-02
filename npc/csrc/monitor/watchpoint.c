@@ -14,9 +14,7 @@
 ***************************************************************************************/
 
 #include "state.h"
-#include <stdbool.h>
 #include "vinit.h"
-#include <string.h>
 
 uint32_t expr(char *e, bool *success);
 #define NR_WP 32

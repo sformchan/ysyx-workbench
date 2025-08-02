@@ -11,5 +11,7 @@
 extern VerilatedContext* contextp;
 extern Vtop* top;
 
+void init_verilator(int argc, char **argv);
+
 
 #endif
