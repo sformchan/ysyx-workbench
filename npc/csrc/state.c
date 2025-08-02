@@ -1,5 +1,6 @@
 #include "state.h"
 #include "vinit.h"
+#include "utils.h"
 
 void init_sdb();
 bool check_wp();
@@ -77,6 +78,7 @@ extern "C" void init_npc(int argc, char *argv[])
 	load_img();
 	init_verilator(argc, argv);
 	init_sdb();
+	init_disasm();
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 
