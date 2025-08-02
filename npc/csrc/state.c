@@ -42,7 +42,9 @@ extern "C" void run_npc(uint64_t step)
 	{
 		
 		execute();
+		#ifdef CONFIG_WATCHPOINT
 		if(check_wp()) npc_state = NPC_STOP;
+		#endif
 		if(npc_state != NPC_RUNNING) break;
 	}
 
