@@ -53,6 +53,10 @@ all: default
 		
 IMG ?=
 ARGS += --log=$(WORK_DIR)/build/npc-log.txt
+
+$(info WORK_DIR = $(WORK_DIR))
+$(info ARGS = $(ARGS))
+
 run: $(BIN)
 	@$(BIN) $(IMG) $(ARGS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
