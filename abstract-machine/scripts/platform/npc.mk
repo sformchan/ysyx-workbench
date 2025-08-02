@@ -16,6 +16,7 @@ LDFLAGS   += --gc-sections -e _start
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = the_insert-arg_rule_in_Makefile_will_insert_mainargs_here
 CFLAGS += -DMAINARGS_MAX_LEN=$(MAINARGS_MAX_LEN) -DMAINARGS_PLACEHOLDER=$(MAINARGS_PLACEHOLDER)
+NPC_FLAGS += --log=$(shell dirname $(IMAGE).elf)/npc-log.txt
 
 insert-arg: image
 	@python3 $(AM_HOME)/tools/insert-arg.py $(IMAGE).bin $(MAINARGS_MAX_LEN) $(MAINARGS_PLACEHOLDER) "$(mainargs)"
@@ -27,7 +28,7 @@ image: image-dep
 
 #@echo "TODO: add command here to run simulation"
 run: insert-arg
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) ARGS=$(NPC_FLAGS) run IMG=$(IMAGE).bin
 
 # run: insert-arg
 # 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run IMG=/home/leonard/ysyx-workbench/am-kernels/kernels/demo/build/demo-riscv32-nemu.bin
