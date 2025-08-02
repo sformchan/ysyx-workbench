@@ -6,9 +6,7 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT};
 
 #include <stdio.h>
 #include "memory.h"
-#include <stdint.h>
-#include <stdlib.h>
-#include <assert.h>
+#include "common.h"
 #include "utils.h"
 #include </home/leonard/ysyx-workbench/npc/include/generated/autoconf.h>
 
