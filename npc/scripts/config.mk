@@ -44,6 +44,7 @@ $(FIXDEP):
 menuconfig: $(MCONF) $(CONF) $(FIXDEP)
 	$(Q)$(MCONF) $(Kconfig)
 	$(Q)$(CONF) $(silent) --syncconfig $(Kconfig)
+	$(MAKE) include/config/auto.conf
 
 savedefconfig: $(CONF)
 	$(Q)$< $(silent) --$@=configs/defconfig $(Kconfig)
@@ -68,3 +69,9 @@ define call_fixdep
 	@$(FIXDEP) $(1) $(2) unused > $(1).tmp
 	@mv $(1).tmp $(1)
 endef
+
+
+include/config/auto.conf: .config
+	@mkdir -p include/config
+	@cp .config $@
+	@cat .config | sed 's/^CONFIG_/#define CONFIG_/g' > include/config/autoconf.h
