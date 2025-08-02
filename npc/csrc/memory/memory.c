@@ -44,7 +44,7 @@ extern "C" int pmem_read(int raddr, int flag)
 	if(flag)
 	{
 		#ifdef CONFIG_MTRACE
-		printf("[MTARCE] " ANSI_FG_CYAN "READ  " ANSI_NONE "addr=" FMT_PADDR "  len=4\n", raddr);
+		printf("[MTARCE] " ANSI_FG_CYAN "READ  " ANSI_NONE "addr=0x%08x"  "  len=4\n", raddr);
 		#endif
 	}
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
@@ -71,11 +71,9 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 		fputc(ch, stderr);
 		return;
 	}
-	//printf(ANSI_FG_BLUE "%08x\n" ANSI_NONE, waddr);
 	uint32_t waddr1 = (uint32_t)waddr & ~(0x3u);
     //waddr &= ~(0x3u);
     uint32_t offset = waddr1 - ysyx_25020047_INITADDR;
-	//printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
 		printf("\n");
@@ -94,7 +92,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
     if (wmask & 0x4) rom[offset + 2] = (wdata >> 16) & 0xFF, len++;
     if (wmask & 0x8) rom[offset + 3] = (wdata >> 24) & 0xFF, len++;
 	#ifdef CONFIG_MTRACE
-  	printf("[MTARCE] " ANSI_FG_MAGENTA "WRITE " ANSI_NONE "addr=" FMT_PADDR "  len=%d\n", waddr1, len);
+  	printf("[MTARCE] " ANSI_FG_MAGENTA "WRITE " ANSI_NONE "addr=0x%08x"  "  len=%d\n", waddr1, len);
   	#endif
 }
 
