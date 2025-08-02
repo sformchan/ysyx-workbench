@@ -22,6 +22,9 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   assign gpr1 = rf[5'b01000]; // x1
   assign gpr2 = rf[5'b01100]; // x2
 
+
+
+
   
   always @(posedge clk) begin
     if (rst) begin
@@ -30,9 +33,14 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
         rf[i] <= {DATA_WIDTH{1'b0}}; //it just initializes all registers to zero at the same time
       end
     end
-    else if (wen && waddr != 5'b0) rf[waddr] <= wdata;  
+    else if (wen && waddr != 5'b0) begin
+		rf[waddr] <= wdata; 
+	end 
+  end
+
+  always @(*) begin
+	integer i;
+	for(i = 0; i < 16; i++) set_gpr(i, rf[i]);
   end
 endmodule
 
-
-//Reg #(1, 1'b1) i0 (clk, rst, in[0], out[0], 1'b1);  // Example instantiation of Reg module

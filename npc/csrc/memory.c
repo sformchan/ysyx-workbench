@@ -12,15 +12,15 @@
 /////////MEM//////////
 uint8_t rom[ysyx_25020047_MEM_SIZE];
 
-// uint8_t rom[ysyx_25020047_ROM_SIZE] = {
-//     0xb7, 0x00, 0x24, 0x1e,
-//     0x03, 0x21, 0x30, 0x00,
-//     0x23, 0x00, 0x10, 0x00,
-//     0x03, 0x21, 0x00, 0x00,
-//     0x93, 0x80, 0x00, 0x7d,
-//     0x33, 0x81, 0x00, 0x00,
-//     0x73, 0x00, 0x10, 0x00 //ebreak
-// };
+uint8_t img[24] = {
+    0xb7, 0x00, 0xf4, 0x01,
+    0x93, 0x80, 0x00, 0x7d,
+    0x33, 0x81, 0x00, 0x00,
+    0xb3, 0x06, 0xf7, 0x00,
+    0x33, 0x81, 0x00, 0x00,
+    0x73, 0x00, 0x10, 0x00 //ebreak
+};
+
 // lui x1 123456
 // lw x2 3(x0)
 // sb x1 0(x0)
@@ -34,18 +34,20 @@ uint8_t rom[ysyx_25020047_MEM_SIZE];
 /////////MEM_VISIT/////////
 extern "C" int pmem_read(int raddr)
 {
+	uint32_t high = 0;
 	if(raddr == RTC_ADDR) 
 	{
 		uint64_t uptime = get_uptime_64bit();
 		//printf("%lu\n", uptime);
+		high = uptime >> 32;
 		return (uint32_t)(uptime & 0xFFFFFFFF); 
 	}
 	if(raddr == RTC_ADDR + 4)
 	{
-		uint64_t uptime = get_uptime_64bit();
-		return (uint32_t)(uptime >> 32);
+		uint32_t uptime = high;
+		return uptime;
 	}
-	
+	//printf("raddr: %08x\n", raddr);
     raddr &= ~(0x3u);
     uint32_t offset = raddr - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
@@ -61,7 +63,7 @@ extern "C" int pmem_read(int raddr)
 
 
 
-extern "C" void pmem_write(int waddr, int wdata, int wmask, int inst, int pc)
+extern "C" void pmem_write(int waddr, int wdata, int wmask)
 {
 
 	
@@ -79,9 +81,9 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask, int inst, int pc)
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
 		printf("\n");
-		printf("\033[31mPC: 0x%08x\033[0m\n", pc);
-		printf("\033[31mINST: 0x%08x\033[0m\n", inst);
-        printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr);
+		//printf("\033[31mPC: 0x%08x\033[0m\n", pc);
+		//printf("\033[31mINST: 0x%08x\033[0m\n", inst);
+        printf("\033[31mError: write_address 0x%08x is out of MEM range.\033[0m\n", waddr1);
 		printf("\033[31mError: origin address: 0x%08x.\033[0m\n", waddr);
 		printf("\033[31mError: offset: 0x%08x\033[0m\n", offset);
 		exit(1);
@@ -152,17 +154,15 @@ void load_verilog_hex(const char *filename) {
     printf("MEM loaded successfully.\n");
 }
 
-
-//load bin file
-
-
 #define ysyx_25020047_RESET_VECTOR 0x80000000
 
 char *img_file = NULL;
  long load_img() {
+	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
 	if (img_file == NULL) {
-	  perror("No image is given.\n");
-	  exit(1); 
+	  printf(ANSI_FG_BLUE "No image is given. Use the built-in image.\n" ANSI_NONE);
+	  memcpy(&rom[offset], img, 24);
+	  return 24; 
 	}
   
 	FILE *fp = fopen(img_file, "rb");
@@ -174,10 +174,8 @@ char *img_file = NULL;
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
   
-	printf("The image is %s, size = %ld\n", img_file, size);
-  
+	printf(ANSI_FG_BLUE "The image is %s, size = %ld\n" ANSI_NONE, img_file, size);
 	fseek(fp, 0, SEEK_SET);
-	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
 	int ret = fread(&rom[offset], size, 1, fp);
 	assert(ret == 1);
   
@@ -204,11 +202,12 @@ char *img_file = NULL;
 //   }
 
 
-int parse_args(int argc, char *argv[]) {
-	if (argc < 2) {
-	  printf("Usage: %s IMAGE\n", argv[1]);
-	  exit(1);
-	}
+int parse_args(int argc, char *argv[]) 
+{
+	// if (argc < 2) {
+	//   printf("Usage: %s IMAGE\n", argv[1]);
+	//   exit(1);
+	// }
 	img_file = argv[1];
 	return 0;
-  }
+}

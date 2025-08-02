@@ -13,20 +13,23 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 #include <ctype.h>
-#include <memory/paddr.h>
-#include "isa.h"
+#include "memory.h"
+#include <stdbool.h>
+#include <string.h>
+#include "utils.h"
+#include "vinit.h"
+#include "state.h"
+
 
 
 bool check_parentheses(int p, int q);    //check parentheses
 uint32_t eval(int p, int q);   
-word_t isa_reg_str2val(const char *s, bool *success);    //reg_name to reg_value
 
 
 
@@ -80,6 +83,7 @@ static struct rule {
   
 };  
 
+#define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 #define NR_REGEX ARRLEN(rules)  //calculate the length of array, for the follow-up iteration
 
 static regex_t re[NR_REGEX] = {};   
@@ -95,7 +99,8 @@ void init_regex() {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
-      panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+      printf("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+	  exit(1);
     }
   }
 }
@@ -220,7 +225,7 @@ bool loop = false; //用于eval函数.
   //因为会先优先匹配到else if(tokens[p].type == 7)的情况 把*之后的表达式作为整体
   //设置这个变量 让第零个嵌套先不去匹配else if(tokens[p].type == 7)
 
-word_t expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
@@ -306,13 +311,13 @@ uint32_t eval(int p, int q) {
      {
        if(strcmp(tokens[p].str, "$pc") == 0)
        {
-         word_t reg_value = cpu.pc;
+         uint32_t reg_value = top->pc;
          return reg_value;
        }
        else
        {
-		char *reg_name = tokens[p].str + 1;
-         word_t reg_value = isa_reg_str2val(reg_name, &success);
+			char *reg_name = tokens[p].str + 1;
+         uint32_t reg_value = reg_str2val(reg_name, &success);
          if(!success)
          {
            printf(ANSI_FG_RED "ERROR" ANSI_NONE ": NOT A LEGAL REGISTER\n");
@@ -325,7 +330,7 @@ uint32_t eval(int p, int q) {
      }
      else if(tokens[p].type == 16)
      {
-       word_t hex_value = (word_t)strtol(tokens[p].str, NULL, 16); 
+       uint32_t hex_value = (uint32_t)strtol(tokens[p].str, NULL, 16); 
        return hex_value;
      }
      else if(tokens[p].type == 2)
@@ -345,19 +350,19 @@ uint32_t eval(int p, int q) {
   }
   else if(tokens[p].type == 7 && (check_parentheses(p + 1, q) || q - p == 1))  //deref
   {
-    word_t addr = eval(p + 1, q);
+    uint32_t addr = eval(p + 1, q);
     if(addr < 0x80000000 || addr > 0x87ffffff)
     {
         printf("%x\n", addr);
         printf(ANSI_FG_RED "ERROR" ANSI_NONE ": INVAILD MEMORY ADDRESS(out of bound)\n");
         return 0;
     }
-    word_t data = paddr_read(addr, 4);
+    uint32_t data = (uint32_t)pmem_read(addr);
     return data;
   }
   else if(tokens[p].type == 8 && (check_parentheses(p + 1, q) || q - p == 2))  //negetive
   {
-    word_t result = eval(p + 1, q);
+    uint32_t result = eval(p + 1, q);
     return -1 * result;
   }
   else if (check_parentheses(p, q) == true) {

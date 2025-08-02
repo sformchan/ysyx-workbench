@@ -1,6 +1,4 @@
 module ysyx_25020047_LSU (
-	input [31:0] pc,
-	input [31:0] inst,
     input [8:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
@@ -80,11 +78,11 @@ always @(*) begin
     if(write) begin
         if(inst_type == 9'b010000000) begin
 			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
-			pmem_write(waddr, wdata, 32'hF, inst, pc);
+			pmem_write(waddr, wdata, 32'hF); //pc inst
 		end
         else if(inst_type == 9'b100000000) begin
             //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
-            pmem_write(waddr, wdata1, wmask, inst, pc);
+            pmem_write(waddr, wdata1, wmask);
         end
     end
 end
