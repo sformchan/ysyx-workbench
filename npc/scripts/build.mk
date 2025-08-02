@@ -52,7 +52,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 all: default
 		
 IMG ?=
-ARGS += --log=$(BUILD_DIR)/npc-log.txt
+override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 
 $(info WORK_DIR = $(WORK_DIR))
 $(info ARGS = $(ARGS))
