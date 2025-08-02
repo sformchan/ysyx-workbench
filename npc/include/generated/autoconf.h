@@ -4,4 +4,4 @@
  * NPC Configuration Menu
  *
  */
-#define CONFIG_WATCHPOINT 1
+#define CONFIG_IRINGBUF 1

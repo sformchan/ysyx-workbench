@@ -9,7 +9,10 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void ringbuf_push(char *log);
 void ringbuf_print();
 
+
 static bool g_print_step = false;
+
+
 
 static void trace_and_difftest(char *logbuf) {
 	#ifdef CONFIG_ITRACE
@@ -69,7 +72,7 @@ extern "C" void execute()
 		#ifdef CONFIG_IRINGBUF
 		  char destbuf[128];
 		  char *r = destbuf;
-		  r += snprintf(r, sizeof(destbuf) / 2, FMT_WORD ": ", s->pc);
+		  r += snprintf(r, sizeof(destbuf) / 2, "0x%08x" ": ", top->pc);
 		  //r += snprintf(r, 8, " ");
 		  int rlen = 4;
 		  int j;
@@ -87,7 +90,7 @@ extern "C" void execute()
 		  char *dest = strdup(destbuf);
 		  //printf("%s\n", destbuf);   ///test///
 		  ringbuf_push(dest);
-		  if(nemu_state.state == NEMU_ABORT)
+		  if(npc_state == NPC_END)
 		  {
 			ringbuf_print();
 		  }
