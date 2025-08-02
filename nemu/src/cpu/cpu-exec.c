@@ -102,7 +102,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
     r += snprintf(r, 4, "%02x ", inst_r[j]);
   }
   //r += snprintf(r, 8, "  ");
-  //r += snprintf(r, 8, "%*s", space_len, " ");
+  r += snprintf(r, 8, "%*s", space_len, " ");
 
 #ifdef CONFIG_ITRACE
   disassemble(r, destbuf + sizeof(destbuf) / 2 + 20 - r,
