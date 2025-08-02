@@ -13,8 +13,8 @@ char *img_file = NULL;
 	unsigned int offset = ysyx_25020047_RESET_VECTOR - ysyx_25020047_INITADDR;
 	if (img_file == NULL) {
 	  printf(ANSI_FG_BLUE "No image is given. Use the built-in image.\n" ANSI_NONE);
-	  memcpy(&rom[offset], img, 28);
-	  return 28; 
+	  memcpy(&rom[offset], img, ysyx_25020047_IMG_SIZE);
+	  return ysyx_25020047_IMG_SIZE; 
 	}
   
 	FILE *fp = fopen(img_file, "rb");
