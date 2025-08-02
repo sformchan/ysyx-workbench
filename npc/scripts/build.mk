@@ -8,7 +8,7 @@ VERILATOR_CFLAGS += -MMD --build -cc \
 				-O2 --x-assign fast --x-initial fast --noassert
 
 WORK_DIR  = $(shell pwd)
-BUILD_DIR = ./build
+BUILD_DIR = $(WORK_DIR)/build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(BUILD_DIR)/$(TOPNAME)
 
