@@ -117,9 +117,15 @@ module ysyx_25020047_EXU(
 				end
 				32'h10000: begin //slt
 					result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
+					reg_wen = 1'b1;
 				end
 				32'h20000: begin //sltu
 					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
+					reg_wen = 1'b1;
+				end
+				32'h40000: begin //xor
+					result = rdata1 ^ rdata2;
+					reg_wen = 1'b1;
 				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
