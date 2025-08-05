@@ -57,12 +57,15 @@ module ysyx_25020047_WBU(
                 32'h40: begin //lbu
                     wdata = memdata;
                 end
-				32'h320: begin //auipc
+				32'h200: begin //auipc
 					wdata = result;
 				end
-				32'h640: begin //jal
+				32'h400: begin //jal
 					wdata = snpc;
 					dnpc = result;
+				end
+				32'h800: begin //sub
+					wdata = result;
 				end
                 default: wdata = 32'b0;
             endcase

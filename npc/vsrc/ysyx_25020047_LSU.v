@@ -56,7 +56,7 @@ always @(*) begin
 			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
 			pmem_write(waddr, wdata, 32'hF); //pc inst
 		end
-        else if(inst_type == 32'h160) begin   //sb
+        else if(inst_type == 32'h100) begin   //sb
             //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
             pmem_write(waddr, wdata1, wmask);
         end

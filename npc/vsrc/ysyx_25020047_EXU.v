@@ -83,17 +83,21 @@ module ysyx_25020047_EXU(
                     result = rdata1 + imm;
                     write = 1'b1;
                 end
-                32'h160: begin //sb
+                32'h100: begin //sb
                     // $display("result 0x%08x", result);
                     result = rdata1 + imm;
                     write = 1'b1;
                 end
-				32'h320: begin //auipc
+				32'h200: begin //auipc
 					result = pc + imm;
 					reg_wen = 1'b1;
 				end
-				32'h640: begin //jal
+				32'h400: begin //jal
 					result = pc + imm;
+					reg_wen = 1'b1;
+				end
+				32'h800: begin //sub
+					result = rdata1 - rdata2;
 					reg_wen = 1'b1;
 				end
                 default: begin
