@@ -85,7 +85,6 @@ assign Simm = {inst[31:25], inst[11:7]};
 wire [31:0] sSimm;
 assign sSimm = {{20{Simm[11]}}, Simm};
 
-
 // Jtype
 wire [4:0] Jrd;
 wire [20:0] Jimm;
@@ -93,12 +92,22 @@ assign Jimm = {inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};
 wire [31:0] sJimm;
 assign sJimm = {{11{Jimm[20]}}, Jimm};
 
+// Btype
+wire [4:0] Brs1;
+wire [4:0] Brs2;
+wire [12:0] Bimm;
+assign Brs1 = inst[19:15];
+assign Brs2 = inst[24:20];
+assign Bimm = {inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};
+wire [31:0] sBimm;
+assign sBimm = {{11{Bimm[20]}}, Bimm};
+
 // combine the signals
 wire [4:0] rs1;
 wire [4:0] rs2;
 wire [4:0] rd;
-assign rs1 = Rrs1 | Irs1 | Srs1;
-assign rs2 = Rrs2 | Srs2;
+assign rs1 = Rrs1 | Irs1 | Srs1 | Brs1;
+assign rs2 = Rrs2 | Srs2 | Brs2;
 assign rd = Rrd | Ird | Urd | Jrd;
 
 
@@ -121,6 +130,9 @@ assign rd = Rrd | Ird | Urd | Jrd;
 				32'b?????????????????010?????0010011: inst_type = 32'h1000; //slti
 				32'b?????????????????011?????0010011: inst_type = 32'h2000; //sltiu
 				
+			//B-type
+				32'b?????????????????000?????1100011: inst_type = 32'h4000; //beq
+				32'b?????????????????001?????1100011: inst_type = 32'h8000; //bne
 
 
 			//R-type
@@ -144,14 +156,19 @@ assign rd = Rrd | Ird | Urd | Jrd;
                     32'h2: imm = sIimm; // jalr
 					32'h20: imm = sIimm; // lw
                     32'h40: imm = sIimm; // lbu
+					32'h1000: imm = sIimm; // slti
+					32'h2000: imm = sIimm; // sltiu
 
                     32'h10: imm = zUimm; // lui
-					32'h200: imm = zUimm; //auipc
+					32'h200: imm = zUimm; // auipc
 
                     32'h80: imm = sSimm; // sw
                     32'h100: imm = sSimm; // sb
 
+					32'h4000: imm = sBimm; // beq
+					32'h8000: imm = sBimm; // bne
 					32'h400: imm = sJimm; // jal
+
                     default:      imm = 32'b0; // default case
                 endcase
             end                                          

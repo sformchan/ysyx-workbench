@@ -32,6 +32,7 @@ module ysyx_25020047_EXU(
     input [31:0] rdata2,
     input [31:0] imm,
 	input [31:0] pc,
+	input [31:0] snpc,
     output reg [31:0] result,
     output reg reg_wen,
     output reg read,
@@ -107,6 +108,12 @@ module ysyx_25020047_EXU(
 				32'h2000: begin //stliu
 					result = ($unsigned(rdata1) < $unsigned(imm)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
+				end
+				32'h4000: begin //beq
+					result = (rdata1 == rdata2) ? (pc + imm) : snpc;
+				end
+				32'h8000: begin //bne
+					result = (rdata1 != rdata2) ? (pc + imm) : snpc;
 				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation

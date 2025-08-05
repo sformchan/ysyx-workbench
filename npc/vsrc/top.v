@@ -54,6 +54,7 @@ ysyx_25020047_EXU u2(
     .rdata2(rdata2),
     .imm(imm),
 	.pc(pc),
+	.snpc(snpc),
     .result(result),
     .reg_wen(reg_wen),
     .read(read),
