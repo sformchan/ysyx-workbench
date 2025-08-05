@@ -61,7 +61,7 @@ module ysyx_25020047_EXU(
                 end
                 32'h8: begin //add
                     //$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
-                    result = rdata1 - rdata2; // R-type instruction
+                    result = rdata1 + rdata2; // R-type instruction
                     reg_wen = 1'b1;
                 end
                 32'h10: begin //lui
