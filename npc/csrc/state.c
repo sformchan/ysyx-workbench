@@ -180,16 +180,25 @@ void init_verilator(int argc, char **argv) {
     contextp->commandArgs(argc, argv);
     top = new Vtop{contextp};
     contextp->traceEverOn(true);
-	top->rst = 0;
+	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
-	for(int i = 0; i < 2; i++)
-	{
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
-		top->eval();
-		//printf("%d\n", top->clk);
-		contextp->timeInc(1);
+	// for(int i = 0; i < 2; i++)
+	// {
+	// 	top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
+	// 	top->eval();
+	// 	//printf("%d\n", top->clk);
+	// 	contextp->timeInc(1);
+	// }
+	// Reset pulse for 2 cycles
+
+	for (int i = 0; i < 2; i++) {
+		top->clk = 0; top->eval(); contextp->timeInc(1);
+		top->clk = 1; top->eval(); contextp->timeInc(1);
 	}
-	//top->rst = 0;
+
+
+	
+	top->rst = 0;
 }
 
 
