@@ -24,8 +24,21 @@ int main(int argc, char** argv)
 	// top->clk = 1;
 	// top->clk = 0;
 	// top->rst = 0;
-	npc_clk_once();
-	
+	//npc_clk_once();
+	top->rst = 1;
+top->clk = 0;
+top->eval(); // 初始状态：rst=1，clk=0
+
+top->clk = 1;
+top->eval(); // 上升沿：这里才会触发 always @(posedge clk) 执行 pc <= 0x80000000
+
+top->clk = 0;
+top->eval();
+
+top->rst = 0; // 取消复位
+top->eval();
+
+
 ////////execution////////
 	sdb_mainloop();
 
