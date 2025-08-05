@@ -18,16 +18,43 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+void diff_set_regs(void *ctx) {
+	CPU_state *c = (CPU_state *)ctx;
+	for (int i = 0; i < 32; i++) {
+	  cpu.gpr[i] = c->gpr[i];
+	}
+	cpu.pc = c->pc;
+  }
+  
+void diff_get_regs(void *ctx) {
+	CPU_state *c = (CPU_state *)ctx;
+	for (int i = 0; i < 32; i++) {
+	  c->gpr[i] = cpu.gpr[i];
+	}
+	c->pc = cpu.pc;
+}
+  
+
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  assert(0);
+	if(direction == DIFFTEST_TO_REF) memcpy(guest_to_host(addr), buf, n);
+	else assert(0);
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
-  assert(0);
+	if (direction == DIFFTEST_TO_REF) {
+		// 把 DUT 的寄存器值写入 REF
+		diff_set_regs(dut);
+	} 
+	else {
+		// 把 REF 的寄存器值读出，写入 DUT
+		diff_get_regs(dut);
+	  }
+  	//assert(0);
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  assert(0);
+	for(int i = 0; i < n; i++) cpu_exec(1);
+  //assert(0);
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {
@@ -36,7 +63,7 @@ __EXPORT void difftest_raise_intr(word_t NO) {
 
 __EXPORT void difftest_init(int port) {
   void init_mem();
-  init_mem();
+  init_mem();		
   /* Perform ISA dependent initialization. */
   init_isa();
 }
