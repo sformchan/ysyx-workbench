@@ -81,5 +81,10 @@ void init_monitor()
 	init_disasm();
 	init_ringbuf();
 	init_log(log_file);
-	read_elf_symbols(elf_file);
+	#ifdef CONFIG_FTRACE
+  	if (elf_file != NULL) {
+    printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
+    read_elf_symbols(elf_file);
+  	}
+	#endif
 }
