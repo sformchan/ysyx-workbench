@@ -141,7 +141,7 @@ module ysyx_25020047_EXU(
 					write = 1'b1;
 				end
 				32'h400000: begin //srai arithmetic
-					result = rdata1 >>> shamt;
+					result = $signed(rdata1) >>> shamt;
 					reg_wen = 1'b1;
 				end
 				32'h800000: begin //srli
