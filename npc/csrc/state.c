@@ -214,6 +214,8 @@ void transform()
 		cpu.gpr[i] = gpr_val[i];
 	}
 	cpu.pc = top->pc;
+	printf("0x%08x\n", top->pc);
+	printf("0x%08x\n", cpu.pc);
 }
 extern "C" void print_gpr()
 {
