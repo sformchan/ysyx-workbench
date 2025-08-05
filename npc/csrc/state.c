@@ -167,16 +167,6 @@ extern "C" void init_npc(int argc, char *argv[])
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
-	top->rst = 1;
-	for (int i = 0; i < 2; i++) {
-		top->clk = 0; top->eval(); printf("pc: 0x%08x\n");
-		top->clk = 1; top->eval(); printf("pc: 0x%08x\n");
-	}
-	top->rst = 0;
-	for (int i = 0; i < 2; i++) {
-		top->clk = 0; top->eval(); printf("pc: 0x%08x\n");
-		top->clk = 1; top->eval(); printf("pc: 0x%08x\n");
-	}
 	init_monitor();
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
