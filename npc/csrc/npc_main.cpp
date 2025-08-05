@@ -21,11 +21,9 @@ int main(int argc, char** argv)
 	//init_verilator(argc, argv);
 	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
-	top->clk = 1;
-	top->eval();
-	top->clk = 0;
 	top->rst = 0;
-	top->eval();
+	top->clk = 0;
+
 
 ////////execution////////
 	sdb_mainloop();
