@@ -8,7 +8,7 @@ void init_monitor();
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void ringbuf_push(char *log);
 void ringbuf_print();
-
+void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
 
 static bool g_print_step = false;
 
@@ -41,6 +41,16 @@ extern "C" void execute()
 		top->eval();
 		//printf("%d\n", top->clk);
 		inst = pmem_read(top->pc, 0);
+		
+		if(inst == 0xFFFFFFFF)
+		{
+			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
+			exit(1);
+		}
+		contextp->timeInc(1);
+	} 
+
+	//FTRACE
 		#ifdef CONFIG_FTRACE
 		uint32_t rd = (inst >> 7) & 0x1f;
 		int32_t imm = (int32_t)(inst) >> 20;
@@ -49,13 +59,8 @@ extern "C" void execute()
 		uint32_t opcode = inst & 0x7F;
 		if(opcode == 0x67) ftrace_exec(top->pc, top->dnpc, rd, rs1, imm);
 		#endif
-		if(inst == 0xFFFFFFFF)
-		{
-			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
-			exit(1);
-		}
-		contextp->timeInc(1);
-	} 
+
+	//ITRACE
 		count++;
 		// printf("|0x%08X  |0x%08X  |%08d   |\n", top->pc, inst, count);
 		char logbuf[128];
