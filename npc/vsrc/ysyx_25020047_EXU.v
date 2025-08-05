@@ -31,6 +31,7 @@ module ysyx_25020047_EXU(
     input [31:0] rdata1,
     input [31:0] rdata2,
     input [31:0] imm,
+	input [4:0] shamt, 
 	input [31:0] pc,
 	input [31:0] snpc,
     output reg [31:0] result,
@@ -138,6 +139,18 @@ module ysyx_25020047_EXU(
 				32'h200000: begin //sh
 					result = rdata1 + imm;
 					write = 1'b1;
+				end
+				32'h400000: begin //srai
+					result = $signed(rdata1) >>> shamt;
+					reg_wen = 1'b1;
+				end
+				32'h800000: begin //srli
+					result = $unsigned(rdata1) >>> shamt;
+					reg_wen = 1'b1;
+				end
+				32'h1000000: begin //slli
+					result = $unsigned(rdata1) <<< shamt;
+					reg_wen = 1'b1;
 				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation

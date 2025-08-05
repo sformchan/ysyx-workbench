@@ -23,6 +23,7 @@ ysyx_25020047_IFU u0(
 
 wire [31:0]  imm;
 wire [31:0]   inst_type;
+wire [4:0] shamt;
 ysyx_25020047_IDU u1(
     .clk(clk),
     .rst(rst),
@@ -38,7 +39,8 @@ ysyx_25020047_IDU u1(
     .snpc(snpc),
     .gpr0(gpr0),
     .gpr1(gpr1),
-    .gpr2(gpr2)
+    .gpr2(gpr2),
+	.shamt(shamt)
 );
 
 
@@ -53,6 +55,7 @@ ysyx_25020047_EXU u2(
     .rdata1(rdata1),
     .rdata2(rdata2),
     .imm(imm),
+	.shamt(shamt),
 	.pc(pc),
 	.snpc(snpc),
     .result(result),
