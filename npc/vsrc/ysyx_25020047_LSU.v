@@ -53,15 +53,15 @@ always @(*) begin
   case (store_offset)
     2'b00: begin
       wdata1 = {16'b0, wdata[15:0]};  // halfword at byte 0
-      sh_wmask  = 4'b0011;
+      sh_wmask = 32'h3;
     end
     2'b10: begin
       wdata1 = {wdata[15:0], 16'b0};  // halfword at byte 2
-      sh_wmask  = 4'b1100;
+      sh_wmask  = 32'h12;
     end
     default: begin
       wdata1 = 32'b0;
-      sh_wmask  = 4'b0000;  // invalid address, do nothing
+      sh_wmask  = 32'h0;  // invalid address, do nothing
     end
   endcase
 end
