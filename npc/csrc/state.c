@@ -194,6 +194,7 @@ void init_verilator(int argc, char **argv) {
 		//printf("%d\n", top->clk);
 		contextp->timeInc(1);
 	}
+	top->rst = 0;
 }
 
 #define ysyx_25020047_GPR_NUM 32
