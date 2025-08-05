@@ -11,6 +11,7 @@ uint32_t count = 0;
 uint32_t inst = 0;
 	
 void sdb_mainloop();
+void npc_clk_once();
 
 int main(int argc, char** argv)
 {
@@ -18,11 +19,12 @@ int main(int argc, char** argv)
 ////////initialization///////
 	init_npc(argc, argv);
 	//init_verilator(argc, argv);
-	top->rst = 1;
-	top->clk = 1;
-	//top->pc = ysyx_25020047_INITADDR;
-	top->clk = 0;
-	top->rst = 0;
+	// top->rst = 1;
+	// top->pc = ysyx_25020047_INITADDR;
+	// top->clk = 1;
+	// top->clk = 0;
+	// top->rst = 0;
+	npc_clk_once();
 	
 ////////execution////////
 	sdb_mainloop();

@@ -170,6 +170,13 @@ extern "C" void init_npc(int argc, char *argv[])
 	printf("\033[32mStimulation starting...\033[0m\n");
 }
 
+void npc_clk_once() {
+    top->clk = 0;
+    top->eval();
+    top->clk = 1;
+    top->eval();
+}
+
 
 extern "C" void set_npc_state(int state)
 {
