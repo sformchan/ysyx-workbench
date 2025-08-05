@@ -22,30 +22,48 @@ end
 reg [31:0] wdata1;
 wire [1:0] store_offset;
 assign store_offset = waddr[1:0];
-reg [31:0] wmask;
+reg [31:0] sb_wmask;
 always @(*) begin
     case(store_offset)
         2'b00: begin
             wdata1 = wdata;
-            wmask = 32'h1;
+            sb_wmask = 32'h1;
         end
         2'b01: begin
             wdata1 = {wdata[23:0], 8'b0};
-            wmask = 32'h2;
+            sb_wmask = 32'h2;
         end
         2'b10: begin
             wdata1 = {wdata[15:0], 16'b0};
-            wmask = 32'h4;
+            sb_wmask = 32'h4;
         end
         2'b11: begin
             wdata1 = {wdata[7:0], 24'b0};
-            wmask = 32'h8;
+            sb_wmask = 32'h8;
         end
         default: begin
             wdata1 = wdata;
-            wmask = 32'h0;
+            sb_wmask = 32'h0;
         end
     endcase
+end
+
+reg [31:0] sh_wmask;
+always @(*) begin
+  case (store_offset)
+    2'b00: begin
+      wdata1 = {16'b0, wdata[15:0]};  // halfword at byte 0
+      sh_wmask  = 4'b0011;
+    end
+    2'b10: begin
+      wdata1 = {wdata[15:0], 16'b0};  // halfword at byte 2
+      sh_wmask  = 4'b1100;
+    end
+    default: begin
+      wdata1 = 32'b0;
+      sh_wmask  = 4'b0000;  // invalid address, do nothing
+    end
+  endcase
 end
 
 
@@ -58,9 +76,12 @@ always @(*) begin
 		end
         else if(inst_type == 32'h100) begin   //sb
             //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
-            pmem_write(waddr, wdata1, wmask);
+            pmem_write(waddr, wdata1, sb_wmask);
         end
-    end
+		else if(inst_type == 32'h200000) begin //sh
+			pmem_write(waddr, wdata1, sh_wmask);
+    	end
+	end
 end
 
 
