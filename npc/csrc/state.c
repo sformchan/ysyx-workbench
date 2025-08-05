@@ -188,6 +188,13 @@ void init_verilator(int argc, char **argv) {
     contextp->commandArgs(argc, argv);
     top = new Vtop{contextp};
     contextp->traceEverOn(true);
+	top->rst = 1;
+	top->pc = ysyx_25020047_INITADDR;
+	top->clk = 1;
+	top->eval();
+	top->rst = 0;
+	top->clk = 0;
+	top->eval();
 }
 
 #define ysyx_25020047_GPR_NUM 32
