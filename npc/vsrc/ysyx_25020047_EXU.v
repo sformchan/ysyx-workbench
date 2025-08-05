@@ -101,11 +101,11 @@ module ysyx_25020047_EXU(
 					reg_wen = 1'b1;
 				end
 				32'h1000: begin //stli
-					result = ((signed)rdata1 < (signed)imm) ? 1 : 0;
+					result = ($signed(rdata1) < $signed(imm)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
 				32'h2000: begin //stliu
-					result = ((unsigned)rdata1 < (unsigned)imm) ? 1 : 0;
+					result = ($unsigned(rdata1) < $unsigned(imm)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
                 default: begin
