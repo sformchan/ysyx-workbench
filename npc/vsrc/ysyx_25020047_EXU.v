@@ -100,6 +100,14 @@ module ysyx_25020047_EXU(
 					result = rdata1 - rdata2;
 					reg_wen = 1'b1;
 				end
+				32'h1000: begin //stli
+					result = ((signed)rdata1 < (signed)imm) ? 1 : 0;
+					reg_wen = 1'b1;
+				end
+				32'h2000: begin //stliu
+					result = ((unsigned)rdata1 < (unsigned)imm) ? 1 : 0;
+					reg_wen = 1'b1;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					result = 32'b0; // default case

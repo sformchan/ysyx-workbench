@@ -67,6 +67,12 @@ module ysyx_25020047_WBU(
 				32'h800: begin //sub
 					wdata = result;
 				end
+				32'h1000: begin //slti
+					wdata = result;
+				end
+				32'h2000: begin //sltiu
+					wdata = result;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          
