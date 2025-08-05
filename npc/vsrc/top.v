@@ -10,7 +10,8 @@ module top(
     output [31:0] pc,
     output [31:0] gpr0,
     output [31:0] gpr1,
-    output [31:0] gpr2
+    output [31:0] gpr2,
+	output [31:0] dnpc
 );
 
 wire [31:0] inst;
@@ -72,7 +73,7 @@ ysyx_25020047_LSU u3(
 
 
 wire [31:0]  wdata;
-wire [31:0]  dnpc;
+//wire [31:0]  dnpc;
 wire [31:0]  snpc;
 ysyx_25020047_WBU u4(
     .inst_type (inst_type),

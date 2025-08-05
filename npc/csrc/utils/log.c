@@ -26,7 +26,7 @@ FILE *log_fp = NULL;
 void init_log(const char *log_file) {
   log_fp = stdout;
   if (log_file != NULL) {
-    printf("Trying to open log file: %s\n", log_file);
+    //printf("Trying to open log file: %s\n", log_file);
     FILE *fp = fopen(log_file, "w");
     if (!fp) {
       perror("fopen");

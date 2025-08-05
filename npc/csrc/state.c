@@ -41,6 +41,13 @@ extern "C" void execute()
 		top->eval();
 		//printf("%d\n", top->clk);
 		inst = pmem_read(top->pc, 0);
+		#ifdef CONFIG_FTRACE
+		uint32_t rd = (inst >> 7) & 0x1f;
+		int32_t imm = (int32_t)(inst) >> 20;
+		uint32_t rs1 = (inst >> 15) & 0x1f;
+		uint32_t target = top->dnpc;
+		ftrace_exec(top->pc, top->dnpc, rd, rs1, imm);
+		#endif
 		if(inst == 0xFFFFFFFF)
 		{
 			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);

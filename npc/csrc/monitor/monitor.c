@@ -7,6 +7,8 @@ void init_sdb();
 void init_log(const char *log_file);
 void init_ringbuf();
 void init_disasm();
+void read_elf_symbols(const char *elf_path);
+
 
 char *img_file = NULL;
  long load_img() {
@@ -38,9 +40,10 @@ char *img_file = NULL;
 #define required_argument 1
 #define no_argument 0
 char *log_file = NULL;
+char *elf_file = NULL;
 int parse_args(int argc, char *argv[]) {
 	const struct option table[] = {
-	  //{"elf"      , required_argument, NULL, 'e'},  // csf added
+	  {"elf"      , required_argument, NULL, 'e'},  // csf added
 	 // {"batch"    , no_argument      , NULL, 'b'},
 	  {"log"      , required_argument, NULL, 'l'},
 	 // {"diff"     , required_argument, NULL, 'd'},
@@ -49,9 +52,9 @@ int parse_args(int argc, char *argv[]) {
 	  {0          , 0                , NULL,  0 },
 	};
 	int o;
-	while ( (o = getopt_long(argc, argv, "-l:", table, NULL)) != -1) {
+	while ( (o = getopt_long(argc, argv, "-l:e:", table, NULL)) != -1) {
 	  switch (o) {
-		//case 'e': elf_file = optarg; break; // csf added
+		case 'e': elf_file = optarg; break; // csf added
 		//case 'b': sdb_set_batch_mode(); break;
 		//case 'p': sscanf(optarg, "%d", &difftest_port); break;
 		case 'l': log_file = optarg; break;
@@ -78,4 +81,5 @@ void init_monitor()
 	init_disasm();
 	init_ringbuf();
 	init_log(log_file);
+	read_elf_symbols(elf_file);
 }
