@@ -140,16 +140,16 @@ module ysyx_25020047_EXU(
 					result = rdata1 + imm;
 					write = 1'b1;
 				end
-				32'h400000: begin //srai
-					result = $signed(rdata1) >>> shamt;
+				32'h400000: begin //srai arithmetic
+					result = rdata1 >>> shamt;
 					reg_wen = 1'b1;
 				end
 				32'h800000: begin //srli
-					result = $unsigned(rdata1) >>> shamt;
+					result = rdata1 >> shamt;
 					reg_wen = 1'b1;
 				end
-				32'h1000000: begin //slli
-					result = $unsigned(rdata1) <<< shamt;
+				32'h1000000: begin //slli logical
+					result = rdata1 << shamt;
 					reg_wen = 1'b1;
 				end
 				32'h2000000: begin //andi
