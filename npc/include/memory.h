@@ -10,8 +10,8 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask);
 void load_verilog_hex(const char *filename);
 long load_img();
 extern int parse_args(int argc, char *argv[]);
-extern char *img_file;
-extern char *log_file;
+uint8_t *guest_to_host(uint32_t paddr);
+
 
 //#define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024
 #define ysyx_25020047_MEM_SIZE 128 * 1024 * 1024

@@ -9,13 +9,14 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT, NPC_ABORT};
 #include "common.h"
 #include "utils.h"
 #include </home/leonard/ysyx-workbench/npc/include/generated/autoconf.h>
+#include "difftest.h"
 
 extern uint32_t gpr_val[];
 extern const char *gpr_name[];
 extern int npc_state;
 extern uint32_t inst;
 extern uint32_t count;
-
+extern CPU_state cpu;
 
 extern "C" void init_npc(int argc, char *argv[]);
 extern "C" void execute();

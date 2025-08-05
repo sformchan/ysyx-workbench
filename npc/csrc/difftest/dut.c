@@ -16,18 +16,46 @@
 #include <dlfcn.h>
 #include <utils.h>
 #include <common.h>
+#include "difftest.h"
+#include "state.h"
+
 
 typedef uint32_t paddr_t;
 
 void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
-void (*ref_difftest_exec)(uint64_t n) = NULL;
+void (*ref_difftest_exec)(uint64_t) = NULL;
 void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
+
 
 #ifdef CONFIG_DIFFTEST
 
 static bool is_skip_ref = false;
 static int skip_dut_nr_inst = 0;
+
+
+
+
+
+bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
+	for (int i = 0; i < 32; i++) {
+	  if (ref_r->gpr[i] != cpu.gpr[i]) {
+		printf("Mismatch at reg %d: dut = 0x%x, ref = 0x%x\n", i, cpu.gpr[i], ref_r->gpr[i]);
+		return false;
+	  }
+	}
+	if (ref_r->pc != cpu.pc) {
+	  printf("Mismatch at pc: dut = 0x%x, ref = 0x%x\n", cpu.pc, ref_r->pc);
+	  return false;
+	}
+	return true;
+  }
+  
+
+
+
+
+
 
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
@@ -64,19 +92,19 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
   handle = dlopen(ref_so_file, RTLD_LAZY);
   assert(handle);
 
-  ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");
+  ref_difftest_memcpy = (void (*)(paddr_t, void*, size_t, bool)) dlsym(handle, "difftest_memcpy");
   assert(ref_difftest_memcpy);
 
-  ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");
+  ref_difftest_regcpy = (void (*)(void*, bool)) dlsym(handle, "difftest_regcpy");
   assert(ref_difftest_regcpy);
 
-  ref_difftest_exec = dlsym(handle, "difftest_exec");
+  ref_difftest_exec = (void (*)(uint64_t)) dlsym(handle, "difftest_exec");
   assert(ref_difftest_exec);
 
-  ref_difftest_raise_intr = dlsym(handle, "difftest_raise_intr");
+  ref_difftest_raise_intr = (void (*)(uint64_t)) dlsym(handle, "difftest_raise_intr");
   assert(ref_difftest_raise_intr);
 
-  void (*ref_difftest_init)(int) = dlsym(handle, "difftest_init");
+  void (*ref_difftest_init)(int) = (void (*)(int)) dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
 
   Log("Differential testing: %s", ANSI_FMT("ON", ANSI_FG_GREEN));
@@ -85,15 +113,15 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
       "If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
   ref_difftest_init(port);
-  ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(ysyx_25020047_RESET_VECTOR, guest_to_host(ysyx_25020047_RESET_VECTOR), img_size, DIFFTEST_TO_REF);
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
 
 static void checkregs(CPU_state *ref, vaddr_t pc) {
   if (!isa_difftest_checkregs(ref, pc)) {
-    nemu_state.state = NEMU_ABORT;
-    nemu_state.halt_pc = pc;
-    isa_reg_display();
+    npc_state = NPC_ABORT;
+    //nemu_state.halt_pc = pc;
+    print_gpr();
   }
 }
 
@@ -109,7 +137,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     }
     skip_dut_nr_inst --;
     if (skip_dut_nr_inst == 0)
-      panic("can not catch up with ref.pc = " FMT_WORD " at pc = " FMT_WORD, ref_r.pc, pc);
+      printf("can not catch up with ref.pc = " "0x%08x" " at pc = " "0x%08x", ref_r.pc, pc);
     return;
   }
 

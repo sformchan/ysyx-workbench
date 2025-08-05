@@ -96,6 +96,16 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   	#endif
 }
 
+uint8_t *guest_to_host(uint32_t paddr) {
+	uint32_t offset = paddr - ysyx_25020047_INITADDR;
+	if (offset >= ysyx_25020047_MEM_SIZE) {
+	  printf("\033[31mError: guest_to_host() access out of range: 0x%08x\033[0m\n", paddr);
+	  exit(1); // 或者 assert(0);
+	}
+	return &rom[offset];
+}
+
+
 
 
 //load hex file

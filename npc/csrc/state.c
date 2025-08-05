@@ -2,6 +2,9 @@
 #include "vinit.h"
 #include "utils.h"
 
+
+
+CPU_state cpu;
 bool check_wp();
 int npc_state = NPC_STOP;
 void init_monitor();
@@ -9,6 +12,8 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void ringbuf_push(char *log);
 void ringbuf_print();
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
+void difftest_step(vaddr_t pc, vaddr_t npc);
+
 
 static bool g_print_step = false;
 
@@ -29,6 +34,9 @@ static void trace_and_difftest(char *logbuf) {
 		}	
 	  }
 	#endif 
+	#ifdef CONFIG_DIFFTEST
+	difftest_step(top->pc, top->dnpc);
+	#endif
 }
 
 
@@ -107,6 +115,8 @@ extern "C" void execute()
 			ringbuf_print();
 		  }
 		#endif
+
+
 		trace_and_difftest(logbuf);
 }
 
@@ -173,8 +183,8 @@ void init_verilator(int argc, char **argv) {
     contextp->traceEverOn(true);
 }
 
-
-uint32_t gpr_val[32];
+#define ysyx_25020047_GPR_NUM 32
+uint32_t gpr_val[ysyx_25020047_GPR_NUM];
 const char *gpr_name[16] = {
 	"zero", "ra", "sp", "gp", "tp",
 	"t0", "t1", "t2",
@@ -187,6 +197,14 @@ void set_gpr(int32_t i, int32_t val)
 	gpr_val[i] = val;
 }
 
+void transform()
+{
+	for(int i = 0; i < ysyx_25020047_GPR_NUM; i++)
+	{
+		cpu.gpr[i] = gpr_val[i];
+	}
+	cpu.pc = top->pc;
+}
 extern "C" void print_gpr()
 {
 	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , top->pc);
@@ -213,3 +231,4 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	
 	return num;
   }
+
