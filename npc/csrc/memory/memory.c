@@ -40,17 +40,17 @@ extern "C" int pmem_read(int raddr, int flag)
 		return uptime;
 	}
 	//printf("raddr: %08x\n", raddr);
-    raddr &= ~(0x3u);
+	int raddr1 = raddr & ~(0x3u);
 	if(flag)
 	{
 		#ifdef CONFIG_MTRACE
 		printf("[MTARCE] " ANSI_FG_CYAN "READ  " ANSI_NONE "addr=0x%08x"  "  len=4\n", raddr);
 		#endif
 	}
-    uint32_t offset = raddr - ysyx_25020047_INITADDR;
+    uint32_t offset = raddr1 - ysyx_25020047_INITADDR;
     if(offset + 3 >= ysyx_25020047_MEM_SIZE)
     {
-        printf("\033[31mError: read_address 0x%08x is out of MEM range.\033[0m\n", raddr);
+        printf("\033[31mError: read_address 0x%08x is out of MEM range.\033[0m\n", raddr1);
         return 0xFFFFFFFF;
     }
     return ((uint32_t)rom[offset]) |
