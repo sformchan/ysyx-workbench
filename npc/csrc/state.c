@@ -164,8 +164,8 @@ extern "C" void init_npc(int argc, char *argv[])
 	
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	img_size = load_img();
 	parse_args(argc, argv);
+	img_size = load_img();
 	init_verilator(argc, argv);
 	init_monitor();
 	printf("\033[32mStimulation starting...\033[0m\n");
