@@ -18,9 +18,10 @@ int main(int argc, char** argv)
 ////////initialization///////
 	init_npc(argc, argv);
 	//init_verilator(argc, argv);
-	//top->rst = 1;
+	top->rst = 1;
+	top->clk = 1;
+	//top->pc = ysyx_25020047_INITADDR;
 	top->clk = 0;
-	top->pc = ysyx_25020047_INITADDR;
 	top->rst = 0;
 	
 ////////execution////////
