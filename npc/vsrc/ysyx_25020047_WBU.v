@@ -88,6 +88,12 @@ module ysyx_25020047_WBU(
 				32'h40000: begin //xor
 					wdata = result;
 				end
+				32'h80000: begin //or
+					wdata = result;
+				end
+				32'h100000: begin //and
+					wdata = result;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          

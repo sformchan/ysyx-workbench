@@ -127,6 +127,14 @@ module ysyx_25020047_EXU(
 					result = rdata1 ^ rdata2;
 					reg_wen = 1'b1;
 				end
+				32'h80000: begin //or
+					result = rdata1 | rdata2;
+					reg_wen = 1'b1;
+				end
+				32'h100000: begin //and
+					result = rdata1 & rdata2;
+					reg_wen = 1'b1;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					result = 32'b0; // default case
