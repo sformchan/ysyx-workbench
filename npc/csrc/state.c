@@ -167,20 +167,15 @@ extern "C" void init_npc(int argc, char *argv[])
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
-	top->pc = ysyx_25020047_INITADDR;
-	for(int i = 0; i < 2; i++)
-	{
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
-		top->eval();
-		//printf("%d\n", top->clk);
-		inst = pmem_read(top->pc, 0);
-		
-		if(inst == 0xFFFFFFFF)
-		{
-			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
-			exit(1);
-		}
-		contextp->timeInc(1);
+	top->rst = 1;
+	for (int i = 0; i < 2; i++) {
+		top->clk = 0; top->eval(); printf("pc: 0x%08x\n");
+		top->clk = 1; top->eval(); printf("pc: 0x%08x\n");
+	}
+	top->rst = 0;
+	for (int i = 0; i < 2; i++) {
+		top->clk = 0; top->eval(); printf("pc: 0x%08x\n");
+		top->clk = 1; top->eval(); printf("pc: 0x%08x\n");
 	}
 	init_monitor();
 	printf("\033[32mStimulation starting...\033[0m\n");
