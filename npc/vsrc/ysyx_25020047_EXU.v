@@ -92,6 +92,10 @@ module ysyx_25020047_EXU(
 					result = pc + imm;
 					reg_wen = 1'b1;
 				end
+				32'h640: begin //jal
+					result = pc + imm;
+					reg_wen = 1'b1;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					result = 32'b0; // default case

@@ -67,7 +67,7 @@ assign Rrd = inst[11:7];
 assign Rrs1 = inst[19:15];
 assign Rrs2 = inst[24:20];
 
-//Utype
+// Utype
 wire [4:0] Urd;
 wire [19:0] Uimm;
 assign Urd = inst[11:7];
@@ -85,13 +85,21 @@ assign Simm = {inst[31:25], inst[11:7]};
 wire [31:0] sSimm;
 assign sSimm = {{20{Simm[11]}}, Simm};
 
+
+// Jtype
+wire [4:0] Jrd;
+wire [20:0] Jimm;
+assign Jimm = {inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};
+wire [31:0] sJimm;
+assign sJimm = {{11{Jimm[20]}}, Jimm};
+
 // combine the signals
 wire [4:0] rs1;
 wire [4:0] rs2;
 wire [4:0] rd;
 assign rs1 = Rrs1 | Irs1 | Srs1;
 assign rs2 = Rrs2 | Srs2;
-assign rd = Rrd | Ird | Urd;
+assign rd = Rrd | Ird | Urd | Jrd;
 
 
 // add more instruction types as needed  //judge the type of instruction
@@ -101,6 +109,9 @@ assign rd = Rrd | Ird | Urd;
 			//U-type
 				32'b?????????????????????????0110111: inst_type = 32'h10;  // lui
 				32'b?????????????????????????0010111: inst_type = 32'h320; // auipc
+
+			//J-type
+				32'b?????????????????????????1101111: inst_type = 32'h640; // jal
 
 			//I-type	
                 32'b?????????????????000?????0010011: inst_type = 32'h1; // addi
@@ -133,6 +144,8 @@ assign rd = Rrd | Ird | Urd;
 
                     32'h80: imm = sSimm; // sw
                     32'h160: imm = sSimm; // sb
+
+					32'h640: imm = sJimm; // jal
                     default:      imm = 32'b0; // default case
                 endcase
             end                                          
