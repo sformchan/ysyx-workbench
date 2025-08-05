@@ -152,6 +152,18 @@ module ysyx_25020047_EXU(
 					result = $unsigned(rdata1) <<< shamt;
 					reg_wen = 1'b1;
 				end
+				32'h2000000: begin //andi
+					result = rdata1 & imm;
+					reg_wen = 1'b1;
+				end
+				32'h4000000: begin //ori
+					result = rdata1 | imm;
+					reg_wen = 1'b1;
+				end
+				32'h8000000: begin //xori
+					result = rdata1 ^ imm;
+					reg_wen = 1'b1;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					result = 32'b0; // default case

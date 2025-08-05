@@ -94,6 +94,24 @@ module ysyx_25020047_WBU(
 				32'h100000: begin //and
 					wdata = result;
 				end
+				32'h200000: begin //srai
+					wdata = result;
+				end
+				32'h400000: begin //srli
+					wdata = result;
+				end
+				32'h800000: begin //slli
+					wdata = result;
+				end
+				32'h1000000: begin //andi
+					wdata = result;
+				end
+				32'h2000000: begin //ori
+					wdata = result;
+				end
+				32'h4000000: begin //xori
+					wdata = result;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          
