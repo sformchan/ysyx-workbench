@@ -14,6 +14,7 @@
 #**************************************************************************************/
 
 ifdef CONFIG_DIFFTEST
+$(info difftest.mk linked)
 DIFF_REF_PATH = $(NEMU_HOME)
 DIFF_REF_SO = $(DIFF_REF_PATH)/build/obj-riscv32-nemu-interpreter-so
 MKFLAGS = GUEST_ISA=riscv32 SHARE=1 ENGINE=interpreter
