@@ -96,7 +96,6 @@ void init_monitor()
   	}
 	#endif
 
-	long img_size = load_img();
 
 	#ifdef CONFIG_DIFFTEST
 	init_difftest(diff_so_file, img_size, difftest_port);
