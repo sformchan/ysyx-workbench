@@ -157,7 +157,6 @@ extern "C" void run_npc(uint64_t step)
 	  }
 }
 
-void init_cpu_state();
 ///
 extern "C" void init_npc(int argc, char *argv[])
 {
@@ -167,7 +166,6 @@ extern "C" void init_npc(int argc, char *argv[])
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
-	init_cpu_state();
 	init_monitor();
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
@@ -207,26 +205,27 @@ const char *gpr_name[16] = {
 
 void set_gpr(int32_t i, int32_t val)
 {
-	gpr_val[i] = val;
+	cpu.gpr[i] = val;
+	if(i == 32) cpu.pc = val;
 }
 
-void init_cpu_state()
-{
-	for(int i = 0; i < ysyx_25020047_GPR_NUM; i++)
-	{
-		cpu.gpr[i] = gpr_val[i];
-	}
-	cpu.pc = top->pc;
-	printf("0x%08x\n", top->pc);
-	printf("0x%08x\n", cpu.pc);
-}
+// void init_cpu_state()
+// {
+// 	for(int i = 0; i < ysyx_25020047_GPR_NUM; i++)
+// 	{
+// 		cpu.gpr[i] = gpr_val[i];
+// 	}
+// 	cpu.pc = top->pc;
+// 	printf("0x%08x\n", top->pc);
+// 	printf("0x%08x\n", cpu.pc);
+// }
 extern "C" void print_gpr()
 {
 	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , top->pc);
 	for(int i = 0; i < 16; i++)
 	{
-		if(i == 0) printf("|%s |0x%08x |\n", gpr_name[i], gpr_val[i]);
-		else printf("|%s   |0x%08x |\n", gpr_name[i] , gpr_val[i]);
+		if(i == 0) printf("|%s |0x%08x |\n", gpr_name[i], cpu.gpr[i]);
+		else printf("|%s   |0x%08x |\n", gpr_name[i] , cpu.gpr[i]);
 	}
 }
 
@@ -239,7 +238,7 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	  {
 		num = i;
 		*success = true;
-		return gpr_val[num];
+		return cpu.gpr[num];
 	  }
 	  i++;
 	}

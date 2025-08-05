@@ -13,5 +13,7 @@ always @(posedge clk) begin
     else pc <= dnpc;
 end
 
-
+always @(*) begin
+	set_gpr(32, pc);
+end
 endmodule
