@@ -169,7 +169,6 @@ extern "C" void init_npc(int argc, char *argv[])
 	init_verilator(argc, argv);
 	init_cpu_state();
 	init_monitor();
-	print_gpr();
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
 }
