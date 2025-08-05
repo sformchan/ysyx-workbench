@@ -24,7 +24,7 @@ void read_elf_symbols(const char *elf_path) {
     perror("Cannot open ELF file");
     exit(1);
   }
-
+  printf("find it\n");
   Elf32_Ehdr ehdr;
   if (fread(&ehdr, 1, sizeof(ehdr), fp) != sizeof(ehdr)) {
     perror("Failed to read ELF header");
