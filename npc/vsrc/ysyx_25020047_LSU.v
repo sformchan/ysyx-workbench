@@ -93,6 +93,7 @@ always @(*) begin
     case(inst_type)
         32'h20: memdata = ram_data;  //lw
         32'h40: begin //lbu
+			$display("load_offset = 0x%08x", load_offset);
             //memdata = ram_data;
             case(load_offset)
                 2'b00: memdata = {24'b0, ram_data[7:0]};
