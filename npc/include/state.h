@@ -17,6 +17,10 @@ extern int npc_state;
 extern uint32_t inst;
 extern uint32_t count;
 extern CPU_state cpu;
+extern bool is_batch_mode;
+
+
+
 
 extern "C" void init_npc(int argc, char *argv[]);
 extern "C" void execute();
