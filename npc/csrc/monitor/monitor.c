@@ -82,15 +82,23 @@ int parse_args(int argc, char *argv[]) {
 void init_monitor()
 {
 	init_sdb();
+
 	init_disasm();
+
 	init_ringbuf();
+
 	init_log(log_file);
+
 	#ifdef CONFIG_FTRACE
   	if (elf_file != NULL) {
     printf(ANSI_FG_RED "[DEBUG] ELF file passed: %s\n" ANSI_NONE, elf_file);
     read_elf_symbols(elf_file);
   	}
 	#endif
+
 	long img_size = load_img();
+
+	#ifdef CONFIG_DIFFTEST
 	init_difftest(diff_so_file, img_size, difftest_port);
+	#endif
 }
