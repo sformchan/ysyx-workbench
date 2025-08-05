@@ -52,7 +52,6 @@ $(BIN): $(VSRCS) $(CSRCS) $(NPC_HOME)/include/generated/autoconf.h
 all: default
 		
 include $(NPC_HOME)/scripts/difftest.mk
-$(info diffrefpath = $(DIFF_REF_PATH))
 IMG ?=
 override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 override ARGS += $(ARGS_DIFF)
@@ -60,7 +59,6 @@ override ARGS += $(ARGS_DIFF)
 $(info ARGS = $(ARGS))
 $(info ARGS_DIFF = $(ARGS_DIFF))
 
-$(info NEMU_HOME = $(NEMU_HOME))
 
 
 
