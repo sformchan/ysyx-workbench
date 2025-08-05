@@ -117,6 +117,7 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
   printf("RESET_VECTOR = 0x%x\n", ysyx_25020047_RESET_VECTOR);
 	printf("guest_to_host ptr = %p\n", guest_to_host(ysyx_25020047_RESET_VECTOR));
 	printf("cpu.pc = 0x%x\n", cpu.pc);
+	
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
 
@@ -135,7 +136,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
 	  }
 	CPU_state ref_r;
 	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-	printf("ref.pc = 0x%08x\n", ref_r.pc);
+	//printf("ref.pc = 0x%08x\n", ref_r.pc);
 
   if (skip_dut_nr_inst > 0) {
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
