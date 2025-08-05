@@ -14,7 +14,7 @@
 #**************************************************************************************/
 
 
-CONFIG_DIFFTEST = 1
+
 ifdef CONFIG_DIFFTEST
 
 DIFF_REF_PATH = $(NEMU_HOME)/src/cpu/difftest

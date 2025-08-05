@@ -22,7 +22,7 @@ ysyx_25020047_IFU u0(
 
 
 wire [31:0]  imm;
-wire [8:0]   inst_type;
+wire [31:0]   inst_type;
 ysyx_25020047_IDU u1(
     .clk(clk),
     .rst(rst),
@@ -53,6 +53,7 @@ ysyx_25020047_EXU u2(
     .rdata1(rdata1),
     .rdata2(rdata2),
     .imm(imm),
+	.pc(pc),
     .result(result),
     .reg_wen(reg_wen),
     .read(read),

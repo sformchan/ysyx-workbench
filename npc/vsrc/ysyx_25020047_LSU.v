@@ -1,5 +1,5 @@
 module ysyx_25020047_LSU (
-    input [8:0] inst_type,
+    input [31:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
     input reg [31:0] wdata,
@@ -48,39 +48,15 @@ always @(*) begin
     endcase
 end
 
-// always @(*) begin
-//     case(store_offset)
-//         2'b00: begin
-//             wdata1 = {24'b0, wdata[7:0]};
-//             wmask = 32'h1;
-//         end
-//         2'b01: begin
-//             wdata1 = {16'b0, wdata[7:0], 8'b0};
-//             wmask = 32'h2;
-//         end
-//         2'b10: begin
-//             wdata1 = {8'b0, wdata[7:0], 16'b0};
-//             wmask = 32'h4;
-//         end
-//         2'b11: begin
-//             wdata1 = {wdata[7:0], 24'b0};
-//             wmask = 32'h8;
-//         end
-//         default: begin
-//             wdata1 = 32'b0;
-//             wmask = 32'h0;
-//         end
-//     endcase
-// end
 
 
 always @(*) begin
     if(write) begin
-        if(inst_type == 9'b010000000) begin
+        if(inst_type == 32'h80) begin     //sw
 			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
 			pmem_write(waddr, wdata, 32'hF); //pc inst
 		end
-        else if(inst_type == 9'b100000000) begin
+        else if(inst_type == 32'h160) begin   //sb
             //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
             pmem_write(waddr, wdata1, wmask);
         end
@@ -94,8 +70,8 @@ wire [1:0] load_offset;
 assign load_offset = raddr[1:0];
 always @(*) begin
     case(inst_type)
-        9'b000100000: memdata = ram_data;
-        9'b001000000: begin //lbu
+        32'h20: memdata = ram_data;  //lw
+        32'h40: begin //lbu
             //memdata = ram_data;
             case(load_offset)
                 2'b00: memdata = {24'b0, ram_data[7:0]};

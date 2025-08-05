@@ -25,7 +25,7 @@
 //****************************************************************************************//
 
 module ysyx_25020047_WBU(
-    input [8:0] inst_type,
+    input [31:0] inst_type,
     input [31:0] result,
     input [31:0] memdata,
     input [31:0] snpc,
@@ -37,24 +37,24 @@ module ysyx_25020047_WBU(
         begin
             dnpc = snpc;                                       
             case(inst_type)
-                9'b000000001: begin //addi
+                32'h1: begin //addi
                     wdata = result; 
                 end
-                9'b000000010: begin //jalr
+                32'h2: begin //jalr
                     wdata = snpc;
                     dnpc = result;
                 end
-                9'b000001000: begin //add
+                32'h8: begin //add
                     //$display("wdata 0x%08x", wdata);
                     wdata = result;
                 end
-                9'b000010000: begin //lui
+                32'h10: begin //lui
                     wdata = result; 
                 end
-                9'b000100000: begin //lw
+                32'h20: begin //lw
                     wdata = memdata;
                 end
-                9'b001000000: begin //lbu
+                32'h40: begin //lbu
                     wdata = memdata;
                 end
                 default: wdata = 32'b0;
