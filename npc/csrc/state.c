@@ -157,7 +157,7 @@ extern "C" void run_npc(uint64_t step)
 	  }
 }
 
-
+void init_cpu_state();
 ///
 extern "C" void init_npc(int argc, char *argv[])
 {
@@ -167,16 +167,11 @@ extern "C" void init_npc(int argc, char *argv[])
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
+	init_cpu_state();
 	init_monitor();
+	print_gpr();
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
-}
-
-void npc_clk_once() {
-    top->clk = 0;
-    top->eval();
-    top->clk = 1;
-    top->eval();
 }
 
 
@@ -207,7 +202,7 @@ void set_gpr(int32_t i, int32_t val)
 	gpr_val[i] = val;
 }
 
-void transform()
+void init_cpu_state()
 {
 	for(int i = 0; i < ysyx_25020047_GPR_NUM; i++)
 	{
