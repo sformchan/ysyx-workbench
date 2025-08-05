@@ -115,6 +115,12 @@ module ysyx_25020047_EXU(
 				32'h8000: begin //bne
 					result = (rdata1 != rdata2) ? (pc + imm) : snpc;
 				end
+				32'h10000: begin //slt
+					result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
+				end
+				32'h20000: begin //sltu
+					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					result = 32'b0; // default case
