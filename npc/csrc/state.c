@@ -161,13 +161,29 @@ extern "C" void run_npc(uint64_t step)
 ///
 extern "C" void init_npc(int argc, char *argv[])
 {
+	
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
 	load_img();
 	init_verilator(argc, argv);
+	for(int i = 0; i < 2; i++)
+	{
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
+		top->eval();
+		//printf("%d\n", top->clk);
+		inst = pmem_read(top->pc, 0);
+		
+		if(inst == 0xFFFFFFFF)
+		{
+			perror(ANSI_FG_RED "ERROR READING\n" ANSI_NONE);
+			exit(1);
+		}
+		contextp->timeInc(1);
+	}
 	init_monitor();
 	printf("\033[32mStimulation starting...\033[0m\n");
+	 
 }
 
 void npc_clk_once() {
