@@ -16,7 +16,7 @@
 ifdef CONFIG_DIFFTEST
 
 DIFF_REF_PATH = $(NEMU_HOME)
-DIFF_REF_SO = $(DIFF_REF_PATH)/build/obj-riscv32-nemu-interpreter-so
+DIFF_REF_SO = $(DIFF_REF_PATH)/build/riscv32-nemu-interpreter-so
 MKFLAGS = GUEST_ISA=riscv32 SHARE=1 ENGINE=interpreter
 ARGS_DIFF = --diff=$(DIFF_REF_SO)
 
