@@ -116,9 +116,11 @@ extern "C" void execute()
 		  }
 		#endif
 
-
+	//DIFFTEST AND TRACE
 		trace_and_difftest(logbuf);
 }
+
+
 
 extern "C" void run_npc(uint64_t step)
 {
@@ -147,13 +149,10 @@ extern "C" void run_npc(uint64_t step)
 			break;
 		case NPC_ABORT:
 			printf(ANSI_FG_WHITE "npc_state " ANSI_NONE "= " ANSI_FG_RED "NPC_ABORT.\n" ANSI_NONE);
+			printf("\033[44;36mNPC\033[0m" ANSI_FG_RED " ABORT " ANSI_NONE "at pc 0x%08x (%d cycle(s))\n", top->pc, count);
 			break;
 		
-	// else
-	// {
-	// 	printf(ANSI_FG_WHITE "npc_state = " ANSI_FG_CYAN "NPC_ABORT.\n" ANSI_NONE);
-	// 	printf("\033[44;36mNPC\033[0m" ANSI_FG_RED" HIT GOOD TRAP at pc 0x%08x\n" ANSI_NONE, top->pc);
-	// }
+
 	  }
 }
 
