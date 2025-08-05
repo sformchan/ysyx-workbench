@@ -100,7 +100,7 @@ assign Brs1 = inst[19:15];
 assign Brs2 = inst[24:20];
 assign Bimm = {inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};
 wire [31:0] sBimm;
-assign sBimm = {{11{Bimm[20]}}, Bimm};
+assign sBimm = {{19{Bimm[12]}}, Bimm};
 
 // combine the signals
 wire [4:0] rs1;
@@ -167,6 +167,7 @@ assign rd = Rrd | Ird | Urd | Jrd;
 
 					32'h4000: imm = sBimm; // beq
 					32'h8000: imm = sBimm; // bne
+
 					32'h400: imm = sJimm; // jal
 
                     default:      imm = 32'b0; // default case

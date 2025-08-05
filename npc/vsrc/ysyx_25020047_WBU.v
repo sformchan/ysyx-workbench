@@ -76,7 +76,7 @@ module ysyx_25020047_WBU(
 				32'h4000: begin //beq
 					dnpc = result;
 				end
-				32'h8000; begin //bne
+				32'h8000: begin //bne
 					dnpc = result;
 				end
                 default: wdata = 32'b0;
