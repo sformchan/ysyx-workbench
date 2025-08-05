@@ -48,7 +48,7 @@ extern "C" void execute()
 		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
 		top->eval();
 		//printf("%d\n", top->clk);
-		inst = pmem_read(top->pc, 0);
+		inst = pmem_read(cpu.pc, 0);
 		
 		if(inst == 0xFFFFFFFF)
 		{
@@ -209,7 +209,7 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , top->pc);
+	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
 	for(int i = 0; i < 16; i++)
 	{
 		if(i == 0) printf("|%s |0x%08x |\n", gpr_name[i], cpu.gpr[i]);
