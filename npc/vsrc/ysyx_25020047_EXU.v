@@ -47,7 +47,7 @@ module ysyx_25020047_EXU(
             case(inst_type)
                 9'b000000001: begin //addi
                     result = rdata1 + imm;
-                    reg_wen = 1'b1;
+                    reg_wen = 1'b0;
                 end
                 9'b000000010: begin //jalr
                     result = (rdata1 + imm) & ~1;
