@@ -156,13 +156,15 @@ extern "C" void run_npc(uint64_t step)
 	  }
 }
 
+
+long img_size;
 ///
 extern "C" void init_npc(int argc, char *argv[])
 {
 	
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
-	long img_size = load_img();
+	img_size = load_img();
 	parse_args(argc, argv);
 	init_verilator(argc, argv);
 	init_monitor();

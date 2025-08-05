@@ -18,7 +18,7 @@ extern uint32_t inst;
 extern uint32_t count;
 extern CPU_state cpu;
 extern bool is_batch_mode;
-
+extern long img_size;
 
 #define ysyx_25020047_GPR_NUM 32
 
