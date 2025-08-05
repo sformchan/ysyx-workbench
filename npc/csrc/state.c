@@ -163,8 +163,8 @@ extern "C" void init_npc(int argc, char *argv[])
 	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
-	init_verilator(argc, argv);
 	init_monitor();
+	init_verilator(argc, argv);
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
 }
@@ -182,19 +182,14 @@ void init_verilator(int argc, char **argv) {
     contextp->traceEverOn(true);
 	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
-	// for(int i = 0; i < 2; i++)
-	// {
-	// 	top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
-	// 	top->eval();
-	// 	//printf("%d\n", top->clk);
-	// 	contextp->timeInc(1);
-	// }
+	for(int i = 0; i < 2; i++)
+	{
+		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
+		top->eval();
+		//printf("%d\n", top->clk);
+		contextp->timeInc(1);
+	}
 	// Reset pulse for 2 cycles
-
-	// for (int i = 0; i < 2; i++) {
-	// 	top->clk = 0; top->eval(); contextp->timeInc(1);
-	// 	top->clk = 1; top->eval(); contextp->timeInc(1);
-	// }
 	top->rst = 0;
 }
 
