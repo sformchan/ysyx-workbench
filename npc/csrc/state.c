@@ -46,7 +46,8 @@ extern "C" void execute()
 		int32_t imm = (int32_t)(inst) >> 20;
 		uint32_t rs1 = (inst >> 15) & 0x1f;
 		uint32_t target = top->dnpc;
-		ftrace_exec(top->pc, top->dnpc, rd, rs1, imm);
+		uint32_t opcode = inst & 0x7F;
+		if(opcode == 0x67) ftrace_exec(top->pc, top->dnpc, rd, rs1, imm);
 		#endif
 		if(inst == 0xFFFFFFFF)
 		{

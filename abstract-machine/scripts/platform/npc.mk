@@ -27,7 +27,7 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 #@echo "TODO: add command here to run simulation"
-$(info NPCFLAGS = $(NPCFLAGS))
+#$(info NPCFLAGS = $(NPCFLAGS))
 run: insert-arg
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
 

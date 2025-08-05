@@ -54,8 +54,8 @@ all: default
 IMG ?=
 override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 
-$(info WORK_DIR = $(WORK_DIR))
-$(info ARGS = $(ARGS))
+# $(info WORK_DIR = $(WORK_DIR))
+# $(info ARGS = $(ARGS))
 
 run: $(BIN)
 	@$(BIN) $(ARGS) $(IMG) 
