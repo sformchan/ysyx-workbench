@@ -41,6 +41,7 @@ char *img_file = NULL;
 #define no_argument 0
 char *log_file = NULL;
 char *elf_file = NULL;
+char *diff_so_file = NULL;
 int parse_args(int argc, char *argv[]) {
 	const struct option table[] = {
 	  {"elf"      , required_argument, NULL, 'e'},  // csf added
@@ -52,13 +53,13 @@ int parse_args(int argc, char *argv[]) {
 	  {0          , 0                , NULL,  0 },
 	};
 	int o;
-	while ( (o = getopt_long(argc, argv, "-l:e:", table, NULL)) != -1) {
+	while ( (o = getopt_long(argc, argv, "-l:e:d:", table, NULL)) != -1) {
 	  switch (o) {
-		case 'e': elf_file = optarg; break; // csf added
+		case 'e': elf_file = optarg; break;
 		//case 'b': sdb_set_batch_mode(); break;
 		//case 'p': sscanf(optarg, "%d", &difftest_port); break;
 		case 'l': log_file = optarg; break;
-		//case 'd': diff_so_file = optarg; break;
+		case 'd': diff_so_file = optarg; break;
 		case 1: img_file = optarg; return 0;
 		default:
 		  printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
