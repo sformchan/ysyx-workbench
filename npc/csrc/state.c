@@ -148,7 +148,7 @@ extern "C" void run_npc(uint64_t step)
 			printf("\033[44;36mNPC\033[0m" ANSI_FG_GREEN " HIT GOOD TRAP " ANSI_NONE "at pc 0x%08x (%d cycle(s))\n" , top->pc, count);
 			break;
 		case NPC_ABORT:
-			printf(ANSI_FG_WHITE "npc_state " ANSI_NONE "= " ANSI_FG_RED "NPC_ABORT.\n" ANSI_NONE);
+			//printf(ANSI_FG_WHITE "npc_state " ANSI_NONE "= " ANSI_FG_RED "NPC_ABORT.\n" ANSI_NONE);
 			printf("\033[44;36mNPC\033[0m" ANSI_FG_RED " ABORT " ANSI_NONE "at pc 0x%08x (%d cycle(s))\n", top->pc, count);
 			break;
 		
