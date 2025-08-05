@@ -59,6 +59,11 @@ override ARGS += $(ARGS_DIFF)
 $(info ARGS = $(ARGS))
 $(info ARGS_DIFF = $(ARGS_DIFF))
 
+$(info NEMU_HOME = $(NEMU_HOME))
+
+
+
+
 run: $(BIN)
 	@$(BIN) $(ARGS) $(IMG) 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
