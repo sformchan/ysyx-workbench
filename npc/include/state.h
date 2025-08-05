@@ -20,7 +20,7 @@ extern CPU_state cpu;
 extern bool is_batch_mode;
 
 
-
+#define ysyx_25020047_GPR_NUM 32
 
 extern "C" void init_npc(int argc, char *argv[]);
 extern "C" void execute();

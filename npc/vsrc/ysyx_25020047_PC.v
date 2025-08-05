@@ -14,6 +14,6 @@ always @(posedge clk) begin
 end
 
 always @(*) begin
-	set_gpr(32, pc);
+	set_gpr(65, pc);
 end
 endmodule

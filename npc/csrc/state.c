@@ -194,8 +194,7 @@ void init_verilator(int argc, char **argv) {
 	top->rst = 0;
 }
 
-#define ysyx_25020047_GPR_NUM 32
-uint32_t gpr_val[ysyx_25020047_GPR_NUM];
+
 const char *gpr_name[16] = {
 	"zero", "ra", "sp", "gp", "tp",
 	"t0", "t1", "t2",
@@ -206,19 +205,10 @@ const char *gpr_name[16] = {
 void set_gpr(int32_t i, int32_t val)
 {
 	cpu.gpr[i] = val;
-	if(i == 32) cpu.pc = val;
+	if(i == 65) cpu.pc = val;
 }
 
-// void init_cpu_state()
-// {
-// 	for(int i = 0; i < ysyx_25020047_GPR_NUM; i++)
-// 	{
-// 		cpu.gpr[i] = gpr_val[i];
-// 	}
-// 	cpu.pc = top->pc;
-// 	printf("0x%08x\n", top->pc);
-// 	printf("0x%08x\n", cpu.pc);
-// }
+
 extern "C" void print_gpr()
 {
 	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , top->pc);
