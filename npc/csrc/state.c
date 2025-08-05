@@ -182,13 +182,13 @@ void init_verilator(int argc, char **argv) {
     contextp->traceEverOn(true);
 	top->rst = 1;
 	top->pc = ysyx_25020047_INITADDR;
-	for(int i = 0; i < 2; i++)
-	{
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
-		top->eval();
-		//printf("%d\n", top->clk);
-		contextp->timeInc(1);
-	}
+	// for(int i = 0; i < 2; i++)
+	// {
+	// 	top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
+	// 	top->eval();
+	// 	//printf("%d\n", top->clk);
+	// 	contextp->timeInc(1);
+	// }
 	top->rst = 0;
 }
 
