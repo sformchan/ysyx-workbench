@@ -13,6 +13,8 @@
 # See the Mulan PSL v2 for more details.
 #**************************************************************************************/
 
+
+CONFIG_DIFFTEST = 1
 ifdef CONFIG_DIFFTEST
 
 DIFF_REF_PATH = $(NEMU_HOME)/src/cpu/difftest
