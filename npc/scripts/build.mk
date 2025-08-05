@@ -56,8 +56,8 @@ IMG ?=
 override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 override ARGS += $(ARGS_DIFF)
 # # $(info WORK_DIR = $(WORK_DIR))
-# $(info ARGS = $(ARGS))
-# $(info ARGS_DIFF = $(ARGS_DIFF))
+ $(info ARGS = $(ARGS))
+ $(info ARGS_DIFF = $(ARGS_DIFF))
 
 
 

@@ -14,6 +14,8 @@
 #**************************************************************************************/
 
 
+-include $(NPC_HOME)/include/config/auto.conf
+-include $(NPC_HOME)/include/config/auto.conf.cmd
 
 ifdef CONFIG_DIFFTEST
 
