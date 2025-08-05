@@ -126,7 +126,13 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 }
 
 void difftest_step(vaddr_t pc, vaddr_t npc) {
-  CPU_state ref_r;
+	if (!ref_difftest_regcpy) {
+		printf("\033[31m[difftest] Error: failed to load ref_difftest_regcpy()\033[0m\n");
+		exit(1);
+	  }
+	CPU_state ref_r;
+	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+	printf("ref.pc = 0x%08x\n", ref_r.pc);
 
   if (skip_dut_nr_inst > 0) {
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
