@@ -8,7 +8,7 @@ void init_log(const char *log_file);
 void init_ringbuf();
 void init_disasm();
 void read_elf_symbols(const char *elf_path);
-
+void init_difftest(char *ref_so_file, long img_size, int port);
 
 char *img_file = NULL;
  long load_img() {
@@ -42,12 +42,14 @@ char *img_file = NULL;
 char *log_file = NULL;
 char *elf_file = NULL;
 char *diff_so_file = NULL;
+static int difftest_port = 1234;
+
 int parse_args(int argc, char *argv[]) {
 	const struct option table[] = {
 	  {"elf"      , required_argument, NULL, 'e'},  // csf added
 	 // {"batch"    , no_argument      , NULL, 'b'},
 	  {"log"      , required_argument, NULL, 'l'},
-	 // {"diff"     , required_argument, NULL, 'd'},
+	  {"diff"     , required_argument, NULL, 'd'},
 	 // {"port"     , required_argument, NULL, 'p'},
 	  {"help"     , no_argument      , NULL, 'h'},
 	  {0          , 0                , NULL,  0 },
@@ -88,4 +90,6 @@ void init_monitor()
     read_elf_symbols(elf_file);
   	}
 	#endif
+	long img_size = load_img();
+	init_difftest(diff_so_file, img_size, difftest_port);
 }
