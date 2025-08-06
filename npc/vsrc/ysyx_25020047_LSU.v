@@ -26,15 +26,15 @@ reg [31:0] sb_wmask;
 always @(*) begin
     case(store_offset)
         2'b00: begin
-            wdata1 = wdata;
+            wdata1 = {24'b0, wdata[7:0]};
             sb_wmask = 32'h1;
         end
         2'b01: begin
-            wdata1 = {wdata[23:0], 8'b0};
+            wdata1 = {16'b0, wdata[7:0], 8'b0};
             sb_wmask = 32'h2;
         end
         2'b10: begin
-            wdata1 = {wdata[15:0], 16'b0};
+            wdata1 = {8'b0, wdata[7:0], 16'b0};
             sb_wmask = 32'h4;
         end
         2'b11: begin
