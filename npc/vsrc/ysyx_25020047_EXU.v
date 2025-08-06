@@ -201,12 +201,12 @@ module ysyx_25020047_EXU(
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
-				64'h2000000000: begin //lh
+				64'h4000000000: begin //lh
                     result = rdata1 + imm;
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
-				64'h2000000000: begin //lhu
+				64'h8000000000: begin //lhu
                     result = rdata1 + imm;
                     reg_wen = 1'b1;
                     read = 1'b1;

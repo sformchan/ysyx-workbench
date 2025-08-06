@@ -122,7 +122,7 @@ always @(*) begin
 				default: memdata = 32'b0;
             endcase
 		end
-		64'h4000000000: begin //lhu
+		64'h8000000000: begin //lhu
 				case(load_offset)
                 2'b00: memdata = {16'b0, ram_data[15:0]};
                 2'b10: memdata = {16'b0, ram_data[31:16]};
