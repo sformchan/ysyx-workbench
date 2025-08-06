@@ -4,3 +4,4 @@
  * NPC Configuration Menu
  *
  */
+#define CONFIG_WATCHPOINT 1
