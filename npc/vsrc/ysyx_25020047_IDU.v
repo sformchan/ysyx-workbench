@@ -179,7 +179,7 @@ assign rd = Rrd | Ird | Urd | Jrd;
 
                     32'h80: imm = sSimm; // sw
                     32'h100: imm = sSimm; // sb
-					32'h20000: imm = sSimm; // sh
+					32'h200000: imm = sSimm; // sh
 
 					32'h4000: imm = sBimm; // beq
 					32'h8000: imm = sBimm; // bne
