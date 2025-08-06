@@ -196,6 +196,21 @@ module ysyx_25020047_EXU(
 					result = $signed(rdata1) >>> rdata2[4:0];
 					reg_wen = 1'b1;
 				end
+				64'h2000000000: begin //lb
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
+				64'h2000000000: begin //lh
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
+				64'h2000000000: begin //lhu
+                    result = rdata1 + imm;
+                    reg_wen = 1'b1;
+                    read = 1'b1;
+                end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");

@@ -103,8 +103,32 @@ always @(*) begin
                 2'b01: memdata = {24'b0, ram_data[15:8]};
                 2'b10: memdata = {24'b0, ram_data[23:16]};
                 2'b11: memdata = {24'b0, ram_data[31:24]};
+				default: memdata = 32'b0;
             endcase
         end
+		64'h2000000000: begin //lb
+				case(load_offset)
+                2'b00: memdata = {{24{ram_data[7]}}, ram_data[7:0]};
+                2'b01: memdata = {{24{ram_data[15]}}, ram_data[15:8]};
+                2'b10: memdata = {{24{ram_data[23]}}, ram_data[23:16]};
+                2'b11: memdata = {{24{ram_data[31]}}, ram_data[31:24]};
+				default: memdata = 32'b0;
+            endcase
+		end
+		64'h4000000000: begin //lh
+				case(load_offset)
+                2'b00: memdata = {{16{ram_data[15]}}, ram_data[15:0]};
+                2'b10: memdata = {{16{ram_data[31]}}, ram_data[31:16]};
+				default: memdata = 32'b0;
+            endcase
+		end
+		64'h4000000000: begin //lhu
+				case(load_offset)
+                2'b00: memdata = {16'b0, ram_data[15:0]};
+                2'b10: memdata = {16'b0, ram_data[31:16]};
+				default: memdata = 32'b0;
+            endcase
+		end
         default     : memdata = 32'b0;
     endcase
 end

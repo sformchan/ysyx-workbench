@@ -139,6 +139,15 @@ module ysyx_25020047_WBU(
 				64'h1000000000: begin //sra
 					wdata = result;
 				end
+				64'h2000000000: begin //lb
+                    wdata = memdata;
+                end
+				64'h4000000000: begin //lh
+                    wdata = memdata;
+                end
+				64'h8000000000: begin //lhu
+                    wdata = memdata;
+                end
                 default: wdata = 32'b0;
             endcase
         end                                          
