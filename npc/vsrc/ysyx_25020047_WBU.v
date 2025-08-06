@@ -25,7 +25,7 @@
 //****************************************************************************************//
 
 module ysyx_25020047_WBU(
-    input [31:0] inst_type,
+    input [63:0] inst_type,
     input [31:0] result,
     input [31:0] memdata,
     input [31:0] snpc,
@@ -37,79 +37,79 @@ module ysyx_25020047_WBU(
         begin
             dnpc = snpc;                                       
             case(inst_type)
-                32'h1: begin //addi
+                64'h1: begin //addi
                     wdata = result; 
                 end
-                32'h2: begin //jalr
+                64'h2: begin //jalr
                     wdata = snpc;
                     dnpc = result;
                 end
-                32'h8: begin //add
+                64'h8: begin //add
                     //$display("wdata 0x%08x", wdata);
                     wdata = result;
                 end
-                32'h10: begin //lui
+                64'h10: begin //lui
                     wdata = result; 
                 end
-                32'h20: begin //lw
+                64'h20: begin //lw
                     wdata = memdata;
                 end
-                32'h40: begin //lbu
+                64'h40: begin //lbu
                     wdata = memdata;
                 end
-				32'h200: begin //auipc
+				64'h200: begin //auipc
 					wdata = result;
 				end
-				32'h400: begin //jal
+				64'h400: begin //jal
 					wdata = snpc;
 					dnpc = result;
 				end
-				32'h800: begin //sub
+				64'h800: begin //sub
 					wdata = result;
 				end
-				32'h1000: begin //slti
+				64'h1000: begin //slti
 					wdata = result;
 				end
-				32'h2000: begin //sltiu
+				64'h2000: begin //sltiu
 					wdata = result;
 				end
-				32'h4000: begin //beq
+				64'h4000: begin //beq
 					dnpc = result;
 				end
-				32'h8000: begin //bne
+				64'h8000: begin //bne
 					dnpc = result;
 				end
-				32'h10000: begin //slt
+				64'h10000: begin //slt
 					wdata = result;
 				end
-				32'h20000: begin //sltu
+				64'h20000: begin //sltu
 					wdata = result;
 				end
-				32'h40000: begin //xor
+				64'h40000: begin //xor
 					wdata = result;
 				end
-				32'h80000: begin //or
+				64'h80000: begin //or
 					wdata = result;
 				end
-				32'h100000: begin //and
+				64'h100000: begin //and
 					wdata = result;
 				end
-				32'h400000: begin //srai
+				64'h400000: begin //srai
 					wdata = result;
 				end
-				32'h800000: begin //srli
+				64'h800000: begin //srli
 					wdata = result;
 				end
-				32'h1000000: begin //slli
+				64'h1000000: begin //slli
 					wdata = result;
 				end
-				32'h2000000: begin //andi
+				64'h2000000: begin //andi
 					wdata = result;
 				end
-				32'h4000000: begin //ori
+				64'h4000000: begin //ori
 					wdata = result;
 				end
-				32'h8000000: begin //xori
+				64'h8000000: begin //xori
 					wdata = result;
 				end
                 default: wdata = 32'b0;

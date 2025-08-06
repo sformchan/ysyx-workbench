@@ -22,7 +22,7 @@ ysyx_25020047_IFU u0(
 
 
 wire [31:0]  imm;
-wire [31:0]   inst_type;
+wire [63:0]   inst_type;
 wire [4:0] shamt;
 ysyx_25020047_IDU u1(
     .clk(clk),

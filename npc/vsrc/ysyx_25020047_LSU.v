@@ -1,5 +1,5 @@
 module ysyx_25020047_LSU (
-    input [31:0] inst_type,
+    input [63:0] inst_type,
     input [31:0] raddr,
     input [31:0] waddr,
     input reg [31:0] wdata,
@@ -72,15 +72,15 @@ end
 
 always @(*) begin
     if(write) begin
-        if(inst_type == 32'h80) begin     //sw
+        if(inst_type == 64'h80) begin     //sw
 			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
 			pmem_write(waddr, wdata, 32'hF); //pc inst
 		end
-        else if(inst_type == 32'h100) begin   //sb
+        else if(inst_type == 64'h100) begin   //sb
             //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
             pmem_write(waddr, wdata1, sb_wmask);
         end
-		else if(inst_type == 32'h200000) begin //sh
+		else if(inst_type == 64'h200000) begin //sh
 			pmem_write(waddr, wdata2, sh_wmask);
     	end
 	end
@@ -94,8 +94,8 @@ assign load_offset = raddr[1:0];
 always @(*) begin
 	memdata = 32'b0;
     case(inst_type)
-        32'h20: memdata = ram_data;  //lw
-        32'h40: begin //lbu
+        64'h20: memdata = ram_data;  //lw
+        64'h40: begin //lbu
 			//$display("load_offset = 0x%08x", load_offset);
             //memdata = ram_data;
             case(load_offset)

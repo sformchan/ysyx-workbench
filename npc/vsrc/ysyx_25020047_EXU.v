@@ -27,7 +27,7 @@
 
 
 module ysyx_25020047_EXU(
-    input [31:0]  inst_type,
+    input [63:0]  inst_type,
     input [31:0] rdata1,
     input [31:0] rdata2,
     input [31:0] imm,
@@ -48,119 +48,119 @@ module ysyx_25020047_EXU(
             write = 1'b0;
             reg_wen = 1'b0;
             case(inst_type)
-                32'h1: begin //addi
+                64'h1: begin //addi
                     result = rdata1 + imm;
                     reg_wen = 1'b1;
                 end
-                32'h2: begin //jalr
+                64'h2: begin //jalr
                     result = (rdata1 + imm) & ~1;
                     reg_wen = 1'b1;
                 end
-                32'h4: begin //ebreak
+                64'h4: begin //ebreak
                     reg_wen = 1'b0; // ebreak does not write back
 					set_npc_state(32'h2); // end simulation
                 end
-                32'h8: begin //add
+                64'h8: begin //add
                     //$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
                     result = rdata1 + rdata2; // R-type instruction
                     reg_wen = 1'b1;
                 end
-                32'h10: begin //lui
+                64'h10: begin //lui
                     result = imm;
                     reg_wen = 1'b1; 
                 end
-                32'h20: begin //lw
+                64'h20: begin //lw
                     // $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
                     result = rdata1 + imm;
                     // $display("result 0x%08x", result);
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
-                32'h40: begin //lbu
+                64'h40: begin //lbu
                     result = rdata1 + imm;
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
-                32'h80: begin //sw
+                64'h80: begin //sw
                     result = rdata1 + imm;
                     write = 1'b1;
                 end
-                32'h100: begin //sb
+                64'h100: begin //sb
                     // $display("result 0x%08x", result);
                     result = rdata1 + imm;
                     write = 1'b1;
                 end
-				32'h200: begin //auipc
+				64'h200: begin //auipc
 					result = pc + imm;
 					reg_wen = 1'b1;
 				end
-				32'h400: begin //jal
+				64'h400: begin //jal
 					result = pc + imm;
 					reg_wen = 1'b1;
 				end
-				32'h800: begin //sub
+				64'h800: begin //sub
 					result = rdata1 - rdata2;
 					reg_wen = 1'b1;
 				end
-				32'h1000: begin //stli
+				64'h1000: begin //stli
 					result = ($signed(rdata1) < $signed(imm)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
-				32'h2000: begin //stliu
+				64'h2000: begin //stliu
 					result = ($unsigned(rdata1) < $unsigned(imm)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
-				32'h4000: begin //beq
+				64'h4000: begin //beq
 					result = (rdata1 == rdata2) ? (pc + imm) : snpc;
 				end
-				32'h8000: begin //bne
+				64'h8000: begin //bne
 					result = (rdata1 != rdata2) ? (pc + imm) : snpc;
 				end
-				32'h10000: begin //slt
+				64'h10000: begin //slt
 					result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
-				32'h20000: begin //sltu
+				64'h20000: begin //sltu
 					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
 					reg_wen = 1'b1;
 				end
-				32'h40000: begin //xor
+				64'h40000: begin //xor
 					result = rdata1 ^ rdata2;
 					reg_wen = 1'b1;
 				end
-				32'h80000: begin //or
+				64'h80000: begin //or
 					result = rdata1 | rdata2;
 					reg_wen = 1'b1;
 				end
-				32'h100000: begin //and
+				64'h100000: begin //and
 					result = rdata1 & rdata2;
 					reg_wen = 1'b1;
 				end
-				32'h200000: begin //sh
+				64'h200000: begin //sh
 					result = rdata1 + imm;
 					write = 1'b1;
 				end
-				32'h400000: begin //srai arithmetic
+				64'h400000: begin //srai arithmetic
 					result = $signed(rdata1) >>> shamt;
 					reg_wen = 1'b1;
 				end
-				32'h800000: begin //srli
+				64'h800000: begin //srli
 					result = rdata1 >> shamt;
 					reg_wen = 1'b1;
 				end
-				32'h1000000: begin //slli logical
+				64'h1000000: begin //slli logical
 					result = rdata1 << shamt;
 					reg_wen = 1'b1;
 				end
-				32'h2000000: begin //andi
+				64'h2000000: begin //andi
 					result = rdata1 & imm;
 					reg_wen = 1'b1;
 				end
-				32'h4000000: begin //ori
+				64'h4000000: begin //ori
 					result = rdata1 | imm;
 					reg_wen = 1'b1;
 				end
-				32'h8000000: begin //xori
+				64'h8000000: begin //xori
 					result = rdata1 ^ imm;
 					reg_wen = 1'b1;
 				end
