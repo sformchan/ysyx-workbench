@@ -48,19 +48,20 @@ always @(*) begin
     endcase
 end
 
+reg [31:0] wdata2;
 reg [31:0] sh_wmask;
 always @(*) begin
   case (store_offset)
     2'b00: begin
-      wdata1 = {16'b0, wdata[15:0]};  // halfword at byte 0
+      wdata2 = {16'b0, wdata[15:0]};  // halfword at byte 0
       sh_wmask = 32'h3;
     end
     2'b10: begin
-      wdata1 = {wdata[15:0], 16'b0};  // halfword at byte 2
+      wdata2 = {wdata[15:0], 16'b0};  // halfword at byte 2
       sh_wmask  = 32'h12;
     end
     default: begin
-      wdata1 = 32'b0;
+      wdata2 = 32'b0;
       sh_wmask  = 32'h0;  // invalid address, do nothing
     end
   endcase
@@ -79,7 +80,7 @@ always @(*) begin
             pmem_write(waddr, wdata1, sb_wmask);
         end
 		else if(inst_type == 32'h200000) begin //sh
-			pmem_write(waddr, wdata1, sh_wmask);
+			pmem_write(waddr, wdata2, sh_wmask);
     	end
 	end
 end
