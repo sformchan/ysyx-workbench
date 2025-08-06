@@ -10,6 +10,7 @@ module ysyx_25020047_LSU (
 
 reg [31:0] ram_data;
 always @(*) begin
+	ram_data = 0;
     if(read) begin
 		//$display("raddr: 0x%08x", raddr);
         ram_data = pmem_read(raddr, 1);
@@ -91,6 +92,7 @@ end
 wire [1:0] load_offset;
 assign load_offset = raddr[1:0];
 always @(*) begin
+	memdata = 32'b0;
     case(inst_type)
         32'h20: memdata = ram_data;  //lw
         32'h40: begin //lbu
