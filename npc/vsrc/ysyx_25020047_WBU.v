@@ -124,6 +124,21 @@ module ysyx_25020047_WBU(
 				64'h80000000: begin //bgeu
 					dnpc = result;
 				end
+				64'h100000000: begin //sll
+					wdata = result;
+				end
+				64'h200000000: begin //slt
+					wdata = result;
+				end
+				64'h400000000: begin //sltu
+					wdata = result;
+				end
+				64'h800000000: begin //srl
+					wdata = result;
+				end
+				64'h1000000000: begin //sra
+					wdata = result;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          
