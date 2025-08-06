@@ -164,6 +164,18 @@ module ysyx_25020047_EXU(
 					result = rdata1 ^ imm;
 					reg_wen = 1'b1;
 				end
+				64'h10000000: begin //blt
+					result = ($signed(rdata1) < $signed(rdata2)) ? (pc + imm) : snpc;
+				end 
+				64'h20000000: begin //bge
+					result = ($signed(rdata1) > $signed(rdata2)) ? (pc + imm) : snpc;
+				end
+				64'h40000000: begin //bltu
+					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? (pc + imm) : snpc;
+				end
+				64'h80000000: begin //bgeu
+					result = ($unsigned(rdata1) > $unsigned(rdata2)) ? (pc + imm) : snpc;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");

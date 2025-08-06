@@ -112,6 +112,18 @@ module ysyx_25020047_WBU(
 				64'h8000000: begin //xori
 					wdata = result;
 				end
+				64'h10000000: begin //blt
+					dnpc = result;
+				end
+				64'h20000000: begin //bge
+					dnpc = result;
+				end
+				64'h40000000: begin //bltu
+					dnpc = result;
+				end
+				64'h80000000: begin //bgeu
+					dnpc = result;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          
