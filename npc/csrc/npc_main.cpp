@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	delete top;
 	//tfp->close();
 	delete contextp;
-	return ((npc_state == NPC_END ) || (npc_state == NPC_QUIT)) ? 0 : 1;
+	return ((npc_state == NPC_END && cpu.gpr[10] == 0) || (npc_state == NPC_QUIT)) ? 0 : 1;
 		
 }
 
