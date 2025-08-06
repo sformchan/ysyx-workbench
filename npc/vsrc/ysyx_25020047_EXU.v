@@ -166,7 +166,7 @@ module ysyx_25020047_EXU(
 				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
-					$display("Got instruction left to implement\n");
+					$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");
 					result = 32'b0; // default case
 				end
             endcase
