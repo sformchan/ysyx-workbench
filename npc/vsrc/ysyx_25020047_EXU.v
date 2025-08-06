@@ -168,13 +168,13 @@ module ysyx_25020047_EXU(
 					result = ($signed(rdata1) < $signed(rdata2)) ? (pc + imm) : snpc;
 				end 
 				64'h20000000: begin //bge
-					result = ($signed(rdata1) > $signed(rdata2)) ? (pc + imm) : snpc;
+					result = ($signed(rdata1) >= $signed(rdata2)) ? (pc + imm) : snpc;
 				end
 				64'h40000000: begin //bltu
 					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? (pc + imm) : snpc;
 				end
 				64'h80000000: begin //bgeu
-					result = ($unsigned(rdata1) > $unsigned(rdata2)) ? (pc + imm) : snpc;
+					result = ($unsigned(rdata1) >= $unsigned(rdata2)) ? (pc + imm) : snpc;
 				end
 				64'h100000000: begin //sll
 					result = rdata1 << rdata2[4:0];
