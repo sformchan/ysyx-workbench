@@ -28,14 +28,14 @@ const char *exception_name(int mcause) {
 
 void etrace(int mcause, vaddr_t mepc) {
 	printf(ANSI_FG_WHITE "[etrace]" ANSI_NONE " mcause=0x%x (%s), mepc=0x%08x\n", mcause, exception_name(mcause), mepc);
-  
-	printf("  gpr: ");
+	printf("\n");
+	printf("gpr: ");
 	for (int i = 0; i < 32; i++) {
 	  printf("x%d=0x%08x\n", i, cpu.gpr[i]);
 	}
 	printf("\n");
   
-	printf("  mstatus=0x%x mepc=0x%08x\n", cpu.mstatus, cpu.mepc);
+	printf("mstatus=0x%x mepc=0x%08x\n", cpu.mstatus, cpu.mepc);
   }
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
