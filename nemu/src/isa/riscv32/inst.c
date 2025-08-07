@@ -24,7 +24,7 @@
 
 
 word_t csr_read(uint32_t csr_num) {
-	printf("csr read successfully\n");
+	//printf("csr read successfully\n");
 	switch (csr_num) {
 	  case 0x305: return cpu.mtvec;     // mtvec
 	  case 0x341: return cpu.mepc;      // mepc
@@ -44,7 +44,7 @@ void csr_write(uint32_t csr_num, word_t val) {
 	  default:
 		panic("Unhandled CSR write: 0x%x", csr_num);
 	}
-	printf("csr write successfully\n");
+	//printf("csr write successfully\n");
 }
 
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
@@ -149,7 +149,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrw  , I, word_t old = csr_read(BITS(s->isa.inst, 31, 20)); R(rd) = csr_read(BITS(s->isa.inst, 31, 20)); csr_write(BITS(s->isa.inst, 31, 20), src1 | old));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc), printf("dnpc: 0x%08x\n", s->dnpc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc));
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
