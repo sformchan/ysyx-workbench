@@ -22,6 +22,29 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+
+word_t csr_read(uint32_t csr_num) {
+	switch (csr_num) {
+	  case 0x305: return cpu.mtvec;     // mtvec
+	  case 0x341: return cpu.mepc;      // mepc
+	  case 0x342: return cpu.mcause;    // mcause
+	  case 0x300: return cpu.mstatus;   // mstatus
+	  default:
+		panic("Unhandled CSR read: 0x%x", csr_num);
+	}
+  }
+  
+void csr_write(uint32_t csr_num, word_t val) {
+	switch (csr_num) {
+	  case 0x305: cpu.mtvec = val; break;   // mtvec
+	  case 0x341: cpu.mepc = val; break;    // mepc
+	  case 0x342: cpu.mcause = val; break;  // mcause
+	  case 0x300: cpu.mstatus = val; break; // mstatus
+	  default:
+		panic("Unhandled CSR write: 0x%x", csr_num);
+	}
+}
+
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
 
 enum {
@@ -120,8 +143,11 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(rd) = SEXT(Mr(src1 + imm, 1), 8));
   INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(rd) = src1 | imm); 
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = csr_read(BITS(s->isa.inst, 31, 20)), csr_write(BITS(s->isa.inst, 31, 20), src1));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
