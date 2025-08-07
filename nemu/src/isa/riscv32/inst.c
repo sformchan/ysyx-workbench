@@ -161,5 +161,6 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst = inst_fetch(&s->snpc, 4);
+  if(cpu.mcause == 11) s->isa.inst = inst_fetch(&s->snpc + 4, 4);
   return decode_exec(s);
 }
