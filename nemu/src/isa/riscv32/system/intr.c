@@ -46,7 +46,9 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.mepc = epc;
 //   word_t vec = cpu.mtvec;  
 //   printf("[EXCEPTION] raise NO=0x%x from epc=0x%08x, jump to mtvec=0x%08x\n", NO, epc, vec);
+	#ifdef CONFIG_ETRACE
 	etrace(NO, epc);
+	#endif
   return cpu.mtvec;
 }
 

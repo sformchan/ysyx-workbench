@@ -237,5 +237,6 @@ config DTRACE
 	bool "Enable device trace"
 	default n
 
-
-
+config ETRACE
+	bool "Enable exception trace"
+	default n
