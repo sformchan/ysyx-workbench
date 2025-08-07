@@ -44,9 +44,6 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
   cpu.mcause = NO;
   cpu.mepc = epc;
-  if (NO == 11) {
-    cpu.mepc += 4;  // 跳过ecall，防止死循环
-  }
 //   word_t vec = cpu.mtvec;  
 //   printf("[EXCEPTION] raise NO=0x%x from epc=0x%08x, jump to mtvec=0x%08x\n", NO, epc, vec);
 	etrace(NO, epc);
