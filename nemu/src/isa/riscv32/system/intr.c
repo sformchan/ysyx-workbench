@@ -31,7 +31,7 @@ void etrace(int mcause, vaddr_t mepc) {
   
 	printf("  gpr: ");
 	for (int i = 0; i < 32; i++) {
-	  printf("x%d=0x%08x ", i, cpu.gpr[i]);
+	  printf("x%d=0x%08x\n", i, cpu.gpr[i]);
 	}
 	printf("\n");
   
