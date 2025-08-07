@@ -32,6 +32,7 @@ word_t csr_read(uint32_t csr_num) {
 	  default:
 		panic("Unhandled CSR read: 0x%x", csr_num);
 	}
+	printf("csr read successfully\n");
   }
   
 void csr_write(uint32_t csr_num, word_t val) {
@@ -43,6 +44,7 @@ void csr_write(uint32_t csr_num, word_t val) {
 	  default:
 		panic("Unhandled CSR write: 0x%x", csr_num);
 	}
+	printf("csr write successfully\n");
 }
 
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
