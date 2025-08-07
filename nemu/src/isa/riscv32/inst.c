@@ -152,7 +152,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, mret_flag = 1; if(cpu.mcause == 11) s->dnpc = cpu.mepc; else s->dnpc = cpu.mepc;);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, mret_flag = 1; if(cpu.mcause == 11) s->dnpc = cpu.mepc + 4; else s->dnpc = cpu.mepc;);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
@@ -163,6 +163,5 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst = inst_fetch(&s->snpc, 4);
-  if(mret_flag && cpu.mcause == 11) s->isa.inst = inst_fetch(&s->snpc + 4, 4), mret_flag = 0;
   return decode_exec(s);
 }
