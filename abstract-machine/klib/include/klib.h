@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-#define __NATIVE_USE_KLIB__     //comment out this macro when you need to test the correctness of testfile and not when you wanna test it of klib
+//#define __NATIVE_USE_KLIB__     //comment out this macro when you need to test the correctness of testfile and not when you wanna test it of klib
 
 // string.h
 void  *memset    (void *s, int c, size_t n);
