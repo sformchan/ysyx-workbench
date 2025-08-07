@@ -24,6 +24,7 @@
 
 
 word_t csr_read(uint32_t csr_num) {
+	printf("csr read successfully\n");
 	switch (csr_num) {
 	  case 0x305: return cpu.mtvec;     // mtvec
 	  case 0x341: return cpu.mepc;      // mepc
@@ -32,7 +33,6 @@ word_t csr_read(uint32_t csr_num) {
 	  default:
 		panic("Unhandled CSR read: 0x%x", csr_num);
 	}
-	printf("csr read successfully\n");
   }
   
 void csr_write(uint32_t csr_num, word_t val) {
