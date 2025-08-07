@@ -14,6 +14,29 @@
 ***************************************************************************************/
 
 #include <isa.h>
+#include <utils.h>
+
+const char *exception_name(int mcause) {
+	switch (mcause) {
+	  case 0: return "Instruction address misaligned";
+	  case 2: return "Illegal instruction";
+	  case 11: return ANSI_FG_YELLOW "Environment call from M-mode" ANSI_NONE;
+	  // 根据需要补充更多异常
+	  default: return "Unknown exception";
+	}
+  }
+
+void etrace(int mcause, vaddr_t mepc) {
+	printf(ANSI_FG_WHITE "[etrace]" ANSI_NONE " mcause=0x%x (%s), mepc=0x%08x\n", mcause, exception_name(mcause), mepc);
+  
+	printf("  gpr: ");
+	for (int i = 0; i < 32; i++) {
+	  printf("x%d=0x%08x ", i, cpu.gpr[i]);
+	}
+	printf("\n");
+  
+	printf("  mstatus=0x%x mepc=0x%08x\n", cpu.mstatus, cpu.mepc);
+  }
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
@@ -23,7 +46,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.mepc = epc;
 //   word_t vec = cpu.mtvec;  
 //   printf("[EXCEPTION] raise NO=0x%x from epc=0x%08x, jump to mtvec=0x%08x\n", NO, epc, vec);
-
+	etrace(NO, epc);
   return cpu.mtvec;
 }
 
