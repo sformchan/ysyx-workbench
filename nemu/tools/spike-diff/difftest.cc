@@ -41,9 +41,9 @@ struct diff_context_t {
   word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];
   word_t pc;
   word_t mstatus;
+  word_t mepc;
   word_t mcause;
 
-  word_t mepc;
   
 };
 
