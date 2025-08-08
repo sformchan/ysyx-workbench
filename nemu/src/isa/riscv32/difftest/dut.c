@@ -25,11 +25,11 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
     Log("\033[31mPC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.pc, ref_r->pc);  
     flag = false;
   }
-  printf("\033[33mCURRENT PC = " FMT_WORD "\033[0m" "\n", pc);
-  for(int i = 0; i < 32; i++)
-  {
-      Log("\033[31mGPR mismatch: DUT[%d] = " FMT_WORD ", REF[%d] = " FMT_WORD "\033[0m", i, cpu.gpr[i], i, ref_r->gpr[i]);
-  }
+//   printf("\033[33mCURRENT PC = " FMT_WORD "\033[0m" "\n", pc);
+//   for(int i = 0; i < 32; i++)
+//   {
+//       Log("\033[31mGPR mismatch: DUT[%d] = " FMT_WORD ", REF[%d] = " FMT_WORD "\033[0m", i, cpu.gpr[i], i, ref_r->gpr[i]);
+//   }
   for(int i = 0; i < 32; i++)
   {
     if(cpu.gpr[i] != ref_r->gpr[i])
