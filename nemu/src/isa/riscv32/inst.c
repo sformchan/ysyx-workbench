@@ -47,6 +47,31 @@ void csr_write(uint32_t csr_num, word_t val) {
 	//printf("csr write successfully\n");
 }
 
+void exec_mret(vaddr_t dnpc) {
+    // 读出 mstatus 各个字段
+    uint32_t mstatus = cpu.mstatus;
+
+    // 恢复当前特权级为 MPP
+    //cpu.privilege = (mstatus >> 11) & 0x3;  // MPP 位
+
+    // 恢复 MIE = MPIE
+    uint32_t mpie = (mstatus >> 7) & 0x1;
+    if (mpie)
+        cpu.mstatus |= (1 << 3);
+    else
+        cpu.mstatus &= ~(1 << 3);
+
+    // 清空 MPIE
+    cpu.mstatus &= ~(1 << 7);
+
+    // 清空 MPP
+    cpu.mstatus &= ~(3 << 11);
+
+    // 设置 PC = mepc
+    dnpc = cpu.mepc;
+}
+
+
 void ftrace_exec(uint32_t pc, uint32_t target, uint32_t rd, uint32_t rs1, int32_t imm);
 
 enum {
@@ -152,7 +177,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(cpu.gpr[17], s->pc));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, exec_mret(s->dnpc));
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
