@@ -48,27 +48,11 @@ void csr_write(uint32_t csr_num, word_t val) {
 }
 
 void exec_mret(vaddr_t dnpc) {
-    // 读出 mstatus 各个字段
-    uint32_t mstatus = cpu.mstatus;
-
-    // 恢复当前特权级为 MPP
-    //cpu.privilege = (mstatus >> 11) & 0x3;  // MPP 位
-
-    // 恢复 MIE = MPIE
-    uint32_t mpie = (mstatus >> 7) & 0x1;
-    if (mpie)
-        cpu.mstatus |= (1 << 3);
-    else
-        cpu.mstatus &= ~(1 << 3);
-
-    // 清空 MPIE
-    cpu.mstatus &= ~(1 << 7);
-
-    // 清空 MPP
-    cpu.mstatus &= ~(3 << 11);
-
-    // 设置 PC = mepc
-    dnpc = cpu.mepc;
+	dnpc = cpu.mepc;
+	cpu.mstatus &= ~(1<<3); 
+	cpu.mstatus |= ((cpu.mstatus&(1<<7))>>4); 
+	cpu.mstatus |= (1<<7); 
+	cpu.mstatus &= ~((1<<11)+(1<<12)); 
 }
 
 
