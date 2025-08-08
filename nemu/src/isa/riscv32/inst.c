@@ -47,8 +47,7 @@ void csr_write(uint32_t csr_num, word_t val) {
 	//printf("csr write successfully\n");
 }
 
-void exec_mret(vaddr_t dnpc) {
-	dnpc = cpu.mepc;
+void exec_mret() {
 	cpu.mstatus &= ~(1<<3); 
 	cpu.mstatus |= ((cpu.mstatus&(1<<7))>>4); 
 	cpu.mstatus |= (1<<7); 
@@ -161,7 +160,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(cpu.gpr[17], s->pc));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, exec_mret(s->dnpc));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, exec_mret(); s->dnpc = cpu.mepc);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
