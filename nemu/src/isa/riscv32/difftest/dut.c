@@ -40,17 +40,17 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
   if(cpu.mepc != ref_r->mepc)
   {
-	Log("\033[31mGPR mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mepc, ref_r->mepc); 
+	Log("\033[31mMEPC mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mepc, ref_r->mepc); 
 	flag = false;
   }
   if(cpu.mcause != ref_r->mcause)
   {
-	Log("\033[31mGPR mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mcause, ref_r->mcause); 
+	Log("\033[31mMCAUSE mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mcause, ref_r->mcause); 
 	flag = false;
   } 
   if(cpu.mstatus != ref_r->mstatus) 
   {
-	Log("\033[31mGPR mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mstatus, ref_r->mstatus); 
+	Log("\033[31mMSTATUS mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.mstatus, ref_r->mstatus); 
 	flag = false;
   }
 
