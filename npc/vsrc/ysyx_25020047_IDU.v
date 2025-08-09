@@ -37,9 +37,9 @@ module ysyx_25020047_IDU(
     output [31:0]     rdata2,
     output [31:0]         pc,
     output [31:0]       snpc,
-    output [31:0]  gpr0,
-    output [31:0]  gpr1,
-    output [31:0]  gpr2,
+    // output [31:0]  gpr0,
+    // output [31:0]  gpr1,
+    // output [31:0]  gpr2,
 	output [4:0] shamt
 );
 
@@ -221,10 +221,10 @@ GPR #(5, 32) u1
     .wdata(wdata),
     .waddr(rd),
     .rdata1(rdata1),
-    .rdata2(rdata2),
-    .gpr0(gpr0),
-    .gpr1(gpr1),
-    .gpr2(gpr2)
+    .rdata2(rdata2)
+    // .gpr0(gpr0),
+    // .gpr1(gpr1),
+    // .gpr2(gpr2)
 );
  
 

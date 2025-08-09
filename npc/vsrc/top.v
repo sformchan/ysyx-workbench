@@ -8,9 +8,9 @@ module top(
     input rst,
     //input  [31:0] inst,
     output [31:0] pc,
-    output [31:0] gpr0,
-    output [31:0] gpr1,
-    output [31:0] gpr2,
+    // output [31:0] gpr0,
+    // output [31:0] gpr1,
+    // output [31:0] gpr2,
 	output [31:0] dnpc
 );
 
@@ -37,9 +37,9 @@ ysyx_25020047_IDU u1(
     .rdata2(rdata2),
     .pc(pc),
     .snpc(snpc),
-    .gpr0(gpr0),
-    .gpr1(gpr1),
-    .gpr2(gpr2),
+    // .gpr0(gpr0),
+    // .gpr1(gpr1),
+    // .gpr2(gpr2),
 	.shamt(shamt)
 );
 
