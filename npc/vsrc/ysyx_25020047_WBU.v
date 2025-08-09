@@ -152,6 +152,7 @@ module ysyx_25020047_WBU(
                 end
 				64'h10000000000: begin //ecall
 					dnpc = intr_mtvec;
+					$display("switch to mtvec: 0x%08x", dnpc);
 				end
 				64'h20000000000: begin //csrrw
 					wdata = csr_rdata;
