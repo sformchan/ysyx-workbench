@@ -38,8 +38,8 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 	ctx->mepc = (uintptr_t)entry;
 	ctx->gpr[10] = (uintptr_t)arg;
 	ctx->mstatus = 0x1800;
-	printf("kcontext: entry=%p, arg=%p, ctx=%p\n", entry, arg, ctx);
-	printf("mepc = 0x%08x, a0 = 0x%08x\n", ctx->mepc, ctx->gpr[10]);
+	// printf("kcontext: entry=%p, arg=%p, ctx=%p\n", entry, arg, ctx);
+	// printf("mepc = 0x%08x, a0 = 0x%08x\n", ctx->mepc, ctx->gpr[10]);
   	return ctx;
 }
 
