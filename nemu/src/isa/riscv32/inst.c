@@ -48,10 +48,10 @@ void csr_write(uint32_t csr_num, word_t val) {
 }
 
 void exec_mret() {
-	// cpu.mstatus &= ~(1<<3); 
-	// cpu.mstatus |= ((cpu.mstatus&(1<<7))>>4); 
-	// cpu.mstatus |= (1<<7); 
-	// cpu.mstatus &= ~((1<<11)+(1<<12)); 
+	cpu.mstatus &= ~(1<<3); 
+	cpu.mstatus |= ((cpu.mstatus&(1<<7))>>4); 
+	cpu.mstatus |= (1<<7); 
+	cpu.mstatus &= ~((1<<11)+(1<<12)); 
 }
 
 

@@ -42,10 +42,10 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
-//   cpu.mstatus &= ~(1<<7);
-//   cpu.mstatus |= ((cpu.mstatus&(1<<3))<<4);
-//   cpu.mstatus &= ~(1<<3);
-//   cpu.mstatus |= ((1<<11)+(1<<12));
+  cpu.mstatus &= ~(1<<7);
+  cpu.mstatus |= ((cpu.mstatus&(1<<3))<<4);
+  cpu.mstatus &= ~(1<<3);
+  cpu.mstatus |= ((1<<11)+(1<<12));
   cpu.mcause = NO;
   cpu.mepc = epc;
 //   printf("[EXCEPTION] raise NO=0x%x from epc=0x%08x, jump to mtvec=0x%08x\n", NO, epc, vec);
