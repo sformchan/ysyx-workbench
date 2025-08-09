@@ -42,7 +42,7 @@ struct diff_context_t {
   word_t pc;
   word_t mtvec;
   word_t mepc;
-  word_t mstatus;
+  word_t mstatus = 0x1800;
   word_t mcause;
 };
 
