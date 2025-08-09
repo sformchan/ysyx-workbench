@@ -24,6 +24,10 @@ void diff_set_regs(void *ctx) {
 	  cpu.gpr[i] = c->gpr[i];
 	}
 	cpu.pc = c->pc;
+	cpu.mepc = c->mepc;
+	cpu.mtvec = c->mtvec;
+	cpu.mcause = c->mcause;
+	cpu.mstatus = c->mstatus;
   }
   
 void diff_get_regs(void *ctx) {
@@ -32,6 +36,10 @@ void diff_get_regs(void *ctx) {
 	  c->gpr[i] = cpu.gpr[i];
 	}
 	c->pc = cpu.pc;
+	c->mepc = cpu.mepc;
+	c->mtvec = cpu.mtvec;
+	c->mcause = cpu.mcause;
+	c->mstatus = cpu.mstatus;
 }
   
 
@@ -58,7 +66,18 @@ __EXPORT void difftest_exec(uint64_t n) {
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {
-  assert(0);
+    // 触发异常编号NO
+    cpu.mcause = NO;
+    // 保存当前pc到mepc
+    cpu.mepc = cpu.pc;
+    // 设置mstatus，屏蔽中断等（参考你之前写的）
+    cpu.mstatus &= ~(1 << 7);               // MPIE = MIE
+    cpu.mstatus |= ((cpu.mstatus & (1 << 3)) << 4);  // MPP = previous MIE
+    cpu.mstatus &= ~(1 << 3);               // MIE = 0
+    cpu.mstatus |= (1 << 11) | (1 << 12);   // 设置 MPP 为机器模式 (假设机器模式为 3)
+
+    // 跳转到中断向量
+    cpu.pc = cpu.mtvec;
 }
 
 __EXPORT void difftest_init(int port) {
