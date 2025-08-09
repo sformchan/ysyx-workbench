@@ -144,7 +144,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   IFDEF(CONFIG_ITRACE, init_disasm());
-
+	cpu.mstatus = 0x1800;
   /* Display welcome message. */
   welcome();
 
