@@ -28,6 +28,8 @@ module ysyx_25020047_IDU(
     input clk,
     input rst,
     input reg_wen,
+	input csr_wen,
+	input intr,
     input  [31:0]      wdata,
     input  [31:0]       dnpc,
     input  [31:0]       inst,
@@ -37,10 +39,9 @@ module ysyx_25020047_IDU(
     output [31:0]     rdata2,
     output [31:0]         pc,
     output [31:0]       snpc,
-    // output [31:0]  gpr0,
-    // output [31:0]  gpr1,
-    // output [31:0]  gpr2,
-	output [4:0] shamt
+	output [4:0] shamt,
+	output [31:0] intr_mtvec,
+	output [31:0] csr_rdata
 );
 
 
@@ -112,6 +113,16 @@ assign rs1 = Rrs1 | Irs1 | Srs1 | Brs1;
 assign rs2 = Rrs2 | Srs2 | Brs2;
 assign rd = Rrd | Ird | Urd | Jrd;
 
+// csr
+wire [31:0] csr_raddr = {20'b0, Iimm};
+reg [31:0] csr_wdata;
+always @(*) begin
+	case(inst_type)
+		64'h20000000000: csr_wdata = rdata1;
+		64'h40000000000: csr_wdata = csr_rdata | rdata1;
+		default: csr_wdata = 32'b0;
+	endcase
+end
 
 // add more instruction types as needed  //judge the type of instruction
     always @(*)           
@@ -140,6 +151,9 @@ assign rd = Rrd | Ird | Urd | Jrd;
 				32'b?????????????????000?????0000011: inst_type = 64'h2000000000; // lb
 				32'b?????????????????001?????0000011: inst_type = 64'h4000000000; // lh
 				32'b?????????????????101?????0000011: inst_type = 64'h8000000000; // lhu
+
+				32'b?????????????????001?????1110011: inst_type = 64'h20000000000; // csrrw
+				32'b?????????????????010?????1110011: inst_type = 64'h40000000000; // csrrs
 				
 			//B-type
 				32'b?????????????????000?????1100011: inst_type = 64'h4000; // beq
@@ -150,7 +164,6 @@ assign rd = Rrd | Ird | Urd | Jrd;
 				32'b?????????????????111?????1100011: inst_type = 64'h80000000; // bgeu
 
 			//R-type
-                32'b00000000000100000000000001110011: inst_type = 64'h4; // ebreak
                 32'b0000000??????????000?????0110011: inst_type = 64'h8; // add
 				32'b0100000??????????000?????0110011: inst_type = 64'h800; // sub
 				32'b0000000??????????010?????0110011: inst_type = 64'h10000; // slt
@@ -168,6 +181,11 @@ assign rd = Rrd | Ird | Urd | Jrd;
                 32'b?????????????????010?????0100011: inst_type = 64'h80; // sw
                 32'b?????????????????000?????0100011: inst_type = 64'h100; // sb
 				32'b?????????????????001?????0100011: inst_type = 64'h200000; // sh
+
+			//N-type
+				32'b00000000000100000000000001110011: inst_type = 64'h4; // ebreak
+				32'b00000000000000000000000001110011: inst_type = 64'h10000000000; // ecall
+
                 default:                              inst_type = 64'hFFFFFFFFFFFFFFFF; // default case
             endcase                                     
         end                                          
@@ -210,7 +228,7 @@ assign rd = Rrd | Ird | Urd | Jrd;
                 endcase
             end                                          
 
-
+wire [31:0] NO;
 GPR #(5, 32) u1
 (
     .clk(clk),
@@ -221,14 +239,30 @@ GPR #(5, 32) u1
     .wdata(wdata),
     .waddr(rd),
     .rdata1(rdata1),
-    .rdata2(rdata2)
+    .rdata2(rdata2),
+	.NO(NO)
     // .gpr0(gpr0),
     // .gpr1(gpr1),
     // .gpr2(gpr2)
 );
  
 
-ysyx_25020047_PC u2
+CSR #(32) u2
+(
+	.clk(clk),
+	.rst(rst),
+	.wen(csr_wen),
+	.addr(csr_raddr),
+	.csr_wdata(csr_wdata),
+	.csr_rdata(csr_rdata),
+	.intr(intr),
+	.intr_NO(NO),
+	.intr_epc(pc),
+	.intr_mtvec(intr_mtvec)
+);
+
+
+ysyx_25020047_PC u3
 (
     .clk(clk),
     .rst(rst),

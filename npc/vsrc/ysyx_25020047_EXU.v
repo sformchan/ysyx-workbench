@@ -36,8 +36,10 @@ module ysyx_25020047_EXU(
 	input [31:0] snpc,
     output reg [31:0] result,
     output reg reg_wen,
+	output reg csr_wen,
     output reg read,
-    output reg write
+    output reg write,
+	output reg intr
 );
 
 
@@ -211,6 +213,17 @@ module ysyx_25020047_EXU(
                     reg_wen = 1'b1;
                     read = 1'b1;
                 end
+				64'h10000000000: begin //ecall
+					intr = 1'b1;
+				end
+				64'h20000000000: begin //csrrw
+					reg_wen = 1'b1;
+					csr_wen = 1'b1;
+				end
+				64'h40000000000: begin //csrrs
+					reg_wen = 1'b1;
+					csr_wen = 1'b1;
+				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
 					$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");

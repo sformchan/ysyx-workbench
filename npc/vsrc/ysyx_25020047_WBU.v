@@ -28,6 +28,8 @@ module ysyx_25020047_WBU(
     input [63:0] inst_type,
     input [31:0] result,
     input [31:0] memdata,
+	input [31:0] intr_mtvec,
+	input [31:0] csr_rdata,
     input [31:0] snpc,
     output reg [31:0] wdata,
     output reg [31:0] dnpc    
@@ -148,6 +150,12 @@ module ysyx_25020047_WBU(
 				64'h8000000000: begin //lhu
                     wdata = memdata;
                 end
+				64'h10000000000: begin //ecall
+					dnpc = intr_mtvec;
+				end
+				64'h20000000000: begin //csrrw
+					wdata = csr_rdata;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          

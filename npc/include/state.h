@@ -11,6 +11,18 @@ enum {NPC_STOP, NPC_RUNNING, NPC_END, NPC_QUIT, NPC_ABORT};
 #include </home/leonard/ysyx-workbench/npc/include/generated/autoconf.h>
 #include "difftest.h"
 
+typedef uint32_t word_t;
+typedef uint32_t vaddr_t;
+
+typedef struct {
+	word_t gpr[16];   // 32 个通用寄存器
+	vaddr_t pc;       // 程序计数器
+	word_t mepc;
+	word_t mtvec;
+	word_t mcause;
+	word_t mstatus;
+  } CPU_state;
+
 extern uint32_t gpr_val[];
 extern const char *gpr_name[];
 extern int npc_state;

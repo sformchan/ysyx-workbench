@@ -2,6 +2,7 @@ import "DPI-C" function void set_npc_state(input int state);
 import "DPI-C" function int pmem_read(input int raddr, input int flag);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 import "DPI-C" function void set_gpr(input int i, input int val);
+import "DPI-C" function void set_csr(input int mepc, input int mtvec, input int mcause, input int mstatus);
 
 module top(
     input clk,
@@ -24,10 +25,16 @@ ysyx_25020047_IFU u0(
 wire [31:0]  imm;
 wire [63:0]   inst_type;
 wire [4:0] shamt;
+wire csr_wen;
+wire intr;
+wire [31:0] intr_mtvec;
+wire [31:0] csr_rdata;
 ysyx_25020047_IDU u1(
     .clk(clk),
     .rst(rst),
     .reg_wen(reg_wen),
+	.csr_wen(csr_wen),
+	.intr(intr),
     .wdata(wdata),
     .dnpc(dnpc),
     .inst(inst),
@@ -37,10 +44,9 @@ ysyx_25020047_IDU u1(
     .rdata2(rdata2),
     .pc(pc),
     .snpc(snpc),
-    // .gpr0(gpr0),
-    // .gpr1(gpr1),
-    // .gpr2(gpr2),
-	.shamt(shamt)
+	.shamt(shamt),
+	.intr_mtvec(intr_mtvec),
+	.csr_rdata(csr_rdata)
 );
 
 
@@ -60,8 +66,10 @@ ysyx_25020047_EXU u2(
 	.snpc(snpc),
     .result(result),
     .reg_wen(reg_wen),
+	.csr_wen(csr_wen),
     .read(read),
-    .write(write)
+    .write(write),
+	.intr(intr)
 );
 
 
@@ -84,6 +92,8 @@ ysyx_25020047_WBU u4(
     .inst_type (inst_type),
     .result    (result),
     .memdata (memdata),
+	.intr_mtvec (intr_mtvec),
+	.csr_rdata(csr_rdata),
     .snpc      (snpc),
     .wdata     (wdata),
     .dnpc      (dnpc)

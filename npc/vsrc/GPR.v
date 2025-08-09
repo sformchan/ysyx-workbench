@@ -7,7 +7,8 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   input  [DATA_WIDTH-1:0]  wdata, 
   input  [ADDR_WIDTH-1:0]  waddr, //rd
   output [DATA_WIDTH-1:0]  rdata1,
-  output [DATA_WIDTH-1:0]  rdata2
+  output [DATA_WIDTH-1:0]  rdata2,
+  output [DATA_WIDTH-1:0]  NO
 //   output [DATA_WIDTH-1:0]  gpr0,
 //   output [DATA_WIDTH-1:0]  gpr1,
 //   output [DATA_WIDTH-1:0]  gpr2
@@ -22,7 +23,7 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
 //   assign gpr1 = rf[5'b01000]; // x1
 //   assign gpr2 = rf[5'b01100]; // x2
 
-
+assign NO = rf[5'b01111];
 
 
   

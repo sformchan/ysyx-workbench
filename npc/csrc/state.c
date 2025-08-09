@@ -198,11 +198,12 @@ void init_verilator(int argc, char **argv) {
 }
 
 
-const char *gpr_name[16] = {
+const char *reg_name[20] = {
 	"zero", "ra", "sp", "gp", "tp",
 	"t0", "t1", "t2",
 	"s0", "s1",
-	"a0", "a1", "a2", "a3", "a4", "a5"
+	"a0", "a1", "a2", "a3", "a4", "a5", 
+	"mepc", "mtvec", "mcause", "mstatus"
   };
 
 void set_gpr(int32_t i, int32_t val)
@@ -217,9 +218,15 @@ extern "C" void print_gpr()
 	printf("|" ANSI_FG_GREEN "PC   " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
 	for(int i = 0; i < 16; i++)
 	{
-		if(i == 0) printf("|%s |0x%08x |\n", gpr_name[i], cpu.gpr[i]);
-		else printf("|%s   |0x%08x |\n", gpr_name[i] , cpu.gpr[i]);
+		if(i == 0) printf("|%s  |0x%08x |\n", reg_name[i], cpu.gpr[i]);
+		else printf("|%s    |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
 	}
+	printf("\n");
+	printf("|%s  |0x%08x |\n", reg_name[16], cpu.mepc);
+	printf("|%s |0x%08x |\n", reg_name[17], cpu.mtvec);
+	printf("|%s |0x%08x |\n", reg_name[18], cpu.mcause);
+	printf("|%s|0x%08x |\n", reg_name[19], cpu.mstatus);
+
 }
 
 extern "C" uint32_t reg_str2val(const char *s, bool *success) {
@@ -227,7 +234,7 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	int i = 0;
 	while(i < 32)
 	{
-	  if(strcmp(s, gpr_name[i]) == 0)
+	  if(strcmp(s, reg_name[i]) == 0)
 	  {
 		num = i;
 		*success = true;
@@ -235,7 +242,17 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	  }
 	  i++;
 	}
-	
+	if(strcmp(s, reg_name[16]) == 0) return cpu.mepc;
+	if(strcmp(s, reg_name[17]) == 0) return cpu.mtvec;
+	if(strcmp(s, reg_name[18]) == 0) return cpu.mcause;
+	if(strcmp(s, reg_name[19]) == 0) return cpu.mstatus;
 	return num;
   }
 
+  void set_csr(int32_t mepc, int32_t mtvec, int32_t mcause, int32_t mstatus)
+{
+	cpu.mepc = mepc;
+	cpu.mtvec = mtvec;
+	cpu.mcause = mcause;
+	cpu.mstatus = mstatus;
+}
