@@ -63,6 +63,7 @@ wire mie_bit = mstatus[3];
 		// 清除MPP (bits 12 and 11)
 		mstatus[12] <= 1'b0;
 		mstatus[11] <= 1'b0;
+	end
   end
 
   always @(*) begin
