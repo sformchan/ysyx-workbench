@@ -36,7 +36,7 @@ wire mie_bit = mstatus[3];
 	  mcause <= {DATA_WIDTH{1'b0}};
     end
     else if (wen && addr != 32'b0) begin
-		$display("hello");
+		$display("0x%08x", addr);	
 		$display("0x%08x", csr_wdata);	
 		case(addr) 
 			32'h305: mtvec <= csr_wdata;
