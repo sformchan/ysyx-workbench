@@ -9,9 +9,6 @@ module GPR #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   output [DATA_WIDTH-1:0]  rdata1,
   output [DATA_WIDTH-1:0]  rdata2,
   output [DATA_WIDTH-1:0]  NO
-//   output [DATA_WIDTH-1:0]  gpr0,
-//   output [DATA_WIDTH-1:0]  gpr1,
-//   output [DATA_WIDTH-1:0]  gpr2
 );
   reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
 
