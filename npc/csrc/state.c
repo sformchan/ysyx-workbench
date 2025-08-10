@@ -222,7 +222,7 @@ extern "C" void print_gpr()
 		if(i == 0) printf("|%s   |0x%08x |\n", reg_name[i], cpu.gpr[i]);
 		else printf("|%s     |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
 	}
-	printf("||||||||||||||||||||\n");
+	printf("|--------------------|\n");
 
 	printf("|%s   |0x%08x |\n", reg_name[16], cpu.mepc);
 	printf("|%s  |0x%08x |\n", reg_name[17], cpu.mtvec);
