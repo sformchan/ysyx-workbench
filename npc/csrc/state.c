@@ -35,6 +35,7 @@ static void trace_and_difftest(char *logbuf) {
 	  }
 	#endif 
 	#ifdef CONFIG_DIFFTEST
+	printf("pc: 0x%08x dnpc: 0x%08x\n", top->pc, top->dnpc);
 	difftest_step(top->pc, top->dnpc);
 	#endif
 }

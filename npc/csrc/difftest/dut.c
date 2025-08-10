@@ -35,7 +35,7 @@
 
 
 
-	bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
+	bool isa_difftest_checkregs(CPU_state *ref_r) {   //vaddr pc
 		for (int i = 0; i < 32; i++) {
 		if (ref_r->gpr[i] != cpu.gpr[i]) {
 			printf("Mismatch at reg %d: dut = 0x%x, ref = 0x%x\n", i, cpu.gpr[i], ref_r->gpr[i]);
@@ -63,6 +63,7 @@
 	// already write some memory, and the incoming instruction in NEMU
 	// will load that memory, we will encounter false negative. But such
 	// situation is infrequent.
+	printf("%d\n", (int)is_skip_ref);
 	skip_dut_nr_inst = 0;
 	}
 
@@ -119,8 +120,8 @@
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 	}
 
-	static void checkregs(CPU_state *ref, vaddr_t pc) {
-	if (!isa_difftest_checkregs(ref, pc)) {
+	static void checkregs(CPU_state *ref) {
+	if (!isa_difftest_checkregs(ref)) {
 		npc_state = NPC_ABORT;
 		print_gpr();
 	}
@@ -139,7 +140,7 @@
 		ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 		if (ref_r.pc == npc) {
 		skip_dut_nr_inst = 0;
-		checkregs(&ref_r, npc);
+		checkregs(&ref_r);
 		return;
 		}
 		skip_dut_nr_inst --;
@@ -150,10 +151,14 @@
 
 	if (is_skip_ref) {
 		// to skip the checking of an instruction, just copy the reg state to reference design
+		//printf("been here\n");
+		printf("pc:0x%08x\n", cpu.pc);
 		ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 		is_skip_ref = false;
 		return;
 	}
+	
+	printf("pc:0x%08x\n", cpu.pc);
 	// printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",
 	// 	cpu.mepc, cpu.mtvec, cpu.mcause, cpu.pc);
 	// printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",
@@ -162,7 +167,7 @@
 	
 	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
-	checkregs(&ref_r, pc);
+	checkregs(&ref_r);
 	}
 	#else
 	void init_difftest(char *ref_so_file, long img_size, int port) { }
