@@ -171,6 +171,8 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
 	printf("0x%08x\n", s->snpc);
+	printf("0x%08x\n", s->pc);
+	printf("0x%08x\n", s->dnpc);
   s->isa.inst = inst_fetch(&s->snpc, 4);
   return decode_exec(s);
 }
