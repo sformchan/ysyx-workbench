@@ -27,6 +27,7 @@ wire [63:0]   inst_type;
 wire [4:0] shamt;
 wire csr_wen;
 wire intr;
+wire mret;
 wire [31:0] intr_mtvec;
 wire [31:0] csr_rdata;
 ysyx_25020047_IDU u1(
@@ -35,6 +36,7 @@ ysyx_25020047_IDU u1(
     .reg_wen(reg_wen),
 	.csr_wen(csr_wen),
 	.intr(intr),
+	.mret(mret),
     .wdata(wdata),
     .dnpc(dnpc),
     .inst(inst),
@@ -69,7 +71,8 @@ ysyx_25020047_EXU u2(
 	.csr_wen(csr_wen),
     .read(read),
     .write(write),
-	.intr(intr)
+	.intr(intr),
+	.mret(mret)
 );
 
 

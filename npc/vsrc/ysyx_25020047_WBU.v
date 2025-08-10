@@ -160,6 +160,10 @@ module ysyx_25020047_WBU(
 				64'h40000000000: begin //csrrs
 					wdata = csr_rdata;
 				end
+				64'h80000000000: begin //mret
+					dnpc = intr_mtvec;
+					//$display("switch to mtvec: 0x%08x", dnpc);
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          

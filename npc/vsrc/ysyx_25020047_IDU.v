@@ -30,6 +30,7 @@ module ysyx_25020047_IDU(
     input reg_wen,
 	input csr_wen,
 	input intr,
+	input mret,
     input  [31:0]      wdata,
     input  [31:0]       dnpc,
     input  [31:0]       inst,
@@ -185,6 +186,7 @@ end
 			//N-type
 				32'b00000000000100000000000001110011: inst_type = 64'h4; // ebreak
 				32'b00000000000000000000000001110011: inst_type = 64'h10000000000; // ecall
+				32'b00110000001000000000000001110011: inst_type = 64'h80000000000; // mret
 
                 default:                              inst_type = 64'hFFFFFFFFFFFFFFFF; // default case
             endcase                                     

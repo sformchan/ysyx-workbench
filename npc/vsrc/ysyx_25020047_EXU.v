@@ -39,7 +39,8 @@ module ysyx_25020047_EXU(
 	output reg csr_wen,
     output reg read,
     output reg write,
-	output reg intr
+	output reg intr,
+	output reg mret
 );
 
 
@@ -223,6 +224,9 @@ module ysyx_25020047_EXU(
 				64'h40000000000: begin //csrrs
 					reg_wen = 1'b1;
 					csr_wen = 1'b1;
+				end
+				64'h80000000000: begin //mret
+					mret = 1'b1;
 				end
                 default: begin
 					set_npc_state(32'h4); // abort simulation
