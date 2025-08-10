@@ -262,6 +262,7 @@ CSR #(32) u2
 	.intr_NO(NO),
 	.intr_epc(pc),
 	.intr_mtvec(intr_mtvec),
+	.mret(mret),
 	.mret_mepc(mret_mepc)
 );
 

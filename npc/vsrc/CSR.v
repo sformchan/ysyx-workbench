@@ -9,6 +9,7 @@ module CSR #(DATA_WIDTH = 1) (
   input   [DATA_WIDTH - 1 : 0] intr_NO,
   input   [DATA_WIDTH - 1 : 0] intr_epc,
   output  [DATA_WIDTH - 1 : 0] intr_mtvec,
+  input                     mret,
   output  [DATA_WIDTH - 1 : 0] mret_mepc
 );
   reg [DATA_WIDTH-1:0] mepc;
@@ -46,8 +47,6 @@ wire mie_bit = mstatus[3];
 		endcase
 	end
 	else if (intr) begin
-		
-		
 		mepc <= intr_epc;
         mcause <= intr_NO;
         // mstatus 更新 (MPIE <= MIE; MIE<=0; MPP <= intr_priv) 
@@ -55,6 +54,15 @@ wire mie_bit = mstatus[3];
     	mstatus[3] <= 1'b0;               // MIE = 0
     	mstatus[12:11] <= 2'b11;          // MPP = Machine
 	end 
+	else if (mret) begin
+		mstatus[3] <= 1'b0;
+		// MIE = MPIE (bit7 >> 4 => bit3)
+		mstatus[3] <= mstatus[7];
+		// MPIE置1
+		mstatus[7] <= 1'b1;
+		// 清除MPP (bits 12 and 11)
+		mstatus[12] <= 1'b0;
+		mstatus[11] <= 1'b0;
   end
 
   always @(*) begin
