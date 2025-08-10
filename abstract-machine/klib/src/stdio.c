@@ -18,7 +18,7 @@ static int utoa(unsigned int num, char *buf, int base, int uppercase) {
     char tmp[32];
     int len = 0;
 
-    // 先逆序放到 tmp
+    // 先逆序放到 tmp	
     do {
         tmp[len++] = digits[num % base];
         num /= base;
