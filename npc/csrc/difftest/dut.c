@@ -47,6 +47,11 @@
 		printf("Mismatch at pc: dut = 0x%08x, ref = 0x%08x\n", cpu.pc, ref_r->pc);
 		return false;
 		}
+		if(cpu.mtvec != ref_r->mtvec)
+		{
+			Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.mtvec, ref_r->mtvec); 
+			flag = false;
+		}
 		if(cpu.mepc != ref_r->mepc)
 		{
 			Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.mepc, ref_r->mepc); 

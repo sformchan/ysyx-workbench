@@ -35,9 +35,7 @@ wire mie_bit = mstatus[3];
 	  mtvec <= {DATA_WIDTH{1'b0}};
 	  mcause <= {DATA_WIDTH{1'b0}};
     end
-    else if (wen && addr != 32'b0) begin
-		$display("0x%08x", addr);	
-		$display("0x%08x", csr_wdata);	
+    else if (wen && addr != 32'b0) begin	
 		case(addr) 
 			32'h305: mtvec <= csr_wdata;
 			32'h341: mepc <= csr_wdata;
