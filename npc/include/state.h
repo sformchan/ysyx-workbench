@@ -15,7 +15,7 @@ typedef uint32_t word_t;
 typedef uint32_t vaddr_t;
 
 typedef struct {
-	word_t gpr[16];   // 32 个通用寄存器
+	word_t gpr[32];   // 32 个通用寄存器
 	vaddr_t pc;       // 程序计数器
 	word_t mepc;
 	word_t mtvec;
