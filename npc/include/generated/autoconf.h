@@ -4,4 +4,6 @@
  * NPC Configuration Menu
  *
  */
+#define CONFIG_IRINGBUF 1
+#define CONFIG_ITRACE 1
 #define CONFIG_DIFFTEST 1
