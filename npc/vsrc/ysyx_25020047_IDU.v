@@ -244,9 +244,6 @@ GPR #(5, 32) u1
     .rdata1(rdata1),
     .rdata2(rdata2),
 	.NO(NO)
-    // .gpr0(gpr0),
-    // .gpr1(gpr1),
-    // .gpr2(gpr2)
 );
  
 
