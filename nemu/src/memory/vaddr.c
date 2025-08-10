@@ -18,6 +18,7 @@
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
 	printf("to here\n");
+	printf("0x%08x\n", addr);
   return paddr_read(addr, len);
 }
 
