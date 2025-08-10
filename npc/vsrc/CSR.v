@@ -45,6 +45,8 @@ wire mie_bit = mstatus[3];
 		endcase
 	end
 	else if (intr) begin
+		$display("hello");
+		$display("0x%08x", intr_epc);	
 		mepc <= intr_epc;
         mcause <= intr_NO;
         // mstatus 更新 (MPIE <= MIE; MIE<=0; MPP <= intr_priv) 
