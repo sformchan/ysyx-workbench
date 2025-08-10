@@ -17,12 +17,12 @@ typedef uint32_t vaddr_t;
 typedef struct {
 	word_t gpr[32];   // 32 个通用寄存器    // fuckin amount of gpr!!!!!
 	vaddr_t pc;       // 程序计数器
-	word_t mepc;
 	word_t mtvec;
-	word_t mcause;
+	word_t mepc;
 	word_t mstatus;
+	word_t mcause;
   } CPU_state;
-
+  
 extern uint32_t gpr_val[];
 extern const char *gpr_name[];
 extern int npc_state;
