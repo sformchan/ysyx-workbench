@@ -154,7 +154,7 @@
 			exit(1);
 		}
 		CPU_state ref_r;
-		ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+		//ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 		// printf("ref.pc = 0x%08x\n", ref_r.pc);
 
 	if (skip_dut_nr_inst > 0) {
