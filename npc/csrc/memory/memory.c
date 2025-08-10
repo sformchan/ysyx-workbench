@@ -70,8 +70,11 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 	if ((uint32_t)waddr == SERIAL_ADDR) {
 		skip_flag = 1;
 		char ch = (char)(wdata & 0xFF);
-		if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
-		fputc(ch, stderr);
+		// if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
+		// fputc(ch, stderr);
+		if (ch == '\n') putchar('\r');
+    	putchar(ch);
+    	fflush(stdout); // 确保立即输出
 		return;
 	}
 	uint32_t waddr1 = (uint32_t)waddr & ~(0x3u);
