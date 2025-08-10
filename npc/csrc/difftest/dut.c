@@ -36,16 +36,33 @@
 
 
 	bool isa_difftest_checkregs(CPU_state *ref_r) {   //vaddr pc
-		for (int i = 0; i < 32; i++) {
+		bool flag = true;
+		for (int i = 0; i < 16; i++) {
 		if (ref_r->gpr[i] != cpu.gpr[i]) {
-			printf("Mismatch at reg %d: dut = 0x%x, ref = 0x%x\n", i, cpu.gpr[i], ref_r->gpr[i]);
+			printf("Mismatch at reg %d: dut = 0x%08x, ref = 0x%08x\n", i, cpu.gpr[i], ref_r->gpr[i]);
 			return false;
 		}
 		}
 		if (ref_r->pc != cpu.pc) {
-		printf("Mismatch at pc: dut = 0x%x, ref = 0x%x\n", cpu.pc, ref_r->pc);
+		printf("Mismatch at pc: dut = 0x%08x, ref = 0x%08x\n", cpu.pc, ref_r->pc);
 		return false;
 		}
+		if(cpu.mepc != ref_r->mepc)
+		{
+			Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.mepc, ref_r->mepc); 
+			flag = false;
+		}
+		if(cpu.mcause != ref_r->mcause)
+		{
+			Log("\033[31mMCAUSE mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.mcause, ref_r->mcause); 
+			flag = false;
+		} 
+		if(cpu.mstatus != ref_r->mstatus) 
+		{
+			Log("\033[31mMSTATUS mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.mstatus, ref_r->mstatus); 
+			flag = false;
+		}
+		if(!flag) return false;
 		return true;
 	}
 	
