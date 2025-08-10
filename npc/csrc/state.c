@@ -216,16 +216,16 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("|" ANSI_FG_GREEN "PC    " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
+	printf("|" ANSI_FG_GREEN "PC     " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
 	for(int i = 0; i < 16; i++)
 	{
-		if(i == 0) printf("|%s  |0x%08x |\n", reg_name[i], cpu.gpr[i]);
-		else printf("|%s    |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
+		if(i == 0) printf("|%s   |0x%08x |\n", reg_name[i], cpu.gpr[i]);
+		else printf("|%s     |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
 	}
 	printf("\n");
-	printf("|%s  |0x%08x |\n", reg_name[16], cpu.mepc);
-	printf("|%s |0x%08x |\n", reg_name[17], cpu.mtvec);
-	printf("|%s |0x%08x |\n", reg_name[18], cpu.mcause);
+	printf("|%s   |0x%08x |\n", reg_name[16], cpu.mepc);
+	printf("|%s  |0x%08x |\n", reg_name[17], cpu.mtvec);
+	printf("|%s  |0x%08x |\n", reg_name[18], cpu.mcause);
 	printf("|%s|0x%08x |\n", reg_name[19], cpu.mstatus);
 
 }
