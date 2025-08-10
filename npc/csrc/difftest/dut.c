@@ -63,7 +63,6 @@
 	// already write some memory, and the incoming instruction in NEMU
 	// will load that memory, we will encounter false negative. But such
 	// situation is infrequent.
-	printf("%d\n", (int)is_skip_ref);
 	skip_dut_nr_inst = 0;
 	}
 
@@ -151,14 +150,12 @@
 
 	if (is_skip_ref) {
 		// to skip the checking of an instruction, just copy the reg state to reference design
-		//printf("been here\n");
-		printf("pc:0x%08x\n", cpu.pc);
 		ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 		is_skip_ref = false;
 		return;
 	}
 	
-	printf("pc:0x%08x\n", cpu.pc);
+	//printf("pc:0x%08x\n", cpu.pc);
 	// printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",
 	// 	cpu.mepc, cpu.mtvec, cpu.mcause, cpu.pc);
 	// printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",

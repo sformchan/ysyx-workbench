@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 extern void difftest_skip_ref();
-
+extern int skip_flag;
 #define DIFFTEST_TO_DUT false
 #define DIFFTEST_TO_REF true
 
