@@ -157,6 +157,9 @@ module ysyx_25020047_WBU(
 				64'h20000000000: begin //csrrw
 					wdata = csr_rdata;
 				end
+				64'h40000000000: begin //csrrs
+					wdata = csr_rdata;
+				end
                 default: wdata = 32'b0;
             endcase
         end                                          
