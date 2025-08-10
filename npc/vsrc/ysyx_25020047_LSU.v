@@ -64,6 +64,7 @@ always @(*) begin
     default: begin
       wdata2 = 32'b0;
       sh_wmask  = 32'h0;  // invalid address, do nothing
+	  display("invalid");
     end
   endcase
   $display("wdata: 0x%08x", wdata2);
