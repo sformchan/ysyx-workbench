@@ -115,7 +115,7 @@ assign rd = Rrd | Ird | Urd | Jrd;
 
 // csr
 wire [31:0] csr_raddr = {20'b0, Iimm};
-reg [31:0] csr_wdata;
+reg	 [31:0] csr_wdata;
 always @(*) begin
 	case(inst_type)
 		64'h20000000000: csr_wdata = rdata1;

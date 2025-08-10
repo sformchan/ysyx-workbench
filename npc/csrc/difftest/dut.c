@@ -117,6 +117,7 @@
 		printf("RESET_VECTOR = 0x%x\n", ysyx_25020047_RESET_VECTOR);
 		printf("guest_to_host ptr = %p\n", guest_to_host(ysyx_25020047_RESET_VECTOR));
 		printf("cpu.pc = 0x%x\n", cpu.pc);
+
 		
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 	}
@@ -156,8 +157,12 @@
 		is_skip_ref = false;
 		return;
 	}
-
+	printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",
+		cpu.mepc, cpu.mtvec, cpu.mcause, cpu.pc);
+	printf("Exception raised: mepc=0x%x, mtvec=0x%x, mcause=0x%x, pc=0x%x\n",
+		ref_r.mepc, ref_r.mtvec, ref_r.mcause, ref_r.pc);	
 	ref_difftest_exec(1);
+	
 	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
 	checkregs(&ref_r, pc);
