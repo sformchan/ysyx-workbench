@@ -225,7 +225,7 @@ extern "C" void print_gpr()
 	printf("\n");
 	printf("|%s   |0x%08x |\n", reg_name[16], cpu.mepc);
 	printf("|%s  |0x%08x |\n", reg_name[17], cpu.mtvec);
-	printf("|%s  |0x%08x |\n", reg_name[18], cpu.mcause);
+	printf("|%s |0x%08x |\n", reg_name[18], cpu.mcause);
 	printf("|%s|0x%08x |\n", reg_name[19], cpu.mstatus);
 
 }
