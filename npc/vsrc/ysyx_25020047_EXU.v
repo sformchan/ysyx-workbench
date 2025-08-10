@@ -144,6 +144,7 @@ module ysyx_25020047_EXU(
 				end
 				64'h200000: begin //sh
 					result = rdata1 + imm;
+					$display("result: 0x%08x", result);
 					write = 1'b1;
 				end
 				64'h400000: begin //srai arithmetic
