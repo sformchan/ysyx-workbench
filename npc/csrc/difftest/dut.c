@@ -35,8 +35,6 @@
 
 
 
-
-
 	bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		for (int i = 0; i < 32; i++) {
 		if (ref_r->gpr[i] != cpu.gpr[i]) {
@@ -51,9 +49,6 @@
 		return true;
 	}
 	
-
-
-
 
 
 
@@ -112,11 +107,13 @@
 		"This will help you a lot for debugging, but also significantly reduce the performance. "
 		"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
-	ref_difftest_init(port);
-	ref_difftest_memcpy(ysyx_25020047_RESET_VECTOR, guest_to_host(ysyx_25020047_RESET_VECTOR), img_size, DIFFTEST_TO_REF);
 		printf("RESET_VECTOR = 0x%x\n", ysyx_25020047_RESET_VECTOR);
 		printf("guest_to_host ptr = %p\n", guest_to_host(ysyx_25020047_RESET_VECTOR));
 		printf("cpu.pc = 0x%x\n", cpu.pc);
+
+	ref_difftest_init(port);
+	ref_difftest_memcpy(ysyx_25020047_RESET_VECTOR, guest_to_host(ysyx_25020047_RESET_VECTOR), img_size, DIFFTEST_TO_REF);
+
 
 		
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
