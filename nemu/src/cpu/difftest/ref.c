@@ -20,7 +20,7 @@
 
 void diff_set_regs(void *ctx) {
 	CPU_state *c = (CPU_state *)ctx;
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < 32; i++) {
 	  cpu.gpr[i] = c->gpr[i];
 	}
 	cpu.pc = c->pc;
@@ -32,7 +32,7 @@ void diff_set_regs(void *ctx) {
   
 void diff_get_regs(void *ctx) {
 	CPU_state *c = (CPU_state *)ctx;
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < 32; i++) {
 	  c->gpr[i] = cpu.gpr[i];
 	}
 	c->pc = cpu.pc;
