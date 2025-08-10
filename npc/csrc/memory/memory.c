@@ -4,6 +4,7 @@
 #include "device.h"
 #include "utils.h"
 #include "state.h"
+#include "difftest.h"
 
 
 /////////MEM//////////
@@ -29,6 +30,7 @@ extern "C" int pmem_read(int raddr, int flag)
 	uint32_t high = 0;
 	if(raddr == RTC_ADDR) 
 	{
+		diff_skip_ref();
 		uint64_t uptime = get_uptime_64bit();
 		//printf("%lu\n", uptime);
 		high = uptime >> 32;
@@ -36,6 +38,7 @@ extern "C" int pmem_read(int raddr, int flag)
 	}
 	if(raddr == RTC_ADDR + 4)
 	{
+		diff_skip_ref();
 		uint32_t uptime = high;
 		return uptime;
 	}
@@ -66,6 +69,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 
 	
 	if ((uint32_t)waddr == SERIAL_ADDR) {
+		diff_skip_ref();
 		char ch = (char)(wdata & 0xFF);
 		if (ch == '\n') fputc('\r', stderr);  // optional: 兼容终端换行
 		fputc(ch, stderr);
