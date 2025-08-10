@@ -29,6 +29,7 @@ wire csr_wen;
 wire intr;
 wire mret;
 wire [31:0] intr_mtvec;
+wire [31:0] mret_mepc;
 wire [31:0] csr_rdata;
 ysyx_25020047_IDU u1(
     .clk(clk),
@@ -48,6 +49,7 @@ ysyx_25020047_IDU u1(
     .snpc(snpc),
 	.shamt(shamt),
 	.intr_mtvec(intr_mtvec),
+	.mret_mepc(mret_mepc),
 	.csr_rdata(csr_rdata)
 );
 
@@ -96,6 +98,7 @@ ysyx_25020047_WBU u4(
     .result    (result),
     .memdata (memdata),
 	.intr_mtvec (intr_mtvec),
+	.mret_mepc (mret_mepc),
 	.csr_rdata(csr_rdata),
     .snpc      (snpc),
     .wdata     (wdata),

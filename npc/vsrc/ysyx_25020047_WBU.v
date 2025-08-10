@@ -29,6 +29,7 @@ module ysyx_25020047_WBU(
     input [31:0] result,
     input [31:0] memdata,
 	input [31:0] intr_mtvec,
+	input [31:0] mret_mepc,
 	input [31:0] csr_rdata,
     input [31:0] snpc,
     output reg [31:0] wdata,
@@ -161,7 +162,7 @@ module ysyx_25020047_WBU(
 					wdata = csr_rdata;
 				end
 				64'h80000000000: begin //mret
-					dnpc = intr_mtvec;
+					dnpc = mret_mepc;
 					//$display("switch to mtvec: 0x%08x", dnpc);
 				end
                 default: wdata = 32'b0;

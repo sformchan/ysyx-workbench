@@ -50,6 +50,9 @@ module ysyx_25020047_EXU(
             read = 1'b0;
             write = 1'b0;
             reg_wen = 1'b0;
+			csr_wen = 1'b0;
+			intr = 1'b0;
+			mret = 1'b0;
             case(inst_type)
                 64'h1: begin //addi
                     result = rdata1 + imm;

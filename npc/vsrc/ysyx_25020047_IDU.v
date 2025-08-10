@@ -42,6 +42,7 @@ module ysyx_25020047_IDU(
     output [31:0]       snpc,
 	output [4:0] shamt,
 	output [31:0] intr_mtvec,
+	output [31:0] mret_mepc,
 	output [31:0] csr_rdata
 );
 
@@ -260,7 +261,8 @@ CSR #(32) u2
 	.intr(intr),
 	.intr_NO(NO),
 	.intr_epc(pc),
-	.intr_mtvec(intr_mtvec)
+	.intr_mtvec(intr_mtvec),
+	.mret_mepc(mret_mepc)
 );
 
 

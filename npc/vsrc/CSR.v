@@ -8,7 +8,8 @@ module CSR #(DATA_WIDTH = 1) (
   input                    intr,
   input   [DATA_WIDTH - 1 : 0] intr_NO,
   input   [DATA_WIDTH - 1 : 0] intr_epc,
-  output  [DATA_WIDTH - 1 : 0] intr_mtvec
+  output  [DATA_WIDTH - 1 : 0] intr_mtvec,
+  output  [DATA_WIDTH - 1 : 0] mret_mepc
 );
   reg [DATA_WIDTH-1:0] mepc;
   reg [DATA_WIDTH-1:0] mstatus;
@@ -16,7 +17,7 @@ module CSR #(DATA_WIDTH = 1) (
   reg [DATA_WIDTH-1:0] mcause;
 
 assign intr_mtvec = mtvec;
-
+assign mret_mepc = mepc;
 always @(*) begin
 	case(addr)
 		32'h305: csr_rdata = mtvec;
