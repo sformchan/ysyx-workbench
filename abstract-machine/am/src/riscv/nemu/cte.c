@@ -15,7 +15,7 @@ Context* __am_irq_handle(Context *c) {
     c = user_handler(ev, c);
     assert(c != NULL);
   }
-  printf("Switch to ctx at %p, mepc = 0x%08x\n", c, c->mepc);
+  //printf("Switch to ctx at %p, mepc = 0x%08x\n", c, c->mepc);
 
   return c;
 }
