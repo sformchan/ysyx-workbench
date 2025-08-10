@@ -40,12 +40,12 @@
 		for (int i = 0; i < 16; i++) {
 		if (ref_r->gpr[i] != cpu.gpr[i]) {
 			printf("Mismatch at reg %d: dut = 0x%08x, ref = 0x%08x\n", i, cpu.gpr[i], ref_r->gpr[i]);
-			return false;
+			flag = false;
 		}
 		}
 		if (ref_r->pc != cpu.pc) {
 		printf("Mismatch at pc: dut = 0x%08x, ref = 0x%08x\n", cpu.pc, ref_r->pc);
-		return false;
+			flag = false;
 		}
 		if(cpu.mtvec != ref_r->mtvec)
 		{
