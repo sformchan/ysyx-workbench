@@ -126,10 +126,7 @@ always @(*) begin
 				case(load_offset)
                 2'b00: memdata = {16'b0, ram_data[15:0]};
                 2'b10: memdata = {16'b0, ram_data[31:16]};
-				default: begin
-					memdata = 32'b0;
-					$display("fuckin got problem");
-				end
+				default: memdata = 32'b0;
             endcase
 		end
         default     : memdata = 32'b0;
