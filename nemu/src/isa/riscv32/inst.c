@@ -37,8 +37,8 @@ word_t csr_read(uint32_t csr_num) {
   
 void csr_write(uint32_t csr_num, word_t val) {
 	switch (csr_num) {
-	  case 0x305: cpu.mtvec = val; break;   // mtvec
-	  case 0x341: cpu.mepc = val; break;    // mepc
+	  case 0x305: cpu.mtvec = val; pritnf("nemu_mtvec\n"); break;   // mtvec
+	  case 0x341: cpu.mepc = val; pritnf("nemu_mepc\n"); break;    // mepc
 	  case 0x342: cpu.mcause = val; break;  // mcause
 	  case 0x300: cpu.mstatus = val; break; // mstatus
 	  default:
