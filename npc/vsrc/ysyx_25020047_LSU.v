@@ -59,14 +59,13 @@ always @(*) begin
     end
     2'b10: begin
       wdata2 = {wdata[15:0], 16'b0};  // halfword at byte 2
-      sh_wmask  = 32'hC;
+      sh_wmask  = 32'hc;  //once write 32'h12 !!!!!!
     end
     default: begin
       wdata2 = 32'b0;
       sh_wmask  = 32'h0;  // invalid address, do nothing
     end
   endcase
-  $display("wdata: 0x%08x", wdata2);
 end
 
 
