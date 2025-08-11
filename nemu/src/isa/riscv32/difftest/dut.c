@@ -53,6 +53,11 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	Log("\033[31mMSTATUS mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.csr.mstatus, ref_r->csr.mstatus); 
 	flag = false;
   }
+  if(cpu.csr.mtvec != ref_r->csr.mtvec) 
+  {
+	Log("\033[31mMSTATUS mismatch: DUT = " FMT_WORD ", REF = " FMT_WORD "\033[0m", cpu.csr.mtvec, ref_r->csr.mtvec); 
+	flag = false;
+  }
 
   if(!flag) printf("\033[33mCURRENT PC = " FMT_WORD "\033[0m" "\n", pc);
   //else printf("pass difftest\n");

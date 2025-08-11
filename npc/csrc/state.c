@@ -224,10 +224,10 @@ extern "C" void print_gpr()
 	}
 	printf("|-------------------|\n");
 
-	printf("|%s   |0x%08x |\n", reg_name[16], cpu.mepc);
-	printf("|%s  |0x%08x |\n", reg_name[17], cpu.mtvec);
-	printf("|%s |0x%08x |\n", reg_name[18], cpu.mcause);
-	printf("|%s|0x%08x |\n", reg_name[19], cpu.mstatus);
+	printf("|%s   |0x%08x |\n", reg_name[16], cpu.csr.mepc);
+	printf("|%s  |0x%08x |\n", reg_name[17], cpu.csr.mtvec);
+	printf("|%s |0x%08x |\n", reg_name[18], cpu.csr.mcause);
+	printf("|%s|0x%08x |\n", reg_name[19], cpu.csr.mstatus);
 
 }
 
@@ -244,17 +244,17 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	  }
 	  i++;
 	}
-	if(strcmp(s, reg_name[16]) == 0) return cpu.mepc;
-	if(strcmp(s, reg_name[17]) == 0) return cpu.mtvec;
-	if(strcmp(s, reg_name[18]) == 0) return cpu.mcause;
-	if(strcmp(s, reg_name[19]) == 0) return cpu.mstatus;
+	if(strcmp(s, reg_name[16]) == 0) return cpu.csr.mepc;
+	if(strcmp(s, reg_name[17]) == 0) return cpu.csr.mtvec;
+	if(strcmp(s, reg_name[18]) == 0) return cpu.csr.mcause;
+	if(strcmp(s, reg_name[19]) == 0) return cpu.csr.mstatus;
 	return num;
   }
 
   void set_csr(int32_t mepc, int32_t mtvec, int32_t mcause, int32_t mstatus)
 {
-	cpu.mepc = mepc;
-	cpu.mtvec = mtvec;
-	cpu.mcause = mcause;
-	cpu.mstatus = mstatus;
+	cpu.csr.mepc = mepc;
+	cpu.csr.mtvec = mtvec;
+	cpu.csr.mcause = mcause;
+	cpu.csr.mstatus = mstatus;
 }
