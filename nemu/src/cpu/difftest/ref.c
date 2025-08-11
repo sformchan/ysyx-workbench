@@ -24,10 +24,10 @@ void diff_set_regs(void *ctx) {
 	  cpu.gpr[i] = c->gpr[i];
 	}
 	cpu.pc = c->pc;
-	cpu.mepc = c->mepc;
-	cpu.mtvec = c->mtvec;
-	cpu.mcause = c->mcause;
-	cpu.mstatus = c->mstatus;
+	cpu.csr.mepc = c->csr.mepc;
+	cpu.csr.mtvec = c->csr.mtvec;
+	cpu.csr.mcause = c->csr.mcause;
+	cpu.csr.mstatus = c->csr.mstatus;
   }
   
 void diff_get_regs(void *ctx) {
@@ -36,10 +36,10 @@ void diff_get_regs(void *ctx) {
 	  c->gpr[i] = cpu.gpr[i];
 	}
 	c->pc = cpu.pc;
-	c->mepc = cpu.mepc;
-	c->mtvec = cpu.mtvec;
-	c->mcause = cpu.mcause;
-	c->mstatus = cpu.mstatus;
+	c->csr.mepc = cpu.csr.mepc;
+	c->csr.mtvec = cpu.csr.mtvec;
+	c->csr.mcause = cpu.csr.mcause;
+	c->csr.mstatus = cpu.csr.mstatus;
 }
   
 

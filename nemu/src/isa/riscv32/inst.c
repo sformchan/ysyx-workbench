@@ -26,10 +26,10 @@
 word_t csr_read(uint32_t csr_num) {
 	//printf("csr read successfully\n");
 	switch (csr_num) {
-	  case 0x305: return cpu.mtvec;     // mtvec
-	  case 0x341: return cpu.mepc;      // mepc
-	  case 0x342: return cpu.mcause;    // mcause
-	  case 0x300: return cpu.mstatus;   // mstatus
+	  case 0x305: return cpu.csr.mtvec;     // mtvec
+	  case 0x341: return cpu.csr.mepc;      // mepc
+	  case 0x342: return cpu.csr.mcause;    // mcause
+	  case 0x300: return cpu.csr.mstatus;   // mstatus
 	  default:
 		panic("Unhandled CSR read: 0x%x", csr_num);
 	}
@@ -37,10 +37,10 @@ word_t csr_read(uint32_t csr_num) {
   
 void csr_write(uint32_t csr_num, word_t val) {
 	switch (csr_num) {
-	  case 0x305: cpu.mtvec = val; break;   // mtvec
-	  case 0x341: cpu.mepc = val;  break;    // mepc
-	  case 0x342: cpu.mcause = val; break;  // mcause
-	  case 0x300: cpu.mstatus = val; break; // mstatus
+	  case 0x305: cpu.csr.mtvec = val; break;   // mtvec
+	  case 0x341: cpu.csr.mepc = val;  break;    // mepc
+	  case 0x342: cpu.csr.mcause = val; break;  // mcause
+	  case 0x300: cpu.csr.mstatus = val; break; // mstatus
 	  default:
 		panic("Unhandled CSR write: 0x%x", csr_num);
 	}
@@ -48,10 +48,10 @@ void csr_write(uint32_t csr_num, word_t val) {
 }
 
 void exec_mret() {
-	cpu.mstatus &= ~(1<<3); 
-	cpu.mstatus |= ((cpu.mstatus&(1<<7))>>4); 
-	cpu.mstatus |= (1<<7); 
-	cpu.mstatus &= ~((1<<11)+(1<<12)); 
+	cpu.csr.mstatus &= ~(1<<3); 
+	cpu.csr.mstatus |= ((cpu.csr.mstatus&(1<<7))>>4); 
+	cpu.csr.mstatus |= (1<<7); 
+	cpu.csr.mstatus &= ~((1<<11)+(1<<12)); 
 }
 
 
@@ -160,7 +160,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); /*printf("R(10): %d\n", R(10));*/);  // R(10) is $a0 
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, exec_mret(); s->dnpc = cpu.mepc);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, exec_mret(); s->dnpc = cpu.csr.mepc);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
