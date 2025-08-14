@@ -1,6 +1,7 @@
 #include "state.h"
 #include "vinit.h"
 #include "utils.h"
+#include "macro.h"
 
 
 
@@ -163,17 +164,17 @@ long img_size;
 ///
 extern "C" void init_npc(int argc, char *argv[])
 {
-	Log("ITRACE: %s", CONFIG_ITRACE ? ANSI_FG_GREEN "ON" ANSI_NONE : ANSI_FG_RED "OFF" ANSI_NONE);
-	// Log("Iringbuf: %s", MUXDEF(CONFIG_IRINGBUF, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-	// Log("Mtrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-	// Log("Ftrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-	// Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-	printf("welcome to \033[44;36mNPC\033[0m!\n");
+	Log("watchpoint: %s", MUXDEF(CONFIG_WATCHPOINT, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+	Log("Iringbuf: %s", MUXDEF(CONFIG_IRINGBUF, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+	Log("Mtrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+	Log("Ftrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+	Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
 	img_size = load_img();
 	init_verilator(argc, argv);
 	init_monitor();
+	printf("welcome to \033[44;36mNPC\033[0m!\n");
 	printf("\033[32mStimulation starting...\033[0m\n");
 	 
 }
