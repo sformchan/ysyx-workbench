@@ -25,9 +25,9 @@ static char* rl_gets() {
   
 	line_read = readline_(ANSI_FG_CYAN "(npc) " ANSI_NONE);
   
-	// if (line_read && *line_read) {
-	//   add_history(line_read);
-	// }
+	if (line_read && *line_read) {
+	  add_history(line_read);
+	}
   
 	return line_read;
 }
@@ -177,8 +177,7 @@ static struct {
   }; 
 
 
-// #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
- #define NR_CMD ARRLEN(cmd_table)
+#define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
