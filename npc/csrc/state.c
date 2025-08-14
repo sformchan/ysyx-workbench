@@ -128,7 +128,7 @@ extern "C" void run_npc(uint64_t step)
 {
 	g_print_step = ((uint64_t)step < 10);
 	switch (npc_state) {
-		case NPC_END: case NPC_QUIT:
+		case NPC_END: case NPC_QUIT: case NPC_ABORT:
 		  printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
 		  return;
 		default: npc_state = NPC_RUNNING;
