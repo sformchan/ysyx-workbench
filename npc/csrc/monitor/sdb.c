@@ -4,7 +4,7 @@
 #include <string.h>
 #include "vinit.h"
 #include "memory.h"
-#include "macro.h"
+#include "macro.h"	
 
 uint32_t expr(char *e, bool *success);
 char *readline_(const char *prompt);
@@ -177,8 +177,8 @@ static struct {
   }; 
 
 
-#define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
-#define NR_CMD ARRLEN(cmd_table)
+// #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
+ #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
