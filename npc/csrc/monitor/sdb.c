@@ -25,9 +25,9 @@ static char* rl_gets() {
   
 	line_read = readline_(ANSI_FG_CYAN "(npc) " ANSI_NONE);
   
-	if (line_read && *line_read) {
-	  add_history(line_read);
-	}
+	// if (line_read && *line_read) {
+	//   add_history(line_read);
+	// }
   
 	return line_read;
 }
