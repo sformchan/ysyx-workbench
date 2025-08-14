@@ -4,6 +4,7 @@
 #include <string.h>
 #include "vinit.h"
 #include "memory.h"
+#include "macro.h"
 
 uint32_t expr(char *e, bool *success);
 char *readline_(const char *prompt);

@@ -37,6 +37,7 @@ char *img_file = NULL;
 	return size;
   }
 
+  
 #define required_argument 1
 #define no_argument 0
 char *log_file = NULL;
