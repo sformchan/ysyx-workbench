@@ -135,9 +135,6 @@
 
 	ref_difftest_init(port);
 	ref_difftest_memcpy(ysyx_25020047_RESET_VECTOR, guest_to_host(ysyx_25020047_RESET_VECTOR), img_size, DIFFTEST_TO_REF);
-
-
-		
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 	}
 

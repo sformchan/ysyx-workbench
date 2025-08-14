@@ -17,7 +17,9 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-//#include "../monitor/sdb/wp.h"
+
+
+
 bool check_wp();
 void ringbuf_push(const char *log);
 void ringbuf_print();
