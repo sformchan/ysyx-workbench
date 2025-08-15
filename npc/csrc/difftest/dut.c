@@ -125,9 +125,9 @@
 	assert(ref_difftest_init);
 
 	//Log("Differential testing: %s", ANSI_FMT("ON", ANSI_FG_GREEN));
-	Log("The result of every instruction will be compared with %s. "
-		"This will help you a lot for debugging, but also significantly reduce the performance. "
-		"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
+	// Log("The result of every instruction will be compared with %s. "
+	// 	"This will help you a lot for debugging, but also significantly reduce the performance. "
+	// 	"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
 		// printf("RESET_VECTOR = 0x%x\n", ysyx_25020047_RESET_VECTOR);
 		// printf("guest_to_host ptr = %p\n", guest_to_host(ysyx_25020047_RESET_VECTOR));
