@@ -18,17 +18,7 @@ size_t strlen(const char *s) {    //tested
 }
 
 char *strcpy(char *dst, const char *src) {   //tested
-
-  // 当成指向字符数组处理，所以即使没有空字符，导致内存访问越界，或修改了其他有用的数据也不管，因为这是函数调用者所需要保证的，下面一些string函数都是这样对带非字符串数组
-  // char *res = dst;
-  // do {
-  //   *dst = *src;
-  //   dst++;
-  //   src++;
-  // } while(*src != '\0');
-  // *dst = '\0';  // 最后一个字符是空字符  
-  // return res;
-  char *res = dst;
+  char *res = dst;  //store the start of the dst
   while ((*dst++ = *src++) != '\0');
   return res;
   
@@ -36,27 +26,30 @@ char *strcpy(char *dst, const char *src) {   //tested
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {   //tested
+	/* The  strncpy()  function is similar, except that at most n bytes of src
+	are copied.  Warning: If there is no null byte among the first n  bytes
+	of src, the string placed in dest will not be null-terminated.
 
-  char *ans = dst;
+	If  the  length of src is less than n, strncpy() writes additional null
+	bytes to dest to ensure that a total of n bytes are written. */
+  char *res = dst;
   while (*src != '\0' && n != 0) {
     *dst = *src;
     ++dst;
     ++src;
     --n;
   }
-  // 将额外的空字符写入dest，直到写入了n个字符的总数。
   while (n != 0) {
     *dst = '\0';
     ++dst;
     --n;
   }
-  return ans;
+  return res;
   //panic("Not implemented");
 }
 
 char *strcat(char *dst, const char *src) {  //tested
   char *ans = dst;
-
   // Move dst to the end of the string
   while (*dst != '\0') {
     ++dst;
@@ -77,7 +70,9 @@ char *strcat(char *dst, const char *src) {  //tested
 
 
 int strcmp(const char *s1, const char *s2) {    //tested
- 
+	/* The  strcmp()  function compares the two strings s1 and s2.  The locale
+	is not taken into account (for  a  locale-aware  comparison,  see  str‐
+	coll(3)).  The comparison is done using unsigned characters. */
   while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2) {
     s1++;
     s2++;
@@ -93,13 +88,12 @@ int strncmp(const char *s1, const char *s2, size_t n) {    //tested
     ++s1;
     ++s2;
   }
-  // 当比较了n次后，即新n变为0时，此时两个字符串也是相等得，memcmp同理
   return *s1 == *s2 || n == 0 ? 0 : (unsigned char)*s1 < (unsigned char)*s2 ? -1 : 1;
   //panic("Not implemented");
 }
 
 void *memset(void *s, int c, size_t n) {  //tested
-  unsigned char *src = s;   // 先讲传入得指针，做无符号字符解释
+  unsigned char *src = s;   // switch to unsigned char (get the lowest 8 bits as a byte)
   while (n != 0) {
     --n; //--
     *src = c;
