@@ -29,7 +29,10 @@ always @(*) begin
 	endcase
 end
   
-wire mie_bit = mstatus[3];
+
+initial begin
+	mstatus = 32'h1800;
+end
   always @(posedge clk) begin
     if (rst) begin
       mepc <= {DATA_WIDTH{1'b0}};
@@ -49,20 +52,8 @@ wire mie_bit = mstatus[3];
 	else if (intr) begin
 		mepc <= intr_epc;
         mcause <= intr_NO;
-        // mstatus 更新 (MPIE <= MIE; MIE<=0; MPP <= intr_priv) 
-    	mstatus[7] <= mie_bit;            // MPIE = 原来的 MIE
-    	mstatus[3] <= 1'b0;               // MIE = 0
-    	mstatus[12:11] <= 2'b11;          // MPP = Machine
 	end 
 	else if (mret) begin
-		mstatus[3] <= 1'b0;
-		// MIE = MPIE (bit7 >> 4 => bit3)
-		mstatus[3] <= mstatus[7];
-		// MPIE置1
-		mstatus[7] <= 1'b1;
-		// 清除MPP (bits 12 and 11)
-		mstatus[12] <= 1'b0;
-		mstatus[11] <= 1'b0;
 	end	
   end
 

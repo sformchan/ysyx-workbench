@@ -171,10 +171,6 @@ extern "C" void init_npc(int argc, char *argv[])
 	Log("Ftrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 	Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 
-	// Log("The result of every instruction will be compared with %s. "
-	// 	"This will help you a lot for debugging, but also significantly reduce the performance. "
-	// 	"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
-	//load_verilog_hex("/home/leonard/Desktop/sum.hex");
 	parse_args(argc, argv);
 	img_size = load_img();
 	init_verilator(argc, argv);

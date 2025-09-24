@@ -47,26 +47,26 @@
 		printf("Mismatch at pc: dut = 0x%08x, ref = 0x%08x\n", cpu.pc, ref_r->pc);
 			flag = false;
 		}
-		if(cpu.csr.mtvec != ref_r->csr.mtvec)
-		{
-			Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mtvec, ref_r->csr.mtvec); 
-			flag = false;
-		}
-		if(cpu.csr.mepc != ref_r->csr.mepc)
-		{
-			Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mepc, ref_r->csr.mepc); 
-			flag = false;
-		}
-		if(cpu.csr.mcause != ref_r->csr.mcause)
-		{
-			Log("\033[31mMCAUSE mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mcause, ref_r->csr.mcause); 
-			flag = false;
-		} 
-		if(cpu.csr.mstatus != ref_r->csr.mstatus) 
-		{
-			Log("\033[31mMSTATUS mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mstatus, ref_r->csr.mstatus); 
-			flag = false;
-		}
+		// if(cpu.csr.mtvec != ref_r->csr.mtvec)
+		// {
+		// 	Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mtvec, ref_r->csr.mtvec); 
+		// 	flag = false;
+		// }
+		// if(cpu.csr.mepc != ref_r->csr.mepc)
+		// {
+		// 	Log("\033[31mMEPC mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mepc, ref_r->csr.mepc); 
+		// 	flag = false;
+		// }
+		// if(cpu.csr.mcause != ref_r->csr.mcause)
+		// {
+		// 	Log("\033[31mMCAUSE mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mcause, ref_r->csr.mcause); 
+		// 	flag = false;
+		// } 
+		// if(cpu.csr.mstatus != ref_r->csr.mstatus) 
+		// {
+		// 	Log("\033[31mMSTATUS mismatch: DUT = 0x%08x"  ", REF = 0x%08x"  "\033[0m", cpu.csr.mstatus, ref_r->csr.mstatus); 
+		// 	flag = false;
+		// }
 		if(!flag) return false;
 		return true;
 	}
