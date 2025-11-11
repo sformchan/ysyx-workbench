@@ -1,6 +1,7 @@
 module CSR #(DATA_WIDTH = 1) (
   input                    clk,
   input                    rst,
+  input					   start,
   input                    wen,
   input  [DATA_WIDTH-1:0]  addr, //imm
   input  [DATA_WIDTH-1:0]  csr_wdata, 
@@ -16,6 +17,11 @@ module CSR #(DATA_WIDTH = 1) (
   reg [DATA_WIDTH-1:0] mstatus;
   reg [DATA_WIDTH-1:0] mtvec;
   reg [DATA_WIDTH-1:0] mcause;
+  reg [DATA_WIDTH-1:0] mcycle;
+  reg [DATA_WIDTH-1:0] mcycleh;
+  reg [DATA_WIDTH-1:0] mvendorid;
+  reg [DATA_WIDTH-1:0] marchid;
+  
 
 assign intr_mtvec = mtvec;
 assign mret_mepc = mepc;
@@ -25,20 +31,43 @@ always @(*) begin
 		32'h341: csr_rdata = mepc;
 		32'h342: csr_rdata = mcause;
 		32'h300: csr_rdata = mstatus;
+		32'hb00: csr_rdata = mcycle;
+		32'hb01: csr_rdata = mcycleh;
+		32'hf11: csr_rdata = mvendorid;
+		32'hf12: csr_rdata = marchid;
 		default: ;
 	endcase
 end
   
 
-initial begin
-	mstatus = 32'h1800;
+
+
+always @(posedge clk or posedge rst) begin
+	if(rst) begin
+		mcycle <= 32'h0;
+		mcycleh <= 32'h0;
+	end
+	else begin
+		if(mcycle == 32'hffffffff) begin
+			mcycle <= 32'h0;
+			mcycleh <= mcycleh + 1;
+		end
+		else begin
+			mcycle <= mcycle + 1;
+		end
+	end
 end
-  always @(posedge clk) begin
+
+
+  always @(posedge clk or posedge rst) begin
     if (rst) begin
+		
       mepc <= {DATA_WIDTH{1'b0}};
-	  mstatus <= {DATA_WIDTH{1'b0}};
+	  mstatus <= 32'h1800;
 	  mtvec <= {DATA_WIDTH{1'b0}};
 	  mcause <= {DATA_WIDTH{1'b0}};
+	  mvendorid <= 32'h79737978;
+	  marchid <= 32'h17DC68F;
     end
     else if (wen && addr != 32'b0) begin	
 		case(addr) 
@@ -58,7 +87,7 @@ end
   end
 
   always @(*) begin
-	set_csr(mepc, mtvec, mcause, mstatus);
+	set_csr(mepc, mtvec, mcause, mstatus, mcycle, mcycleh, mvendorid, marchid);
   end
 endmodule
 

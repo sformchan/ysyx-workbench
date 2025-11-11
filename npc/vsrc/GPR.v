@@ -24,7 +24,7 @@ assign NO = rf[5'b01111];
 
 
   
-  always @(posedge clk) begin
+  always @(posedge clk or posedge rst) begin
     if (rst) begin
       integer i; //this for loop is actually not a loop,
       for (i = 0; i < 2**ADDR_WIDTH; i = i + 1) begin  

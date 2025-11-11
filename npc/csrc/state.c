@@ -152,6 +152,7 @@ extern "C" void run_npc(uint64_t step)
 			break;
 		case NPC_ABORT:
 			//printf(ANSI_FG_WHITE "npc_state " ANSI_NONE "= " ANSI_FG_RED "NPC_ABORT.\n" ANSI_NONE);
+			printf("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m\n");
 			printf("\033[44;36mNPC\033[0m" ANSI_FG_RED " ABORT " ANSI_NONE "at pc 0x%08x (%d cycle(s))\n", top->pc, count);
 			break;
 		
@@ -169,7 +170,7 @@ extern "C" void init_npc(int argc, char *argv[])
 	Log("Iringbuf: %s", MUXDEF(CONFIG_IRINGBUF, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 	Log("Mtrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 	Log("Ftrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-	Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+	Log("ITrace: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
 
 	parse_args(argc, argv);
 	img_size = load_img();
@@ -191,26 +192,39 @@ void init_verilator(int argc, char **argv) {
     contextp->commandArgs(argc, argv);
     top = new Vtop{contextp};
     contextp->traceEverOn(true);
-	top->rst = 1;
+	
 	top->pc = ysyx_25020047_INITADDR;
-	for(int i = 0; i < 2; i++)
-	{
-		top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
-		top->eval();
-		//printf("%d\n", top->clk);
-		contextp->timeInc(1);
-	}
-	// Reset pulse for 2 cycles
+	top->eval();
+	top->rst = 1;
+	top->eval();
 	top->rst = 0;
+	top->start = 1;
+	top->eval();
+
+	
+	
+	
+
+	//top->pc = ysyx_25020047_INITADDR;
+	// for(int i = 0; i < 2; i++)
+	// {
+	// 	top->clk = (contextp->time() % 2 == 0) ? 1 : 0;   //drive the sys_clk
+	// 	top->eval();
+	// 	//printf("%d\n", top->clk);
+	// 	contextp->timeInc(1);
+	// }
+	// Reset pulse for 2 cycles
+	//top->rst = 0;
+	//count++;
 }
 
 
-const char *reg_name[20] = {
+const char *reg_name[24] = {
 	"zero", "ra", "sp", "gp", "tp",
 	"t0", "t1", "t2",
 	"s0", "s1",
 	"a0", "a1", "a2", "a3", "a4", "a5", 
-	"mepc", "mtvec", "mcause", "mstatus"
+	"mepc", "mtvec", "mcause", "mstatus", "mcycle", "mcycleh", "mvendorid", "marchid"
   };
 
 void set_gpr(int32_t i, int32_t val)
@@ -222,18 +236,22 @@ void set_gpr(int32_t i, int32_t val)
 
 extern "C" void print_gpr()
 {
-	printf("|" ANSI_FG_GREEN "PC     " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
+	printf("|" ANSI_FG_GREEN "PC       " ANSI_NONE "|" ANSI_FG_GREEN "0x%08x" ANSI_NONE " |\n" , cpu.pc);
 	for(int i = 0; i < 16; i++)
 	{
-		if(i == 0) printf("|%s   |0x%08x |\n", reg_name[i], cpu.gpr[i]);
-		else printf("|%s     |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
+		if(i == 0) printf("|%s     |0x%08x |\n", reg_name[i], cpu.gpr[i]);
+		else printf("|%s       |0x%08x |\n", reg_name[i] , cpu.gpr[i]);
 	}
-	printf("|-------------------|\n");
+	printf("|---------------------|\n");
 
-	printf("|%s   |0x%08x |\n", reg_name[16], cpu.csr.mepc);
-	printf("|%s  |0x%08x |\n", reg_name[17], cpu.csr.mtvec);
-	printf("|%s |0x%08x |\n", reg_name[18], cpu.csr.mcause);
-	printf("|%s|0x%08x |\n", reg_name[19], cpu.csr.mstatus);
+	printf("|%s     |0x%08x |\n", reg_name[16], cpu.csr.mepc);
+	printf("|%s    |0x%08x |\n", reg_name[17], cpu.csr.mtvec);
+	printf("|%s   |0x%08x |\n", reg_name[18], cpu.csr.mcause);
+	printf("|%s  |0x%08x |\n", reg_name[19], cpu.csr.mstatus);
+	printf("|%s   |0x%08x |\n", reg_name[20], cpu.csr.mcycle);
+	printf("|%s  |0x%08x |\n", reg_name[21], cpu.csr.mcycleh);
+	printf("|%s|0x%08x |\n", reg_name[22], cpu.csr.mvendorid);
+	printf("|%s  |0x%08x |\n", reg_name[23], cpu.csr.marchid);
 
 }
 
@@ -254,13 +272,19 @@ extern "C" uint32_t reg_str2val(const char *s, bool *success) {
 	if(strcmp(s, reg_name[17]) == 0) return cpu.csr.mtvec;
 	if(strcmp(s, reg_name[18]) == 0) return cpu.csr.mcause;
 	if(strcmp(s, reg_name[19]) == 0) return cpu.csr.mstatus;
+	if(strcmp(s, reg_name[20]) == 0) return cpu.csr.mcycle;
+	if(strcmp(s, reg_name[21]) == 0) return cpu.csr.mcycleh;
 	return num;
   }
 
-  void set_csr(int32_t mepc, int32_t mtvec, int32_t mcause, int32_t mstatus)
+  void set_csr(int32_t mepc, int32_t mtvec, int32_t mcause, int32_t mstatus, int32_t mcycle, int32_t mcycleh, int32_t mvendorid, int32_t marchid)
 {
 	cpu.csr.mepc = mepc;
 	cpu.csr.mtvec = mtvec;
 	cpu.csr.mcause = mcause;
 	cpu.csr.mstatus = mstatus;
+	cpu.csr.mcycle = mcycle;
+	cpu.csr.mcycleh = mcycleh;
+	cpu.csr.mvendorid = mvendorid;
+	cpu.csr.marchid = marchid;
 }

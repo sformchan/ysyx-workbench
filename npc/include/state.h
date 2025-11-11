@@ -19,6 +19,10 @@ typedef struct {
 	word_t mepc;
 	word_t mstatus;
 	word_t mcause;
+	word_t mcycle;
+	word_t mcycleh;
+	word_t mvendorid;
+	word_t marchid;
 } CSR;
 
 typedef struct {

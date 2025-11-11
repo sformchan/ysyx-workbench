@@ -27,6 +27,7 @@
 module ysyx_25020047_IDU(
     input clk,
     input rst,
+	input start,
     input reg_wen,
 	input csr_wen,
 	input intr,
@@ -251,6 +252,7 @@ CSR #(32) u2
 (
 	.clk(clk),
 	.rst(rst),
+	.start(start),
 	.wen(csr_wen),
 	.addr(csr_raddr),
 	.csr_wdata(csr_wdata),

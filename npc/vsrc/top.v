@@ -2,16 +2,13 @@ import "DPI-C" function void set_npc_state(input int state);
 import "DPI-C" function int pmem_read(input int raddr, input int flag);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 import "DPI-C" function void set_gpr(input int i, input int val);
-import "DPI-C" function void set_csr(input int mepc, input int mtvec, input int mcause, input int mstatus);
+import "DPI-C" function void set_csr(input int mepc, input int mtvec, input int mcause, input int mstatus, input int mcycle, input int mcycleh, input int mvendorid, input int marchid);
 
 module top(
     input clk,
     input rst,
-    //input  [31:0] inst,
+    input start,
     output [31:0] pc,
-    // output [31:0] gpr0,
-    // output [31:0] gpr1,
-    // output [31:0] gpr2,
 	output [31:0] dnpc
 );
 
@@ -31,9 +28,13 @@ wire mret;
 wire [31:0] intr_mtvec;
 wire [31:0] mret_mepc;
 wire [31:0] csr_rdata;
+
 ysyx_25020047_IDU u1(
     .clk(clk),
     .rst(rst),
+	.start(start),
+
+
     .reg_wen(reg_wen),
 	.csr_wen(csr_wen),
 	.intr(intr),

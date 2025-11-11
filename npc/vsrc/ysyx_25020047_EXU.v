@@ -53,191 +53,191 @@ module ysyx_25020047_EXU(
 			csr_wen = 1'b0;
 			intr = 1'b0;
 			mret = 1'b0;
-            case(inst_type)
-                64'h1: begin //addi
-                    result = rdata1 + imm;
-                    reg_wen = 1'b1;
-                end
-                64'h2: begin //jalr
-                    result = (rdata1 + imm) & ~1;
-                    reg_wen = 1'b1;
-                end
-                64'h4: begin //ebreak
-                    reg_wen = 1'b0; // ebreak does not write back
-					set_npc_state(32'h2); // end simulation
-                end
-                64'h8: begin //add
-                    //$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
-                    result = rdata1 + rdata2; // R-type instruction
-                    reg_wen = 1'b1;
-                end
-                64'h10: begin //lui
-                    result = imm;
-                    reg_wen = 1'b1; 
-                end
-                64'h20: begin //lw
-                    // $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
-                    result = rdata1 + imm;
-                    // $display("result 0x%08x", result);
-                    reg_wen = 1'b1;
-                    read = 1'b1;
-                end
-                64'h40: begin //lbu
-                    result = rdata1 + imm;
-                    reg_wen = 1'b1;
-                    read = 1'b1;
-                end
-                64'h80: begin //sw
-                    result = rdata1 + imm;
-                    write = 1'b1;
-                end
-                64'h100: begin //sb
-                    // $display("result 0x%08x", result);
-                    result = rdata1 + imm;
-                    write = 1'b1;
-                end
-				64'h200: begin //auipc
-					result = pc + imm;
-					reg_wen = 1'b1;
-				end
-				64'h400: begin //jal
-					result = pc + imm;
-					reg_wen = 1'b1;
-				end
-				64'h800: begin //sub
-					result = rdata1 - rdata2;
-					reg_wen = 1'b1;
-				end
-				64'h1000: begin //stli
-					result = ($signed(rdata1) < $signed(imm)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h2000: begin //stliu
-					result = ($unsigned(rdata1) < $unsigned(imm)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h4000: begin //beq
-					result = (rdata1 == rdata2) ? (pc + imm) : snpc;
-				end
-				64'h8000: begin //bne
-					result = (rdata1 != rdata2) ? (pc + imm) : snpc;
-				end
-				64'h10000: begin //slt
-					result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h20000: begin //sltu
-					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h40000: begin //xor
-					result = rdata1 ^ rdata2;
-					reg_wen = 1'b1;
-				end
-				64'h80000: begin //or
-					result = rdata1 | rdata2;
-					reg_wen = 1'b1;
-				end
-				64'h100000: begin //and
-					result = rdata1 & rdata2;
-					reg_wen = 1'b1;
-				end
-				64'h200000: begin //sh
-					result = rdata1 + imm;
-					//$display("result: 0x%08x", result);
-					write = 1'b1;
-				end
-				64'h400000: begin //srai arithmetic
-					result = $signed(rdata1) >>> shamt;
-					reg_wen = 1'b1;
-				end
-				64'h800000: begin //srli
-					result = rdata1 >> shamt;
-					reg_wen = 1'b1;
-				end
-				64'h1000000: begin //slli logical
-					result = rdata1 << shamt;
-					reg_wen = 1'b1;
-				end
-				64'h2000000: begin //andi
-					result = rdata1 & imm;
-					reg_wen = 1'b1;
-				end
-				64'h4000000: begin //ori
-					result = rdata1 | imm;
-					reg_wen = 1'b1;
-				end
-				64'h8000000: begin //xori
-					result = rdata1 ^ imm;
-					reg_wen = 1'b1;
-				end
-				64'h10000000: begin //blt
-					result = ($signed(rdata1) < $signed(rdata2)) ? (pc + imm) : snpc;
-				end 
-				64'h20000000: begin //bge
-					result = ($signed(rdata1) >= $signed(rdata2)) ? (pc + imm) : snpc;
-				end
-				64'h40000000: begin //bltu
-					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? (pc + imm) : snpc;
-				end
-				64'h80000000: begin //bgeu
-					result = ($unsigned(rdata1) >= $unsigned(rdata2)) ? (pc + imm) : snpc;
-				end
-				64'h100000000: begin //sll
-					result = rdata1 << rdata2[4:0];
-					reg_wen = 1'b1;
-				end
-				64'h200000000: begin //slt
-					result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h400000000: begin //sltu
-					result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
-					reg_wen = 1'b1;
-				end
-				64'h800000000: begin //srl
-					result = rdata1 >> rdata2[4:0];
-					reg_wen = 1'b1;
-				end
-				64'h1000000000: begin //sra
-					result = $signed(rdata1) >>> rdata2[4:0];
-					reg_wen = 1'b1;
-				end
-				64'h2000000000: begin //lb
-                    result = rdata1 + imm;
-                    reg_wen = 1'b1;
-                    read = 1'b1;
-                end
-				64'h4000000000: begin //lh
-                    result = rdata1 + imm;
-                    reg_wen = 1'b1;
-                    read = 1'b1;
-                end
-				64'h8000000000: begin //lhu
-                    result = rdata1 + imm;
-                    reg_wen = 1'b1;
-                    read = 1'b1;
-                end
-				64'h10000000000: begin //ecall
-					intr = 1'b1;
-				end
-				64'h20000000000: begin //csrrw
-					reg_wen = 1'b1;
-					csr_wen = 1'b1;
-				end
-				64'h40000000000: begin //csrrs
-					reg_wen = 1'b1;
-					csr_wen = 1'b1;
-				end
-				64'h80000000000: begin //mret
-					mret = 1'b1;
-				end
-                default: begin
-					set_npc_state(32'h4); // abort simulation
-					$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");
-					result = 32'b0; // default case
-				end
-            endcase
+				case(inst_type)
+					64'h1: begin //addi
+						result = rdata1 + imm;
+						reg_wen = 1'b1;
+					end
+					64'h2: begin //jalr
+						result = (rdata1 + imm) & ~1;
+						reg_wen = 1'b1;
+					end
+					64'h4: begin //ebreak
+						reg_wen = 1'b0; // ebreak does not write back
+						set_npc_state(32'h2); // end simulation
+					end
+					64'h8: begin //add
+						//$display("rdata1 0x%08x | rdata2 0x%08x | result 0x%08x", rdata1, rdata2, result);
+						result = rdata1 + rdata2; // R-type instruction
+						reg_wen = 1'b1;
+					end
+					64'h10: begin //lui
+						result = imm;
+						reg_wen = 1'b1; 
+					end
+					64'h20: begin //lw
+						// $display("rdata1 imm 0x%08x 0x%08x", rdata1, imm);
+						result = rdata1 + imm;
+						// $display("result 0x%08x", result);
+						reg_wen = 1'b1;
+						read = 1'b1;
+					end
+					64'h40: begin //lbu
+						result = rdata1 + imm;
+						reg_wen = 1'b1;
+						read = 1'b1;
+					end
+					64'h80: begin //sw
+						result = rdata1 + imm;
+						write = 1'b1;
+					end
+					64'h100: begin //sb
+						// $display("result 0x%08x", result);
+						result = rdata1 + imm;
+						write = 1'b1;
+					end
+					64'h200: begin //auipc
+						result = pc + imm;
+						reg_wen = 1'b1;
+					end
+					64'h400: begin //jal
+						result = pc + imm;
+						reg_wen = 1'b1;
+					end
+					64'h800: begin //sub
+						result = rdata1 - rdata2;
+						reg_wen = 1'b1;
+					end
+					64'h1000: begin //stli
+						result = ($signed(rdata1) < $signed(imm)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h2000: begin //stliu
+						result = ($unsigned(rdata1) < $unsigned(imm)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h4000: begin //beq
+						result = (rdata1 == rdata2) ? (pc + imm) : snpc;
+					end
+					64'h8000: begin //bne
+						result = (rdata1 != rdata2) ? (pc + imm) : snpc;
+					end
+					64'h10000: begin //slt
+						result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h20000: begin //sltu
+						result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h40000: begin //xor
+						result = rdata1 ^ rdata2;
+						reg_wen = 1'b1;
+					end
+					64'h80000: begin //or
+						result = rdata1 | rdata2;
+						reg_wen = 1'b1;
+					end
+					64'h100000: begin //and
+						result = rdata1 & rdata2;
+						reg_wen = 1'b1;
+					end
+					64'h200000: begin //sh
+						result = rdata1 + imm;
+						//$display("result: 0x%08x", result);
+						write = 1'b1;
+					end
+					64'h400000: begin //srai arithmetic
+						result = $signed(rdata1) >>> shamt;
+						reg_wen = 1'b1;
+					end
+					64'h800000: begin //srli
+						result = rdata1 >> shamt;
+						reg_wen = 1'b1;
+					end
+					64'h1000000: begin //slli logical
+						result = rdata1 << shamt;
+						reg_wen = 1'b1;
+					end
+					64'h2000000: begin //andi
+						result = rdata1 & imm;
+						reg_wen = 1'b1;
+					end
+					64'h4000000: begin //ori
+						result = rdata1 | imm;
+						reg_wen = 1'b1;
+					end
+					64'h8000000: begin //xori
+						result = rdata1 ^ imm;
+						reg_wen = 1'b1;
+					end
+					64'h10000000: begin //blt
+						result = ($signed(rdata1) < $signed(rdata2)) ? (pc + imm) : snpc;
+					end 
+					64'h20000000: begin //bge
+						result = ($signed(rdata1) >= $signed(rdata2)) ? (pc + imm) : snpc;
+					end
+					64'h40000000: begin //bltu
+						result = ($unsigned(rdata1) < $unsigned(rdata2)) ? (pc + imm) : snpc;
+					end
+					64'h80000000: begin //bgeu
+						result = ($unsigned(rdata1) >= $unsigned(rdata2)) ? (pc + imm) : snpc;
+					end
+					64'h100000000: begin //sll
+						result = rdata1 << rdata2[4:0];
+						reg_wen = 1'b1;
+					end
+					64'h200000000: begin //slt
+						result = ($signed(rdata1) < $signed(rdata2)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h400000000: begin //sltu
+						result = ($unsigned(rdata1) < $unsigned(rdata2)) ? 32'b1 : 32'b0;
+						reg_wen = 1'b1;
+					end
+					64'h800000000: begin //srl
+						result = rdata1 >> rdata2[4:0];
+						reg_wen = 1'b1;
+					end
+					64'h1000000000: begin //sra
+						result = $signed(rdata1) >>> rdata2[4:0];
+						reg_wen = 1'b1;
+					end
+					64'h2000000000: begin //lb
+						result = rdata1 + imm;
+						reg_wen = 1'b1;
+						read = 1'b1;
+					end
+					64'h4000000000: begin //lh
+						result = rdata1 + imm;
+						reg_wen = 1'b1;
+						read = 1'b1;
+					end
+					64'h8000000000: begin //lhu
+						result = rdata1 + imm;
+						reg_wen = 1'b1;
+						read = 1'b1;
+					end
+					64'h10000000000: begin //ecall
+						intr = 1'b1;
+					end
+					64'h20000000000: begin //csrrw
+						reg_wen = 1'b1;
+						csr_wen = 1'b1;
+					end
+					64'h40000000000: begin //csrrs
+						reg_wen = 1'b1;
+						csr_wen = 1'b1;
+					end
+					64'h80000000000: begin //mret
+						mret = 1'b1;
+					end
+					default: begin
+							set_npc_state(32'h4); // abort simulation
+							//$display("\033[1;31mGOT INSTRUCTION LEFT TO IMPLEMENT!\033[0m");
+							result = 32'b0; // default case
+					end
+            	endcase
         end                                          
                                                                    
                                                                    

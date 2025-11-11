@@ -69,15 +69,14 @@ always @(*) begin
 end
 
 
-
 always @(*) begin
     if(write) begin
         if(inst_type == 64'h80) begin     //sw
-			//$display("sw inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
+			//$display("sw waddr 0x%08x wdata1 0x%08x wmask 0x%08x",  waddr, wdata, 32'hF);
 			pmem_write(waddr, wdata, 32'hF); //pc inst
 		end
         else if(inst_type == 64'h100) begin   //sb
-            //$display("sb inst 0x%08x waddr 0x%08x wdata1 0x%08x wmask 0x%08x", inst, waddr, wdata1, wmask);
+            //$display("sb waddr 0x%08x wdata1 0x%08x wmask 0x%08x",  waddr, wdata1, sb_wmask);
             pmem_write(waddr, wdata1, sb_wmask);
         end
 		else if(inst_type == 64'h200000) begin //sh
